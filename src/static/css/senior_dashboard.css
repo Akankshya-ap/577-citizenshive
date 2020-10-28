@@ -1,0 +1,12 @@
+input, select{
+    width: 200px;
+    border-radius: 5px;
+    height: 40px;
+}
+
+table{
+    border-collapse: separate;
+    border-spacing: 8px;
+}
+
+body {font-family: Arial, Helvetica, sans-serif;}
