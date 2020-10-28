@@ -18,3 +18,4 @@ src/citizenshive/__pycache__/wsgi.cpython-36.pyc
 src/app1/migrations/__pycache__/0008_auto_20201028_0036.cpython-36.pyc
 src/app1/migrations/
 src/citizenshive/settings.py
+.vscode/settings.json
