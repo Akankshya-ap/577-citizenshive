@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Citizen's Hive</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/senior_dashboard.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1" >
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/caregiver_dashboard.css' %}">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="{% static 'javascript/caregiver_dashboard.js' %}">
+        </script>
+
+
+    </head>
+
+
+    <body>
+        <!-- <h1>
+            {{ record.email }}
+        </h1> -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">My Profile</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'forum' %}">Forum 
+                      <!-- <span class="sr-only">(current)</span> -->
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Link </a>
+                </li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+                <button class="btn btn-outline-success my-2 my-sm-9" type="submit">  
+                    Logout
+                </button>
+                <!-- <button type="button" class="btn btn-default btn-md">
+                    <span class="glyphicon glyphicon-log-out"></span> Log out
+                </button> -->
+              </form>
+            </div>
+          </nav>
+
+
+          <!-- Caregiver Profile Data -->
+          <div class="container">
+            <div class="row" style="border: 1px solid black;">
+                <div class="col-md-3" style="border-right: 1px solid black;">
+                    <img src="{% static 'images/person_avatar.png' %}" alt="" style="max-width: 90%;">
+                </div>
+
+                <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
+                  <form action="{% url 'caregiver_dashboard_view' %}" method="POST">
+                      {% csrf_token %}
+                  <button type="button" class="btn btn-default btn-sm" class="edit_profile" id="edit_profile" style="right: 0; position: absolute;width: 100px;">
+                      <span class="glyphicon glyphicon-edit"></span> Edit
+                  </button>
+
+                  <br>
+
+                  <table>
+                    <tr>
+                      <td>
+                        <label for="name"> <b>Name</b></label>
+                      </td>
+                      <td>
+                        <input type="text" value="{{ record.name }}" name="name" id="name" disabled> 
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="email"><b>Email</b></label>
+                      </td>
+                      <td>
+                        <input type="text" value="{{ record.email }}" name="email" id="email" disabled>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="dob"><b>Date of Birth</b></label>
+                      </td>
+                      <td>
+                        <input type="date" name="dob" id="dob" disabled value="{{ record.dob }}">
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="availability"> <b> Availability Preference</b></label>
+                      </td>
+                      <td>
+                        <select name="availability" id="availability" disabled>
+                                      <option value="at_seniors">Living at my place</option>
+                                      <option value="at_caregivers">Living at Caregiver's place</option>
+                                      </select>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="zip"><b>Zip Code</b></label>
+                      </td>
+                      <td>
+                        <input type="text" name="zip" id="zip" disabled value="{{ record.zip_code }}">
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="city"><b>City</b></label>
+                      </td>
+                      <td>
+                         <input type="text" name="city" id="city" disabled value="{{ record.city }}" >  
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="state"><b>State</b></label>
+                      </td>
+                      <td>
+                        <input type="text" name="state" id="state" disabled value="{{ record.state }}" >
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <b>Bio</b>
+                      </td>
+                      <td>
+                        <textarea name="bio" id="bio" style="width: 500px;" rows="10" disabled>
+                          {{ record.bio }}
+                        </textarea>
+                      </td>
+                    </tr>
+                  
+                  </table>
+                  <!-- <label for="name"> <b>Name</b></label>
+                  <input type="text" value="{{ record.name }}" name="name" id="name" disabled> <br>
+
+                  <label for="email"><b>Email</b></label>
+                  <input type="text" value="{{ record.email }}" name="email" id="email" disabled><br>
+
+                  <label for="dob"><b>Date of Birth</b></label>
+                  <input type="date" name="dob" id="dob" disabled><br>
+
+                  <label for="availability"> <b> Availability Preference</b></label>
+
+                  <select name="availability" id="availability" disabled>
+                  <option value="at_seniors">Living at my place</option>
+                  <option value="at_caregivers">Living at Caregiver's place</option>
+                  </select>
+                  <br>
+
+                  <label for="zip"><b>Zip Code</b></label>
+                  <input type="text" name="zip" id="zip" disabled><br>
+
+                  <label for="city"><b>City</b></label>
+                  <input type="text" name="city" id="city" disabled><br>
+
+                  <label for="state"><b>State</b></label>
+                  <input type="text" name="state" id="state" disabled><br> -->
+
+                  <!-- <b>Bio</b><br>
+                  
+                  <textarea name="bio" id="bio" style="width: 90%;" rows="10" disabled></textarea><br> -->
+                 
+                  
+                  <input type="submit" name="submit_edit" id="submit_edit" value="Submit Edits" disabled >
+              </form>
+                  
+          </div>
+          </div>
+    </body>
+</html>
