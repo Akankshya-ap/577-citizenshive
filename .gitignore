@@ -17,3 +17,5 @@ src/app1/__pycache__/views.cpython-36.pyc
 src/citizenshive/__pycache__/wsgi.cpython-36.pyc
 src/app1/migrations/__pycache__/0008_auto_20201028_0036.cpython-36.pyc
 src/app1/migrations/
+src/citizenshive/settings.py
+src/citizenshive/settings.py
