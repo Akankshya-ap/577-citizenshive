@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
 from .models import CommonRegistration, Senior, Caregiver, Posts, Comments
 import json
-from pyzipcode import ZipCodeDatabase  
+# from pyzipcode import ZipCodeDatabase  
 
 # Create your views here.
 
@@ -31,11 +31,11 @@ def search_caregivers(request, *args, **kwargs) :
     if request.method == 'POST' :
         zip_code = request.POST['zip']
         radius = int(request.POST['radius'])
-        zcdb = ZipCodeDatabase() 
-        in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius(zip_code, radius)] # ('ZIP', radius in miles)
-        #radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
-        radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
-        # radius_arr = 10 #added 28/10
+        # zcdb = ZipCodeDatabase() 
+        # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius(zip_code, radius)] # ('ZIP', radius in miles)
+        # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
+        # radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
+        radius_arr = 10 #added 28/10
         caregivers = Caregiver.objects.filter(zip_code__in = radius_arr)
         context['caregivers'] = caregivers
         context['isPostRequest'] = True
