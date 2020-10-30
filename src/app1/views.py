@@ -224,5 +224,7 @@ def registration_page(request, *args, **kwargs) :
     else :
         return render(request, 'registration_page.html', context)
     
-
+def about_us(request, *args, **kwargs):
+    context = {}
+    return render(request, 'about_us.html', context)
 
