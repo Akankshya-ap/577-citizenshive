@@ -27,3 +27,11 @@ src/app1/__pycache__/views.cpython-37.pyc
 src/citizenshive/__pycache__/__init__.cpython-37.pyc
 src/citizenshive/__pycache__/settings.cpython-37.pyc
 src/citizenshive/__pycache__/wsgi.cpython-37.pyc
+src/app1/__pycache__/__init__.cpython-39.pyc
+src/app1/__pycache__/admin.cpython-39.pyc
+src/app1/__pycache__/models.cpython-39.pyc
+src/app1/__pycache__/views.cpython-39.pyc
+src/citizenshive/__pycache__/__init__.cpython-39.pyc
+src/citizenshive/__pycache__/settings.cpython-39.pyc
+src/citizenshive/__pycache__/urls.cpython-39.pyc
+src/citizenshive/__pycache__/wsgi.cpython-39.pyc
