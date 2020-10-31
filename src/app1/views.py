@@ -223,6 +223,8 @@ def registration_page(request, *args, **kwargs) :
 
     else :
         return render(request, 'registration_page.html', context)
+
+#repo test
     
 
 
