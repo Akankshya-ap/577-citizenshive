@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>
+            Citizen's Hive
+        </title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/search_caregivers.css' %}">
+        <script type="text/javascript" src="{% static 'javascript/search_caregivers.js' %}">
+        </script> 
+    </head>
+
+    <body>
+        
+        <!-- <h1>
+            Search Caregivers
+            
+        </h1> -->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="{% url 'senior_dashboard_view' %}">My Profile</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'forum' %}">Forum 
+                    <!-- <span class="sr-only">(current)</span> -->
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contact Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"> Search Caregivers </a>
+              </li>
+            </ul>
+            
+
+            <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
+              <li class="nav-item"> 
+                  <a class="nav-link" href="{% url 'logout' %}"> 
+                    Logout 
+                  </a> 
+              </li> 
+            </ul>
+
+
+          </div>
+        </nav>
+
+        <div class="container">
+            <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
+             
+              
+                <form action="{% url 'search_caregivers' %}" method="POST" style="width: 100%;">
+                    {% csrf_token %}
+                    <div class="form-row align-items-center">
+                      <div class="col-auto">
+                        <label class="sr-only" for="zip">Zip Code</label>
+                        <input type="text" class="form-control mb-2" id="zip" placeholder="Zip Code" name="zip" required style="height: 50px;margin-top: 5px;margin-left: 5px;">
+                      </div>
+        
+                      <div class="col-auto my-1">
+                        <label class="mr-sm-2 sr-only" for="radius">Radius</label>
+                        <select class="custom-select mr-sm-2" id="radius" name="radius" style="height: 50px;">
+                          <option value="10">10 miles</option>
+                          <option value="20">20 miles</option>
+                          <option value="30">30 miles</option>
+                          <option value="40">40 miles</option>
+                          <option value="50">50 miles</option>
+                        </select>
+                      </div>
+
+                      <div class="col-auto my-1">
+                        <label class="mr-sm-2 sr-only" for="availability">Availability</label>
+                        <select class="custom-select mr-sm-2" id="availability" name="availability" style="height: 50px;">
+                        
+                          <option value="at_seniors">At my home</option>
+                          <option value="at_caregivers">At Caregiver's place</option>
+                      
+                        </select>
+                      </div>
+                      
+                      <div class="col-auto" style="position: relative; left: 53%;" >
+                        <button type="submit" class="btn btn-primary mb-2" style="height: 49px;"> &#128269;</button>
+                        
+                      </div>
+                    </div>
+                  </form>
+            </div>
+
+            {% if caregivers|length == 0 and isPostRequest %}
+                <h2>No Results match the current search criteria</h2>
+            {% else %}
+            {% for caregiver in caregivers %}
+            
+            <div class="card" style="margin: 15px;">
+              <div class="card-header">
+                {{ caregiver.name }}
+              </div>
+              <div class="card-body">
+                <!-- <h5 class="card-title">Special title treatment</h5> -->
+                <div class="col-md-3">
+                  <img src="{{ caregiver.profile_image.url }}" alt="" style="height: 150px;" >
+                </div>
+                <p class="card-text">
+                  <b>Email : </b> {{ caregiver.email }}
+                  <b>Zip Code: </b> {{ caregiver.zip_code }}
+                </p>
+                <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
+              </div>
+            </div>
+            <!-- <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;">
+                <div class="row" style="margin: 10px; border: 1px solid black;">
+                    <p>
+                        <b>Name</b><br>
+                        {{ caregiver.id }}
+                        {{ caregiver.name }}
+                        {{ caregiver.email }}
+                        {{ caregiver.zip_code }}
+                    </p>
+    
+                </div>
+            </a> -->
+            
+        {% endfor %}
+        {% endif %}
+        </div>
+
+        <!-- <h1>
+            Zip codes data
+            {{ data }}
+        </h1> -->
+
+        
+        
+
+    </body>
+</html>
