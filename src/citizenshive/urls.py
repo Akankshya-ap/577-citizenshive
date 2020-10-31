@@ -24,13 +24,13 @@ urlpatterns = [
     path('handle_login', handle_login, name='handle_login'),
     path('forum', forum, name='forum'),
     path('add_new_post', add_new_post, name='add_new_post' ),
-    path('/add_post_comment', add_post_comment, name='add_post_comment'),
-    path('/senior_dashboard_view', senior_dashboard_view, name='senior_dashboard_view'),
-    path('/caregiver_dashboard_view', caregiver_dashboard_view, name='caregiver_dashboard_view'),
-    path('/search_caregivers', search_caregivers, name='search_caregivers'),
-    path('/view_caregiver_details/<int:caregiver_id>', view_caregiver_details, name='view_caregiver_details'),
-    path('/logout', logout, name='logout'),
-    path('/dashboard_view', dashboard_view, name='dashboard_view'),
+    path('add_post_comment', add_post_comment, name='add_post_comment'),
+    path('senior_dashboard_view', senior_dashboard_view, name='senior_dashboard_view'),
+    path('caregiver_dashboard_view', caregiver_dashboard_view, name='caregiver_dashboard_view'),
+    path('search_caregivers', search_caregivers, name='search_caregivers'),
+    path('view_caregiver_details/<int:caregiver_id>', view_caregiver_details, name='view_caregiver_details'),
+    path('logout', logout, name='logout'),
+    path('dashboard_view', dashboard_view, name='dashboard_view'),
     path('about_us', about_us, name='about_us')
 ]
 
