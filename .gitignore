@@ -76,3 +76,6 @@ src/db.sqlite3
 >>>>>>> pkb555-master
 src/db.sqlite3
 src/db.sqlite3
+.vscode/settings.json
+
+src/db.sqlite3
