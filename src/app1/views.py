@@ -83,64 +83,79 @@ def dashboard_view(request, *args, **kwargs) :
 
 def caregiver_dashboard_view(request, *args, **kwargs) :
     context = {}
+    if 'email' in request.session :
+        email = request.session['email']
+
     if request.method == 'POST' :
-        name = request.POST['name']
-        email = request.POST['email']
+        # name = request.session['name']
+        # email = request.session['email']
         dob = request.POST['dob']
         availability = request.POST['availability']
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
         bio = request.POST['bio']
+        # profile_image = request.FILES['profile_image']
 
         record = Caregiver.objects.get(email=email)
-        record.name = name
+        record.name = record.name 
         record.availability = availability
         record.zip_code = zip_code
         record.city = city
         record.state = state
         record.bio = bio
         record.dob = dob if dob!="" else None
-        record.save()
-        context['record'] = record
-    else :
-        context['record'] = Caregiver.objects.get(email = request.session['email'])
-    return render(request, 'caregiver_dashboard.html', context)
-
-
-def senior_dashboard_view(request, *args, **kwargs) :
-    context = {}
-    if request.method == 'POST' :
-        name = request.POST['name']
-        email = request.POST['email']
-        dob = request.POST['dob']
-        availability = request.POST['availability']
-        zip_code = request.POST['zip']
-        city = request.POST['city']
-        state = request.POST['state']
-        bio = request.POST['bio']
-        #profile_image = request.FILES['profile_image']
-
-        record = Senior.objects.get(email=email)
-        record.name = name
-        record.availability = availability
-        record.zip_code = zip_code
-        record.city = city
-        record.state = state
-        record.bio = bio
-        record.dob = dob if dob!="" else None
-        #record.profile_image = profile_image
+        # record.profile_image = profile_image
 
         record.save()
         context['record'] = record
         #context['profile_image_url'] = record.profile_image.url
         #context['image_object'] = record.profile_image
-        return render(request, 'senior_dashboard1.html', context)
+        return render(request, 'caregiver_dashboard.html', context)
+    else :
+        context['record'] = Caregiver.objects.get(email = request.session['email'])
+        #context['profile_image_url'] = 'default'
+        #context['image_object'] = record.profile_image
+        return render(request, 'caregiver_dashboard.html', context)
+
+
+
+def senior_dashboard_view(request, *args, **kwargs) :
+    context = {}
+    if 'email' in request.session :
+        email = request.session['email']
+
+    if request.method == 'POST' :
+        # name = request.session['name']
+        # email = request.session['email']
+        dob = request.POST['dob']
+        availability = request.POST['availability']
+        zip_code = request.POST['zip']
+        city = request.POST['city']
+        state = request.POST['state']
+        bio = request.POST['bio']
+        # profile_image = request.FILES['profile_image']
+
+        record = Senior.objects.get(email=email)
+        record.name = record.name 
+        record.availability = availability
+        record.zip_code = zip_code
+        record.city = city
+        record.state = state
+        record.bio = bio
+        record.dob = dob if dob!="" else None
+        # record.profile_image = profile_image
+
+        record.save()
+        context['record'] = record
+        #context['profile_image_url'] = record.profile_image.url
+        #context['image_object'] = record.profile_image
+        return render(request, 'senior_dashboard.html', context)
     else :
         context['record'] = Senior.objects.get(email = request.session['email'])
         #context['profile_image_url'] = 'default'
         #context['image_object'] = record.profile_image
-        return render(request, 'senior_dashboard1.html', context)
+        return render(request, 'senior_dashboard.html', context)
 
 
 def add_post_comment(request, *args, **kwargs) :
@@ -197,6 +212,7 @@ def handle_login(request, *args, **kwargs) :
         context = {
             'record' : record
         }
+        request.session['name'] = record.name
 
         #Add values to the session
         # request.session['isLoggedIn']  = True
@@ -204,14 +220,13 @@ def handle_login(request, *args, **kwargs) :
         # request.session['userType'] = user_type
 
         if user_type == 'senior' :
-            return render(request, 'senior_dashboard1.html', context)
+            return render(request, 'senior_dashboard.html', context)
         else :
             return render(request, 'caregiver_dashboard.html', context)
         
 
 
 def landing_page(request, *args, **kwargs) :
-    # return HttpResponse("<h1> Hello Mugdha </h1>")
     context = {}
     if 'email' in request.session :
         #The user is already logged in

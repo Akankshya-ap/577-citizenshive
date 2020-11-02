@@ -5,7 +5,7 @@
         <title>Citizen's Hive</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
-        <link rel="stylesheet" type="text/css" href="{% static 'css/senior_dashboard.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/caregiver_dashboard.css' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1" >
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -27,38 +27,127 @@
             {{ record.email }}
         </h1> -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">My Profile</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'forum' %}">Forum 
-                      <!-- <span class="sr-only">(current)</span> -->
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Contact Us</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#"> Link </a>
-                </li>
-              </ul>
-              <form class="form-inline my-2 my-lg-0">
-                <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
-                <button class="btn btn-outline-success my-2 my-sm-9" type="submit">  
-                    Logout
-                </button>
-                <!-- <button type="button" class="btn btn-default btn-md">
-                    <span class="glyphicon glyphicon-log-out"></span> Log out
-                </button> -->
-              </form>
-            </div>
-          </nav>
+          <a class="navbar-brand" href="#">My Profile</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contact Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'search_seniors' %}"> Search Seniors </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"> My Seniors </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">My Messages</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">My Payments</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'forum' %}">Forum 
+                    <!-- <span class="sr-only">(current)</span> -->
+                </a>
+              </li>
+            </ul>
 
+            <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
+              <li class="nav-item"> 
+                  <a class="nav-link" href="{% url 'logout' %}"> 
+                    Logout 
+                  </a> 
+              </li> 
+            </ul>
+          </div>
+        </nav>
+
+
+
+        <div id="modal1" class="modal">
+          <form  class="modal-content animate" action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="container">
+            <div class="row">
+                <div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
+                    <img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 40%; margin-top: 5%;">
+                    <br><br>
+                    <input type="file" name="profile_image" id="profile_image" class="profile_image">
+                </div>
+
+                <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
+                  <form action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+                  <table>
+                    <tr>
+                      <td>
+                        <label for="dob"><b>Date of Birth</b></label>
+                      </td>
+                      <td>
+                        <input type="date" value="{{ record.dob}}" name="dob" id="dob">
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="availability"> <b> Type of Care</b></label>
+                      </td>
+                      <td>
+                        <select name="availability" value="{{ record.availability }}" id="availability">
+                                      <option value="at_caregivers">Living at my place</option>
+                                      <option value="at_seniors">Living at Senior's place</option>
+                                      </select>
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="zip"><b>Zip Code</b></label>
+                      </td>
+                      <td>
+                        <input type="text" value="{{ record.zip_code }}" name="zip" id="zip">
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="city"><b>City</b></label>
+                      </td>
+                      <td>
+                         <input type="text" value="{{ record.city }}" name="city" id="city">
+                      </td>
+                    </tr>
+                  
+                    <tr>
+                      <td>
+                        <label for="state"><b>State</b></label>
+                      </td>
+                      <td>
+                        <input type="text" name="state" value="{{ record.state }}" id="state">
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                          <label for="bio"><b>Bio</b></label>
+                      </td>
+                      <td>
+                          <input type="text" name="bio" value="{{ record.bio }}" id="bio">
+                      </td>
+                    </tr>
+                  
+                  </table>
+                    
+                    <input type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" style="color: black;" >
+                    
+            </div>
+        </div>
+              </div>
+        </form>
+        </div>
 
           <!-- Caregiver Profile Data -->
           <div class="container">
@@ -70,7 +159,7 @@
                 <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
                   <form action="{% url 'caregiver_dashboard_view' %}" method="POST">
                       {% csrf_token %}
-                  <button type="button" class="btn btn-default btn-sm" class="edit_profile" id="edit_profile" style="right: 0; position: absolute;width: 100px;">
+                  <button type="button" onclick="document.getElementById('modal1').style.display='block'" class="btn btn-default btn-sm" class="edit_profile" id="edit_profile" style="right: 0; position: absolute;width: 100px;">
                       <span class="glyphicon glyphicon-edit"></span> Edit
                   </button>
 
@@ -82,7 +171,7 @@
                         <label for="name"> <b>Name</b></label>
                       </td>
                       <td>
-                        <input type="text" value="{{ record.name }}" name="name" id="name" disabled> 
+                        <body>{{ record.name }}</body>
                       </td>
                     </tr>
                     <tr>
@@ -90,7 +179,7 @@
                         <label for="email"><b>Email</b></label>
                       </td>
                       <td>
-                        <input type="text" value="{{ record.email }}" name="email" id="email" disabled>
+                        <body>{{ record.email }}</body>
                       </td>
                     </tr>
                   
@@ -99,7 +188,7 @@
                         <label for="dob"><b>Date of Birth</b></label>
                       </td>
                       <td>
-                        <input type="date" name="dob" id="dob" disabled value="{{ record.dob }}">
+                        <body>{{ record.dob}}</body>
                       </td>
                     </tr>
                   
@@ -108,10 +197,7 @@
                         <label for="availability"> <b> Availability Preference</b></label>
                       </td>
                       <td>
-                        <select name="availability" id="availability" disabled>
-                                      <option value="at_seniors">Living at my place</option>
-                                      <option value="at_caregivers">Living at Caregiver's place</option>
-                                      </select>
+                        <body>{{ record.availability }}</body>
                       </td>
                     </tr>
                   
@@ -120,7 +206,7 @@
                         <label for="zip"><b>Zip Code</b></label>
                       </td>
                       <td>
-                        <input type="text" name="zip" id="zip" disabled value="{{ record.zip_code }}">
+                        <body>{{ record.zip_code }}</body>
                       </td>
                     </tr>
                   
@@ -129,7 +215,7 @@
                         <label for="city"><b>City</b></label>
                       </td>
                       <td>
-                         <input type="text" name="city" id="city" disabled value="{{ record.city }}" >  
+                        <body>{{ record.city }}</body>
                       </td>
                     </tr>
                   
@@ -138,7 +224,7 @@
                         <label for="state"><b>State</b></label>
                       </td>
                       <td>
-                        <input type="text" name="state" id="state" disabled value="{{ record.state }}" >
+                        <body>{{ record.state }}</body>
                       </td>
                     </tr>
 
@@ -147,9 +233,7 @@
                         <b>Bio</b>
                       </td>
                       <td>
-                        <textarea name="bio" id="bio" style="width: 500px;" rows="10" disabled>
-                          {{ record.bio }}
-                        </textarea>
+                        <body>{{ record.bio }}</body>
                       </td>
                     </tr>
                   
@@ -184,8 +268,7 @@
                   
                   <textarea name="bio" id="bio" style="width: 90%;" rows="10" disabled></textarea><br> -->
                  
-                  
-                  <input type="submit" name="submit_edit" id="submit_edit" value="Submit Edits" disabled >
+                   
               </form>
                   
           </div>
