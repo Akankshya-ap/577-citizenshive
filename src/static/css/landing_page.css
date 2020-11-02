@@ -8,7 +8,7 @@ body,html{
 .bg{
     background-image: url('/static/images/poster.jpg');
     /* Full height */
-    height: 100%; 
+    height: 70%; 
     width: 100%;
     overflow-x: hidden;
 
