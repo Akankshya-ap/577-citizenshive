@@ -21,6 +21,12 @@ def view_caregiver_details(request, caregiver_id) :
     context['caregiver'] = caregiver_obj
     return render(request, 'caregiver_details_for_senior.html', context)
 
+def view_senior_details(request, senior_id) :
+    context = {}
+    senior_obj = Senior.objects.get(id=senior_id)
+    context['caregiver'] = senior_obj
+    return render(request, 'senior_details_for_caregiver.html', context)
+
 def search_caregivers(request, *args, **kwargs) :
     context = {}
     # zcdb = ZipCodeDatabase()
@@ -43,6 +49,30 @@ def search_caregivers(request, *args, **kwargs) :
         context['caregivers'] = []
         context['isPostRequest'] = False
     return render(request, 'search_caregivers.html', context)
+
+def search_seniors(request, *args, **kwargs) :
+    context = {}
+    # zcdb = ZipCodeDatabase()
+    # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius('90007', 8)] # ('ZIP', radius in miles)
+    # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
+    # context['data'] = radius_utf
+    # zip, gender, radius
+    if request.method == 'POST' :
+        zip_code = request.POST['zip']
+        radius = int(request.POST['radius'])
+        # zcdb = ZipCodeDatabase() 
+        # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius(zip_code, radius)] # ('ZIP', radius in miles)
+        # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
+        # radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
+        radius_arr = 10 #added 28/10
+        seniors = Senior.objects.filter(zip_code__in = radius_arr)
+        context['seniors'] = seniors
+        context['isPostRequest'] = True
+    else :
+        context['seniors'] = []
+        context['isPostRequest'] = False
+    return render(request, 'search_seniors.html', context)
+
 
 def dashboard_view(request, *args, **kwargs) :
     user_type = request.session['user_type']
@@ -200,7 +230,7 @@ def registration_page(request, *args, **kwargs) :
     context = {}
     if request.method == 'POST' :
         # return HttpResponse("<h1> Response Received </h1>")
-        #name = request.POST['name']
+        name = request.POST['name']
         email = request.POST['email']
         password = request.POST['psw']
         user_type = request.POST['optradio']
@@ -214,9 +244,9 @@ def registration_page(request, *args, **kwargs) :
             common_registration_obj = CommonRegistration.objects.create(email=email, password=password, userType=user_type)
 
             if user_type == 'senior' :
-                senior_obj = Senior.objects.create(email=email, password=password)
+                senior_obj = Senior.objects.create(name=name, email=email, password=password)
             else :
-                caregiver_obj = Caregiver.objects.create(email=email, password=password)
+                caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
             # return render(request, 'login_page.html', {})
             return redirect('landing_page')
 

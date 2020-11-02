@@ -8,7 +8,7 @@ body,html{
 .bg{
     background-image: url('/static/images/poster.jpg');
     /* Full height */
-    height: 60%; 
+    height: 75%; 
     width: 100%;
     overflow-x: hidden;
     /* overflow-y: hidden; */
@@ -33,7 +33,7 @@ body,html{
     bottom: 0;
     width: 100%;
     background-color: #d4c5c5;
-    color: white;
+    color: #d4c5c5;
     text-align: center;
   }
 
