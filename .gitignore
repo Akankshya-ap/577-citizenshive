@@ -62,3 +62,11 @@ extra/migrations/__pycache__/0009_auto_20201031_0550.cpython-37.pyc
 extra/settings.json
 =======
 >>>>>>> 2cc0757d05f8568481cf37e4184aa44e1006b469
+src/app1/__pycache__/__init__.cpython-38.pyc
+src/app1/__pycache__/admin.cpython-38.pyc
+src/app1/__pycache__/models.cpython-38.pyc
+src/app1/__pycache__/views.cpython-38.pyc
+src/citizenshive/__pycache__/__init__.cpython-38.pyc
+src/citizenshive/__pycache__/settings.cpython-38.pyc
+src/citizenshive/__pycache__/urls.cpython-38.pyc
+src/citizenshive/__pycache__/wsgi.cpython-38.pyc
