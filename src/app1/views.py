@@ -119,7 +119,7 @@ def senior_dashboard_view(request, *args, **kwargs) :
         city = request.POST['city']
         state = request.POST['state']
         bio = request.POST['bio']
-        profile_image = request.FILES['profile_image']
+        #profile_image = request.FILES['profile_image']
 
         record = Senior.objects.get(email=email)
         record.name = name
@@ -129,17 +129,18 @@ def senior_dashboard_view(request, *args, **kwargs) :
         record.state = state
         record.bio = bio
         record.dob = dob if dob!="" else None
-        record.profile_image = profile_image
+        #record.profile_image = profile_image
 
         record.save()
         context['record'] = record
-        # context['profile_image_url'] = record.profile_image.url
-        # context['image_object'] = record.profile_image
+        #context['profile_image_url'] = record.profile_image.url
+        #context['image_object'] = record.profile_image
+        return render(request, 'senior_dashboard1.html', context)
     else :
         context['record'] = Senior.objects.get(email = request.session['email'])
-        # context['profile_image_url'] = 'default'
-        # context['image_object'] = record.profile_image
-    return render(request, 'senior_dashboard.html', context)
+        #context['profile_image_url'] = 'default'
+        #context['image_object'] = record.profile_image
+        return render(request, 'senior_dashboard1.html', context)
 
 
 def add_post_comment(request, *args, **kwargs) :
@@ -203,7 +204,7 @@ def handle_login(request, *args, **kwargs) :
         # request.session['userType'] = user_type
 
         if user_type == 'senior' :
-            return render(request, 'senior_dashboard.html', context)
+            return render(request, 'senior_dashboard1.html', context)
         else :
             return render(request, 'caregiver_dashboard.html', context)
         
