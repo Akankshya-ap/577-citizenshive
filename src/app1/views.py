@@ -8,6 +8,7 @@ import random
 import string
 
 import stripe
+from django.contrib import messages
 from .forms import CheckoutForm, PaymentForm
 from django.views.generic import ListView, DetailView, View
 # Create your views here.
@@ -424,7 +425,7 @@ class CheckoutView(View):
             }
 
             billing_address_qs = Address.objects.filter(
-                user=self.request.email,
+                email=self.request.session['email'],
                 default=True
             )
             if billing_address_qs.exists():
@@ -433,7 +434,7 @@ class CheckoutView(View):
             return render(self.request, "checkout.html", context)
         except ObjectDoesNotExist:
             messages.info(self.request, "You do not have an active order")
-            return redirect("core:checkout")
+            return redirect("checkout")
 
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
@@ -447,7 +448,7 @@ class CheckoutView(View):
                 if use_default_billing:
                     print("Using the defualt billing address")
                     address_qs = Address.objects.filter(
-                        user=self.request.email,
+                        email=self.request.session['email'],
                         default=True
                     )
                     if address_qs.exists():
@@ -457,7 +458,7 @@ class CheckoutView(View):
                     else:
                         messages.info(
                             self.request, "No default billing address available")
-                        return redirect('core:checkout')
+                        return redirect('checkout')
                 else:
                     print("User is entering a new billing address")
                     billing_address1 = form.cleaned_data.get(
@@ -470,7 +471,7 @@ class CheckoutView(View):
 
                     if is_valid_form([billing_address1, billing_country, billing_zip]):
                         billing_address = Address(
-                            user=self.request.email,
+                            email=self.request.session['email'],
                             street_address=billing_address1,
                             apartment_address=billing_address2,
                             country=billing_country,
@@ -490,20 +491,20 @@ class CheckoutView(View):
                     else:
                         messages.info(
                             self.request, "Please fill in the required billing address fields")
-                        return redirect('app1:checkout')
+                        return redirect('checkout')
 
                 # payment_option = form.cleaned_data.get('payment_option')
 
                 # if payment_option == 'S':
-                #     return redirect('core:payment', payment_option='stripe')
+                return redirect('payment') #, payment_option='stripe')
                 # elif payment_option == 'P':
                 #     return redirect('core:payment', payment_option='paypal')
                 # else:
-                #     messages.warning(
-                #         self.request, "Invalid payment option selected")
-                #     return redirect('core:checkout')
+                messages.warning(
+                    self.request, "Invalid payment option selected")
+                return redirect('checkout')
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
-            return redirect("app1:order_summary")
+            return redirect("order_summary")
 
 
