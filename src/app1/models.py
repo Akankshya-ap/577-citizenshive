@@ -73,6 +73,22 @@ class Address(models.Model):
     # address_type = models.CharField(max_length=1, type=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
 
+class Payment(models.Model):
+    stripe_charge_id = models.CharField(max_length=50)
+    email = models.CharField(max_length=200)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+# class UserProfile(models.Model):
+#     email = models.CharField(max_length=50)
+#     stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
+#     one_click_purchasing = models.BooleanField(default=False)
+
+#     def __str__(self):
+#         return self.email
 
 # # Create your models here.
 # class Product(models.Model): 
