@@ -293,6 +293,15 @@ def order_summary(request, *args, **kwargs):
 def checkout(request, *args, **kwargs):
     form = CheckoutForm(request.POST or None)
 
+
+def services(request, *args, **kwargs):
+    context = {}
+    return render(request, 'services.html', context)
+
+def contact(request, *args, **kwargs):
+    context = {}
+    return render(request, 'contact.html', context)
+
 def is_valid_form(values):
     valid = True
     for field in values:
