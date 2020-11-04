@@ -45,6 +45,9 @@ class Comments(models.Model) :
     created_at = models.DateField(default=datetime.now())
     content = models.TextField()
 
+class Match(models.Model) :
+    senior_email = models.CharField(max_length=200)
+    caregiver_email = models.CharField(max_length=200)
 
 # # Create your models here.
 # class Product(models.Model): 
@@ -60,3 +63,4 @@ admin.site.register(Senior)
 admin.site.register(Caregiver)
 admin.site.register(Posts)
 admin.site.register(Comments)
+admin.site.register(Match)
