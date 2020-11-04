@@ -3,7 +3,13 @@ from django.http import Http404, HttpResponse
 from .models import CommonRegistration, Senior, Caregiver, Posts, Comments
 import json
 from pyzipcode import ZipCodeDatabase  
+# 
+import random
+import string
 
+import stripe
+from .forms import CheckoutForm, PaymentForm
+from django.views.generic import ListView, DetailView, View
 # Create your views here.
 
 def logout(request, *args, **kwargs) :
@@ -273,4 +279,116 @@ def registration_page(request, *args, **kwargs) :
 def about_us(request, *args, **kwargs):
     context = {}
     return render(request, 'about_us.html', context)
+
+def order_summary(request, *args, **kwargs):
+    try:
+        context = {
+            
+        }
+        return render(request, 'order_summary.html', context)
+    except ObjectDoesNotExist:
+        messages.warning(request, "You do not have an active order")
+        return render(request, 'order_summary.html', context)
+
+def checkout(request, *args, **kwargs):
+    form = CheckoutForm(request.POST or None)
+
+def is_valid_form(values):
+    valid = True
+    for field in values:
+        if field == '':
+            valid = False
+    return valid
+
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        try:
+            form = CheckoutForm()
+            context = {
+                'form': form,
+            }
+
+            billing_address_qs = Address.objects.filter(
+                user=self.request.email,
+                default=True
+            )
+            if billing_address_qs.exists():
+                context.update(
+                    {'default_billing_address': billing_address_qs[0]})
+            return render(self.request, "checkout.html", context)
+        except ObjectDoesNotExist:
+            messages.info(self.request, "You do not have an active order")
+            return redirect("core:checkout")
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        try:
+            # order = Order.objects.get(user=self.request.user, ordered=False)
+            if form.is_valid():
+
+                use_default_billing = form.cleaned_data.get(
+                    'use_default_billing')
+
+                if use_default_billing:
+                    print("Using the defualt billing address")
+                    address_qs = Address.objects.filter(
+                        user=self.request.email,
+                        default=True
+                    )
+                    if address_qs.exists():
+                        billing_address = address_qs[0]
+                        # order.billing_address = billing_address
+                        # order.save()
+                    else:
+                        messages.info(
+                            self.request, "No default billing address available")
+                        return redirect('core:checkout')
+                else:
+                    print("User is entering a new billing address")
+                    billing_address1 = form.cleaned_data.get(
+                        'billing_address')
+                    billing_address2 = form.cleaned_data.get(
+                        'billing_address2')
+                    billing_country = form.cleaned_data.get(
+                        'billing_country')
+                    billing_zip = form.cleaned_data.get('billing_zip')
+
+                    if is_valid_form([billing_address1, billing_country, billing_zip]):
+                        billing_address = Address(
+                            user=self.request.email,
+                            street_address=billing_address1,
+                            apartment_address=billing_address2,
+                            country=billing_country,
+                            zip=billing_zip,
+                        )
+                        billing_address.save()
+
+                        # order.billing_address = billing_address
+                        # order.save()
+
+                        set_default_billing = form.cleaned_data.get(
+                            'set_default_billing')
+                        if set_default_billing:
+                            billing_address.default = True
+                            billing_address.save()
+
+                    else:
+                        messages.info(
+                            self.request, "Please fill in the required billing address fields")
+                        return redirect('app1:checkout')
+
+                # payment_option = form.cleaned_data.get('payment_option')
+
+                # if payment_option == 'S':
+                #     return redirect('core:payment', payment_option='stripe')
+                # elif payment_option == 'P':
+                #     return redirect('core:payment', payment_option='paypal')
+                # else:
+                #     messages.warning(
+                #         self.request, "Invalid payment option selected")
+                #     return redirect('core:checkout')
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect("app1:order_summary")
+
 

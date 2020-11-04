@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib import admin
 from datetime import datetime
+from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -45,6 +46,23 @@ class Comments(models.Model) :
     created_at = models.DateField(default=datetime.now())
     content = models.TextField()
 
+
+
+class Address(models.Model):
+    # name = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = CountryField(multiple=False)
+    zip = models.CharField(max_length=100)
+    # address_type = models.CharField(max_length=1, type=ADDRESS_CHOICES)
+    default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name_plural = 'Addresses'
 
 # # Create your models here.
 # class Product(models.Model): 
