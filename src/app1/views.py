@@ -290,9 +290,6 @@ def order_summary(request, *args, **kwargs):
         messages.warning(request, "You do not have an active order")
         return render(request, 'order_summary.html', context)
 
-def checkout(request, *args, **kwargs):
-    form = CheckoutForm(request.POST or None)
-
 
 def services(request, *args, **kwargs):
     context = {}
