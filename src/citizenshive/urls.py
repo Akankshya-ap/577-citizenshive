@@ -15,11 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< HEAD
-from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, services
-=======
-from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, search_seniors, view_senior_details
->>>>>>> a9e590dbee87703a9d3e8c1344ab6d500abd5f02
+from pyzipcode import ZipCodeDatabase
+from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, search_seniors, view_senior_details, services, contact
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,7 +35,8 @@ urlpatterns = [
     path('logout', logout, name='logout'),
     path('dashboard_view', dashboard_view, name='dashboard_view'),
     path('about_us', about_us, name='about_us'),
-    path('services', services, name='services')
+    path('services', services, name='services'),
+    path('contact', contact, name='contact')
 ]
 
 from django.conf import settings
