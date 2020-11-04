@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
-from .models import CommonRegistration, Senior, Caregiver, Posts, Comments
+from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address
 import json
 from pyzipcode import ZipCodeDatabase  
 # 
@@ -11,6 +11,115 @@ import stripe
 from .forms import CheckoutForm, PaymentForm
 from django.views.generic import ListView, DetailView, View
 # Create your views here.
+
+from django.conf import settings
+from django.http import JsonResponse
+
+
+from faker import Faker
+from twilio.jwt.access_token import AccessToken
+from twilio.jwt.access_token.grants import ChatGrant
+
+fake = Faker()
+
+# Create your views here.
+
+
+def all_rooms(request) :
+    rooms = Room.objects.all()
+    return render(request, 'chat_index.html', {'rooms': rooms})
+
+
+def room_detail(request, slug) :
+    room = Room.objects.get(slug = slug)
+    return render(request, 'chat_room_detail.html',{'room': room})
+
+def token(request):
+    # identity = request.GET.get('identity', fake.user_name())
+    if request.session['user_type'] == 'senior' :
+        user_obj = Senior.objects.get(email = request.session['email'])
+    else :
+        user_obj = Caregiver.objects.get(email = request.session['email'])
+    identity = user_obj.name
+    device_id = request.GET.get('device', 'default')  # unique device ID
+
+    account_sid = settings.TWILIO_ACCOUNT_SID
+    api_key = settings.TWILIO_API_KEY
+    api_secret = settings.TWILIO_API_SECRET
+    chat_service_sid = settings.TWILIO_CHAT_SERVICE_SID
+
+    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
+
+    # Create a unique endpoint ID for the device
+    endpoint = "MyDjangoChatRoom:{0}:{1}".format(identity, device_id)
+
+    if chat_service_sid:
+        chat_grant = ChatGrant(endpoint_id=endpoint,
+                               service_sid=chat_service_sid)
+        token.add_grant(chat_grant)
+
+    response = {
+        'identity': identity,
+        'token': token.to_jwt().decode('utf-8')
+    }
+
+    return JsonResponse(response)
+
+
+def add_or_get_chatroom(request, user_id) :
+
+    
+    if request.session['user_type'] == 'senior' :
+        # If it is a senior requesting to chat to a caregiver
+        senior_obj = Senior.objects.get(email = request.session['email'])
+        caregiver_obj = Caregiver.objects.get(id = user_id)
+        user1_name = senior_obj.name
+        user2_name = caregiver_obj.name
+        senior_id = senior_obj.id
+        caregiver_id = user_id
+        chatroom_slug = 'senior_' + str(senior_id) + '_caregiver_' + str(caregiver_id)
+    else :
+        # If it is a caregiver requesting to chat to a senior
+        caregiver_obj = Caregiver.objects.get(email = request.session['email'])
+        senior_obj = Senior.objects.get(id = user_id)
+        user1_name = caregiver_obj.name
+        user2_name = senior_obj.name
+        caregiver_id = caregiver_obj.id
+        senior_id = user_id
+        chatroom_slug = 'senior_' + str(senior_id) + '_caregiver_' + str(caregiver_id)
+        pass
+
+    rooms = Room.objects.filter(slug = chatroom_slug)
+
+    if len(rooms) == 0 :
+        room_name = 'Chat between ' + user1_name + ' and ' + user2_name
+        Room.objects.create(name=room_name, description = ' Description ', slug = chatroom_slug)
+        #Add an entry to the UserChats table
+        UserChats.objects.create(user = 'senior_' + str(senior_id), chat_slug=chatroom_slug, with_user=caregiver_obj.name)
+        UserChats.objects.create(user = 'caregiver_' + str(caregiver_id), chat_slug=chatroom_slug, with_user=senior_obj.name)
+        #Redirect to the chatroom
+
+    else :
+        # They have chatted previously so no step needed to create a chatroom
+        pass
+
+    
+    return redirect('room_detail', slug = chatroom_slug)
+    # return redirect('all_rooms')
+
+
+def get_chats(request) :
+   
+    context = {}
+    user_type = request.session['user_type']
+    if user_type == 'senior' :
+        user_obj = Senior.objects.get(email = request.session['email'])
+    else :
+        user_obj = Caregiver.objects.get(email = request.session['email'])
+    chats = UserChats.objects.filter(user = user_type + "_" + str(user_obj.id))
+    
+    context['chats'] = chats
+    return render(request, 'view_all_chats.html', context)
 
 def logout(request, *args, **kwargs) :
     #Delete the current session variables
