@@ -12,20 +12,20 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="{% static 'css/search_caregivers.css' %}">
-        <script type="text/javascript" src="{% static 'javascript/search_caregivers.js' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/search_seniors.css' %}">
+        <script type="text/javascript" src="{% static 'javascript/search_seniors.js' %}">
         </script> 
     </head>
 
     <body>
         
         <!-- <h1>
-            Search Caregivers
+            Search Seniors
             
         </h1> -->
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="{% url 'senior_dashboard_view' %}">My Profile</a>
+          <a class="navbar-brand" href="{% url 'caregiver_dashboard_view' %}">My Profile</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -41,10 +41,7 @@
                 <a class="nav-link" href="#">Contact Us</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#"> Search Caregivers </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> My Caregivers </a>
+                <a class="nav-link" href="#"> Search Seniors </a>
               </li>
             </ul>
             
@@ -65,7 +62,7 @@
             <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
              
               
-                <form action="{% url 'search_caregivers' %}" method="POST" style="width: 100%;">
+                <form action="{% url 'search_seniors' %}" method="POST" style="width: 100%;">
                     {% csrf_token %}
                     <div class="form-row align-items-center">
                       <div class="col-auto">
@@ -88,8 +85,8 @@
                         <label class="mr-sm-2 sr-only" for="availability">Availability</label>
                         <select class="custom-select mr-sm-2" id="availability" name="availability" style="height: 50px;">
                         
-                          <option value="at_seniors">At my home</option>
-                          <option value="at_caregivers">At Caregiver's place</option>
+                          <option value="at_caregivers">At my home</option>
+                          <option value="at_seniors">At Senior's place</option>
                       
                         </select>
                       </div>
@@ -102,35 +99,35 @@
                   </form>
             </div>
 
-            {% if caregivers|length == 0 and isPostRequest %}
+            {% if seniors|length == 0 and isPostRequest %}
                 <h2>No Results match the current search criteria</h2>
             {% else %}
-            {% for caregiver in caregivers %}
+            {% for senior in seniors %}
             
             <div class="card" style="margin: 15px;">
               <div class="card-header">
-                {{ caregiver.name }}
+                {{ senior.name }}
               </div>
               <div class="card-body">
                 <!-- <h5 class="card-title">Special title treatment</h5> -->
                 <div class="col-md-3">
-                  <img src="{{ caregiver.profile_image.url }}" alt="" style="height: 150px;" >
+                  <img src="{{ senior.profile_image.url }}" alt="" style="height: 150px;" >
                 </div>
                 <p class="card-text">
-                  <b>Email : </b> {{ caregiver.email }}
-                  <b>Zip Code: </b> {{ caregiver.zip_code }}
+                  <b>Email : </b> {{ senior.email }}
+                  <b>Zip Code: </b> {{ senior.zip_code }}
                 </p>
-                <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
+                <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
               </div>
             </div>
-            <!-- <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;">
+            <!-- <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;">
                 <div class="row" style="margin: 10px; border: 1px solid black;">
                     <p>
                         <b>Name</b><br>
-                        {{ caregiver.id }}
-                        {{ caregiver.name }}
-                        {{ caregiver.email }}
-                        {{ caregiver.zip_code }}
+                        {{ senior.id }}
+                        {{ senior.name }}
+                        {{ senior.email }}
+                        {{ senior.zip_code }}
                     </p>
     
                 </div>

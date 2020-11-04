@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
 from .models import CommonRegistration, Senior, Caregiver, Posts, Comments
 import json
-# from pyzipcode import ZipCodeDatabase  
+from pyzipcode import ZipCodeDatabase  
 
 # Create your views here.
 
@@ -21,6 +21,12 @@ def view_caregiver_details(request, caregiver_id) :
     context['caregiver'] = caregiver_obj
     return render(request, 'caregiver_details_for_senior.html', context)
 
+def view_senior_details(request, senior_id) :
+    context = {}
+    senior_obj = Senior.objects.get(id=senior_id)
+    context['caregiver'] = senior_obj
+    return render(request, 'senior_details_for_caregiver.html', context)
+
 def search_caregivers(request, *args, **kwargs) :
     context = {}
     # zcdb = ZipCodeDatabase()
@@ -31,11 +37,11 @@ def search_caregivers(request, *args, **kwargs) :
     if request.method == 'POST' :
         zip_code = request.POST['zip']
         radius = int(request.POST['radius'])
-        # zcdb = ZipCodeDatabase() 
-        # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius(zip_code, radius)] # ('ZIP', radius in miles)
+        zcdb = ZipCodeDatabase() 
+        in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius(zip_code, radius)] # ('ZIP', radius in miles)
         # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
-        # radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
-        radius_arr = 10 #added 28/10
+        radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
+        # radius_arr = 10 #added 28/10
         caregivers = Caregiver.objects.filter(zip_code__in = radius_arr)
         context['caregivers'] = caregivers
         context['isPostRequest'] = True
@@ -43,6 +49,30 @@ def search_caregivers(request, *args, **kwargs) :
         context['caregivers'] = []
         context['isPostRequest'] = False
     return render(request, 'search_caregivers.html', context)
+
+def search_seniors(request, *args, **kwargs) :
+    context = {}
+    # zcdb = ZipCodeDatabase()
+    # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius('90007', 8)] # ('ZIP', radius in miles)
+    # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
+    # context['data'] = radius_utf
+    # zip, gender, radius
+    if request.method == 'POST' :
+        zip_code = request.POST['zip']
+        radius = int(request.POST['radius'])
+        zcdb = ZipCodeDatabase() 
+        in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius(zip_code, radius)] # ('ZIP', radius in miles)
+        # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
+        radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
+        # radius_arr = 10 #added 28/10
+        seniors = Senior.objects.filter(zip_code__in = radius_arr)
+        context['seniors'] = seniors
+        context['isPostRequest'] = True
+    else :
+        context['seniors'] = []
+        context['isPostRequest'] = False
+    return render(request, 'search_seniors.html', context)
+
 
 def dashboard_view(request, *args, **kwargs) :
     user_type = request.session['user_type']
@@ -53,63 +83,79 @@ def dashboard_view(request, *args, **kwargs) :
 
 def caregiver_dashboard_view(request, *args, **kwargs) :
     context = {}
+    if 'email' in request.session :
+        email = request.session['email']
+
     if request.method == 'POST' :
-        name = request.POST['name']
-        email = request.POST['email']
+        # name = request.session['name']
+        # email = request.session['email']
         dob = request.POST['dob']
         availability = request.POST['availability']
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
         bio = request.POST['bio']
+        # profile_image = request.FILES['profile_image']
 
         record = Caregiver.objects.get(email=email)
-        record.name = name
+        record.name = record.name 
         record.availability = availability
         record.zip_code = zip_code
         record.city = city
         record.state = state
         record.bio = bio
         record.dob = dob if dob!="" else None
+        # record.profile_image = profile_image
+
         record.save()
         context['record'] = record
+        #context['profile_image_url'] = record.profile_image.url
+        #context['image_object'] = record.profile_image
+        return render(request, 'caregiver_dashboard.html', context)
     else :
         context['record'] = Caregiver.objects.get(email = request.session['email'])
-    return render(request, 'caregiver_dashboard.html', context)
+        #context['profile_image_url'] = 'default'
+        #context['image_object'] = record.profile_image
+        return render(request, 'caregiver_dashboard.html', context)
+
 
 
 def senior_dashboard_view(request, *args, **kwargs) :
     context = {}
+    if 'email' in request.session :
+        email = request.session['email']
+
     if request.method == 'POST' :
-        name = request.POST['name']
-        email = request.POST['email']
+        # name = request.session['name']
+        # email = request.session['email']
         dob = request.POST['dob']
         availability = request.POST['availability']
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
         bio = request.POST['bio']
-        profile_image = request.FILES['profile_image']
+        # profile_image = request.FILES['profile_image']
 
         record = Senior.objects.get(email=email)
-        record.name = name
+        record.name = record.name 
         record.availability = availability
         record.zip_code = zip_code
         record.city = city
         record.state = state
         record.bio = bio
         record.dob = dob if dob!="" else None
-        record.profile_image = profile_image
+        # record.profile_image = profile_image
 
         record.save()
         context['record'] = record
-        # context['profile_image_url'] = record.profile_image.url
-        # context['image_object'] = record.profile_image
+        #context['profile_image_url'] = record.profile_image.url
+        #context['image_object'] = record.profile_image
+        return render(request, 'senior_dashboard.html', context)
     else :
         context['record'] = Senior.objects.get(email = request.session['email'])
-        # context['profile_image_url'] = 'default'
-        # context['image_object'] = record.profile_image
-    return render(request, 'senior_dashboard.html', context)
+        #context['profile_image_url'] = 'default'
+        #context['image_object'] = record.profile_image
+        return render(request, 'senior_dashboard.html', context)
 
 
 def add_post_comment(request, *args, **kwargs) :
@@ -166,6 +212,7 @@ def handle_login(request, *args, **kwargs) :
         context = {
             'record' : record
         }
+        request.session['name'] = record.name
 
         #Add values to the session
         # request.session['isLoggedIn']  = True
@@ -180,7 +227,6 @@ def handle_login(request, *args, **kwargs) :
 
 
 def landing_page(request, *args, **kwargs) :
-    # return HttpResponse("<h1> Hello Mugdha </h1>")
     context = {}
     if 'email' in request.session :
         #The user is already logged in
@@ -200,7 +246,7 @@ def registration_page(request, *args, **kwargs) :
     context = {}
     if request.method == 'POST' :
         # return HttpResponse("<h1> Response Received </h1>")
-        #name = request.POST['name']
+        name = request.POST['name']
         email = request.POST['email']
         password = request.POST['psw']
         user_type = request.POST['optradio']
@@ -214,9 +260,9 @@ def registration_page(request, *args, **kwargs) :
             common_registration_obj = CommonRegistration.objects.create(email=email, password=password, userType=user_type)
 
             if user_type == 'senior' :
-                senior_obj = Senior.objects.create(email=email, password=password)
+                senior_obj = Senior.objects.create(name=name, email=email, password=password)
             else :
-                caregiver_obj = Caregiver.objects.create(email=email, password=password)
+                caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
             # return render(request, 'login_page.html', {})
             return redirect('landing_page')
 
