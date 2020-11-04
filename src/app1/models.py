@@ -58,11 +58,6 @@ class Address(models.Model):
     # address_type = models.CharField(max_length=1, type=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.email
-
-    class Meta:
-        verbose_name_plural = 'Addresses'
 
 # # Create your models here.
 # class Product(models.Model): 
@@ -78,3 +73,4 @@ admin.site.register(Senior)
 admin.site.register(Caregiver)
 admin.site.register(Posts)
 admin.site.register(Comments)
+admin.site.register(Address)
