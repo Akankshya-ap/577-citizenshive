@@ -228,3 +228,7 @@ def about_us(request, *args, **kwargs):
     context = {}
     return render(request, 'about_us.html', context)
 
+def services(request, *args, **kwargs):
+    context = {}
+    return render(request, 'services.html', context)
+
