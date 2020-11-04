@@ -278,3 +278,7 @@ def services(request, *args, **kwargs):
     context = {}
     return render(request, 'services.html', context)
 
+def contact(request, *args, **kwargs):
+    context = {}
+    return render(request, 'contact.html', context)
+
