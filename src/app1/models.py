@@ -82,6 +82,10 @@ class Payment(models.Model):
     def __str__(self):
         return self.email
 
+class Match(models.Model) :
+    senior_email = models.CharField(max_length=200)
+    caregiver_email = models.CharField(max_length=200)
+
 # class UserProfile(models.Model):
 #     email = models.CharField(max_length=50)
 #     stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
@@ -107,3 +111,4 @@ admin.site.register(Comments)
 admin.site.register(Room)
 admin.site.register(UserChats)
 admin.site.register(Address)
+admin.site.register(Match)
