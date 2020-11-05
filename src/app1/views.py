@@ -481,6 +481,7 @@ class CheckoutView(View):
             form = CheckoutForm()
             context = {
                 'form': form,
+                'user_type' : self.request.session['user_type']
             }
 
             billing_address_qs = Address.objects.filter(
