@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
-from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address, Match
+from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address, Match, Rating_Review
 import json
 from pyzipcode import ZipCodeDatabase  
 # 
@@ -25,6 +25,14 @@ from twilio.jwt.access_token.grants import ChatGrant
 fake = Faker()
 
 # Create your views here.
+
+def caregiver_rating(request, *args, **kwargs) :
+    caregiver_email = request.session['email']
+    rating_rows = Rating_Review.objects.filer(caregiver_email = caregiver_email)
+    rating = 0
+    for row in rating_rows :
+        rating += row.rating
+    rating = rating/len(rating_rows)
 
 
 def all_rooms(request) :
@@ -136,6 +144,15 @@ def view_caregiver_details(request, caregiver_id) :
     context = {}
     caregiver_obj = Caregiver.objects.get(id=caregiver_id)
     context['caregiver'] = caregiver_obj
+    rating_rows = Rating_Review.objects.filter(caregiver_email = caregiver_obj.email)
+    rating = 0
+    for row in rating_rows :
+        rating += row.rating
+        review = row.review
+    rating = rating/len(rating_rows)
+    # review=rating_rows.review 
+    context['rating'] = rating
+    context['review'] = review
     return render(request, 'caregiver_details_for_senior.html', context)
 
 def view_senior_details(request, senior_id) :
@@ -662,6 +679,29 @@ def match_caregiver_to_senior(request, caregiver_id) :
             caregiver_email=caregiver_obj.email)
     #return redirect('match_caregiver_to_senior/')
     return render(request, 'caregiver_details_for_senior.html', context)
+
+def rating_review(request) :
+    # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
+    context = {}
+    if 'email' in request.session :
+        senior_email = request.session['email']
+    
+    if request.method == 'POST' :
+        # return HttpResponse("<h1> Response Received </h1>")
+        caregiver_obj = Caregiver.objects.get(id=request.POST['caregiver_id'])
+        context['caregiver'] = caregiver_obj
+        rating = request.POST['rating']
+        review = request.POST['review']
+        record = Rating_Review.objects.create(
+            senior_email=senior_email,
+            caregiver_email=caregiver_obj.email,
+            rating=rating,
+            review=review)
+        # record.save()
+    #return redirect('match_caregiver_to_senior/')
+    #return render(request, 'display_matched_caregiver.html', context)
+    return redirect('senior_dashboard_view')
+
 
 def display_matched_caregivers(request, *args, **kwargs) :
     context = {}

@@ -33,6 +33,13 @@ class Caregiver(models.Model) :
     state = models.CharField(max_length=25,blank = True)
     bio = models.TextField(max_length=1024, blank = True)
     profile_image = models.ImageField(upload_to='images/', blank = True, default='images/person_avatar.png')
+    
+
+class Rating_Review(models.Model) :
+    senior_email = models.CharField(max_length=200)
+    caregiver_email = models.CharField(max_length=200)
+    rating=models.IntegerField(default=0)
+    review=models.TextField(max_length=1024, blank = True)
 
 class Posts(models.Model) :
     created_by = models.CharField(max_length=200)
@@ -112,3 +119,4 @@ admin.site.register(Room)
 admin.site.register(UserChats)
 admin.site.register(Address)
 admin.site.register(Match)
+admin.site.register(Rating_Review)
