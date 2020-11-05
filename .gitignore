@@ -2,7 +2,7 @@ src/citizenshive/__pycache__/
 src/app1/migrations/
 src/app1/__pycache__/
 src/citizenshive/settings.py
-.vscode/settings.json
+.vscode/
 extra/migrations/0006_auto_20201023_0004.py
 extra/migrations/0007_auto_20201023_0039.py
 extra/migrations/0008_auto_20201028_0036.py
