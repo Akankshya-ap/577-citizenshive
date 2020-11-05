@@ -20,11 +20,9 @@
 
 
     </head>
-    {% if user_type == 'senior' %}
-    {% include "navbar_senior.html" %}
-    {% else %}
+    
     {% include "navbar_caregiver.html" %}
-    {% endif %}
+    
 
     <body>
         <!-- <h1>
@@ -93,6 +91,22 @@
                       </td>
                       <td>
                         <input type="text" name="state" value="{{ record.state }}" id="state">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="start_date"><b>Start Date</b></label>
+                      </td>
+                      <td>
+                        <input type="date" value="{{ record.start_date}}" name="start_date" id="sd">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="end_date"><b>End Date</b></label>
+                      </td>
+                      <td>
+                        <input type="date" value="{{ record.end_date}}" name="end_date" id="en">
                       </td>
                     </tr>
 
@@ -193,7 +207,22 @@
                         <body>{{ record.state }}</body>
                       </td>
                     </tr>
-
+                    <tr>
+                      <td>
+                        <label for="start_date"><b>Start Date</b></label>
+                      </td>
+                      <td>
+                        <body>{{ record.start_date }}</body>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="end_date"><b>End Date</b></label>
+                      </td>
+                      <td>
+                        <body>{{ record.end_date }}</body>
+                      </td>
+                    </tr>
                     <tr>
                       <td>
                         <b>Bio</b>
