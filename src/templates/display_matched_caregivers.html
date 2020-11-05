@@ -49,7 +49,7 @@
                 </p>
                 <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
                 <!-- payment -->
-                <a href="{% url 'order_summary' %}" style="text-decoration: none; color: black;" class="btn btn-default">Pay &#8599;</a>
+                <a href="{% url 'pay_order' caregiver_email=caregiver.email %}" style="text-decoration: none; color: black;" class="btn btn-default">Pay &#8599;</a>
                 <br><br>
                 <div>
                     <form action="{% url 'rating_review' %}" method="POST" >
