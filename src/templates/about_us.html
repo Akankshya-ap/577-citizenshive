@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
             Citizen's Hive
         </title>
@@ -10,53 +11,158 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-        body, html {
-        height: 100%;
-        margin: 0;
-        }
+        body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
 
-        .bg {
-        /* The image used */
-        background-image: url("/static/images/about_us.jpg");
+h2,h6,p,img {text-align: center;}
 
-        /* Full height */
-        height: 100%;
+html {
+  box-sizing: border-box;
+}
 
-        /* Center and scale the image nicely */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: auto 100%;
-        background-position-y: 0%;
-        padding: 0rem;
-        }
-        .about_us_div
-        {
-            width: 100%;
-            padding-left :20% ;
-            padding-right: 20%;
-            background-color: transparent 20%;
-        }
-        .about_us_div .h1
-        {
-            
-        }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #474e5d;
+  color: white;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+
         </style>
     </head>
     <body>
-        <div class="bg">
-            <div class="about_us_div">
-            <h1>
-                About Us
-            </h1>
+
+        <div class="about-section">
+            
+           
+        </br>
+            <h1><img src="/static/images/bee.jpg" alt="bee" style="width:3%"/>   CITIZENS HIVE</h1>
+        </br>
             <p style="line-height: 1.7rem">“As one person I cannot change the world, but I can change the world of one person”
                 – Paul Shane Spear
                </p>
-              <p style="line-height: 1.7rem">The Citizens Hive company was founded in 2019 with a clear idea of what problems have become stagnant in the senior care industry. According to the American Geriatric Society, over 40% of seniors that reside in nursing homes experience depression. Our solution is to bring compassionate, personalized, one on one care to seniors. At Citizens Hive, seniors will obtain the consistency and aid they need in order to thrive. Caregivers will also have the benefit of creating their own client experience and the ability to help seniors within their community.</p>
-              <p style="line-height: 1.7rem">The Citizens Hive platform offers options for both seniors and caregivers regarding the type of care needed or provided. We offer affordable live in-home care, in-home hourly care, and the option for seniors to live in the homes their caregivers. Members of the hive can view photos, manage pay, and message one another to build everlasting relationships. We also provide a community forum for members to communicate any questions or answers they may have.</p>
-              <p style="line-height: 1.7rem">The goal of the Citizens Hive platform is to minimize the number of seniors experiencing depression and bring them into a space of compassion and helping hands.</p>
-              <p style="line-height: 1.7rem">Welcome to Citizens Hive. We are glad to have you.</p>
-        
-            </div>
         </div>
+
+          
+          <hr>
+          <div class="row">
+            <div class="column">
+              <div class="card">
+                <div class="container">
+                </br>
+            </br>
+        </br>
+    </br>
+                  <h2>OUR STORY</h2>
+                  <p></br>
+                      The Citizens Hive company was founded in 2019 with a clear idea of what problems have become stagnant in the senior care industry. According to the American Geriatric Society, over 40% of seniors that reside in nursing homes experience depression.
+                  </p>
+                  <p></br>
+                      Our solution is to bring compassionate, personalized, one on one care to seniors. At Citizens Hive, seniors will obtain the consistency and aid they need in order to thrive. Caregivers will also have the benefit of creating their own client experience and the ability to help seniors within their community.</p>
+                  </br>
+                </br>
+            </br>
+        </br>
+    </br>
+</br>
+                  
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+                
+                  
+                  <div class="container">
+                    <img src="/static/images/about_us.jpg" alt="bee" style="width:100%">
+                  
+                </div>
+              </div>
+          
+           
+            <div class="column">
+              <div class="card">
+            
+                <div class="container">
+                </br>
+            </br>
+        </br>
+
+                  <h2>OUR GOAL</h2>
+                </br>
+                <p style="line-height: 1.7rem">The Citizens Hive platform offers options for both seniors and caregivers regarding the type of care needed or provided. We offer affordable live in-home care, in-home hourly care, and the option for seniors to live in the homes their caregivers. </p>
+            </br>
+                <p>Members of the hive can view photos, manage pay, and message one another to build everlasting relationships. We also provide a community forum for members to communicate any questions or answers they may have.</p>
+            </br>
+                <p>The goal of the Citizens Hive platform is to minimize the number of seniors experiencing depression and bring them into a space of compassion and helping hands.</p>
+            </br>
+        </br>
+    </br>
+</br>
+</br>
+                </div>
+              </div>
+            </div>
+       
+
+            
+
+          </div>
+          
+        
     </body>
 </html>
