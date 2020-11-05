@@ -85,12 +85,14 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
 class Transaction(models.Model):
-    senior_id= models.CharField(max_length=200)
-    caregiver_id= models.CharField(max_length=200)
+    senior_email = models.CharField(max_length=200)
+    caregiver_email = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
-    start= models.DateField(null=True, blank = True)
-    end=models.DateField(null=True, blank = True)
-    amount = models.FloatField()
+    start_date= models.DateField(null=True, blank = True)
+    end_date=models.DateField(null=True, blank = True)
+    number_of_days = models.IntegerField(null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    availability = models.CharField(max_length = 25, null=True, blank=True)
 
 class Payment(models.Model):
     stripe_charge_id = models.CharField(max_length=50)
@@ -132,3 +134,4 @@ admin.site.register(UserChats)
 admin.site.register(Address)
 admin.site.register(Match)
 admin.site.register(Rating_Review)
+admin.site.register(Transaction)

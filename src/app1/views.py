@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
-from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address, Match, Rating_Review
+from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address, Match, Transaction, Rating_Review
 import json
 from pyzipcode import ZipCodeDatabase  
 # 
@@ -242,6 +242,8 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
         bio = request.POST['bio']
         # profile_image = request.FILES['profile_image']
 
@@ -251,6 +253,8 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         record.zip_code = zip_code
         record.city = city
         record.state = state
+        record.start_date = start_date
+        record.end_date = end_date
         record.bio = bio
         record.dob = dob if dob!="" else None
         # record.profile_image = profile_image
@@ -283,6 +287,8 @@ def senior_dashboard_view(request, *args, **kwargs) :
         city = request.POST['city']
         state = request.POST['state']
         bio = request.POST['bio']
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
         # profile_image = request.FILES['profile_image']
 
         record = Senior.objects.get(email=email)
@@ -291,6 +297,8 @@ def senior_dashboard_view(request, *args, **kwargs) :
         record.zip_code = zip_code
         record.city = city
         record.state = state
+        record.start_date = start_date
+        record.end_date = end_date
         record.bio = bio
         record.dob = dob if dob!="" else None
         # record.profile_image = profile_image
@@ -704,8 +712,18 @@ def match_caregiver_to_senior(request, caregiver_id) :
     context = {}
     if 'email' in request.session :
         senior_email = request.session['email']
+        senior_obj = Senior.objects.get(email = senior_email)
     caregiver_obj = Caregiver.objects.get(id=caregiver_id)
+    
+    # For Payments
+    subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
+    subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
+    Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability)
+
     context['caregiver'] = caregiver_obj
+    context['start_date'] = subset_start_date
+    context['end_date'] = subset_end_date
+    context['number_of_days'] = (subset_end_date - subset_start_date).days
     if request.method == 'POST' :
         record = Match.objects.create(
             senior_email=senior_email,
@@ -741,7 +759,11 @@ def display_matched_caregivers(request, *args, **kwargs) :
     if 'email' in request.session :
         #The user is already logged in
         email = request.session['email']
-        record = Match.objects.get(senior_email = email)
-        context['caregiver'] = Caregiver.objects.get(email = record.caregiver_email)
-        return render(request, 'display_matched_caregivers.html', context)
-
+        try:
+            record = Match.objects.get(senior_email = email)
+            context['caregiver'] = Caregiver.objects.get(email = record.caregiver_email)
+            return render(request, 'display_matched_caregivers.html', context)
+        except Match.DoesNotExist:
+            messages.add_message(request, messages.INFO, 'No Caregivers Found!')
+            return render(request, 'senior_dashboard.html')
+        
