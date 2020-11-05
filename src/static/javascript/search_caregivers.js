@@ -1,40 +1,38 @@
 $(document).ready(function(){
     $("form").submit(function(e){
 
-        var start_date = new Date($("#start_date").val());
-        var end_date = new Date($("#end_date").val());
-        var current_date = new Date();
+        var start_date = $("#start_date").val();
+        var end_date = $("#end_date").val();
 
-        var start_date_str = start_date.getFullYear() + "-" + start_date.getMonth() + "-" + start_date.getDate();
-        var end_date_str = end_date.getFullYear() + "-" + end_date.getMonth() + "-" + end_date.getDate();
-        var current_date_str = current_date.getFullYear() + "-" + current_date.getMonth() + "-" + current_date.getDay();
+        var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
 
-        console.log("Current date = " , current_date_str);
-        console.log("Start Date = ", start_date_str);
-        console.log("End Date = ", end_date_str);
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
         
-        //Check if the user input start date is less than the current date
-        console.log(start_date_str<current_date_str , ", Start date is less than the current date");
-        if(start_date_str < current_date_str)
+        var current_date = year + "-" + month + "-" + day;
+        
+        // alert("Start Date = " + start_date);
+        // alert("End Date" + end_date);
+        // alert("Current Date = " + current_date);
+
+        if(start_date < current_date) 
         {
             alert("Start date cannot precede the current date");
             e.preventDefault();
         }
-
-
-        //Check if the user input end date is less than the current date
-        console.log(end_date_str<current_date_str , ", End date is less than the current date");
-        if(end_date_str<current_date_str)
+        if(end_date < current_date)
         {
             alert("End date cannot precede the current date");
             e.preventDefault();
         }
-
-        //Check if the user input end date is less than user input start date
-        console.log(end_date_str<start_date_str , ", End date is less than the start date");
-        if(end_date_str<start_date_str)
+        if(end_date < start_date)
         {
-            alert("End date cannot precede the start date");
+            alert("End date cannot precede start date");
             e.preventDefault();
         }
 
