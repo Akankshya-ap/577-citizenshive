@@ -46,6 +46,21 @@ class Comments(models.Model) :
     created_at = models.DateField(default=datetime.now())
     content = models.TextField()
 
+class Room(models.Model) :
+    ''' Represents chat rooms that users can join '''
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=100)
+    slug = models.CharField(max_length=50)
+
+    def __str__(self) :
+        '''  Returns human-readable representation of the model instance  '''
+        return self.name
+
+class UserChats(models.Model) :
+    #User will be a concatenation of user type and user id
+    user = models.CharField(max_length=255)
+    chat_slug = models.CharField(max_length=50)
+    with_user = models.CharField(max_length=255, default = "")
 
 
 class Address(models.Model):
@@ -58,6 +73,26 @@ class Address(models.Model):
     # address_type = models.CharField(max_length=1, type=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
 
+class Payment(models.Model):
+    stripe_charge_id = models.CharField(max_length=50)
+    email = models.CharField(max_length=200)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+class Match(models.Model) :
+    senior_email = models.CharField(max_length=200)
+    caregiver_email = models.CharField(max_length=200)
+
+# class UserProfile(models.Model):
+#     email = models.CharField(max_length=50)
+#     stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
+#     one_click_purchasing = models.BooleanField(default=False)
+
+#     def __str__(self):
+#         return self.email
 
 # # Create your models here.
 # class Product(models.Model): 
@@ -73,4 +108,7 @@ admin.site.register(Senior)
 admin.site.register(Caregiver)
 admin.site.register(Posts)
 admin.site.register(Comments)
+admin.site.register(Room)
+admin.site.register(UserChats)
 admin.site.register(Address)
+admin.site.register(Match)
