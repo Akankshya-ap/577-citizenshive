@@ -145,7 +145,7 @@ def view_caregiver_details(request, caregiver_id) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
     context = {}
     caregiver_obj = Caregiver.objects.get(id=caregiver_id)
-    context['caregiver'] = caregiver_obj
+    context['user'] = caregiver_obj
     rating_rows = Rating_Review.objects.filter(caregiver_email = caregiver_obj.email)
     rating = 0
     if len(rating_rows)!=0:
@@ -163,7 +163,7 @@ def view_caregiver_details(request, caregiver_id) :
 def view_senior_details(request, senior_id) :
     context = {}
     senior_obj = Senior.objects.get(id=senior_id)
-    context['caregiver'] = senior_obj
+    context['user'] = senior_obj
     context['user_type'] = request.session['user_type']
     return render(request, 'senior_details_for_caregiver.html', context)
 
@@ -773,7 +773,8 @@ def rating_review(request) :
         # record.save()
     #return redirect('match_caregiver_to_senior/')
     #return render(request, 'display_matched_caregiver.html', context)
-    return redirect('senior_dashboard_view')
+    # return redirect('senior_dashboard_view')
+    return redirect('display_matched_caregivers')
 
 
 def display_matched_caregivers(request, *args, **kwargs) :
@@ -790,9 +791,29 @@ def display_matched_caregivers(request, *args, **kwargs) :
         email = request.session['email']
         try:
             record = Match.objects.get(senior_email = email)
-            context['caregiver'] = Caregiver.objects.get(email = record.caregiver_email)
+            context['user'] = Caregiver.objects.get(email = record.caregiver_email)
             return render(request, 'display_matched_caregivers.html', context)
         except Match.DoesNotExist:
             messages.add_message(request, messages.INFO, 'No Caregivers Found!')
             return redirect('senior_dashboard_view')
+
+def display_matched_seniors(request, *args, **kwargs) :
+    context = {}
+    context['user_type'] = request.session['user_type']
+    user_type = request.session['user_type']
+    email = request.session['email']
+    if user_type == 'senior' :
+            context['record'] = Senior.objects.get(email = email)
+    else :
+        context['record'] = Caregiver.objects.get(email = email)
+    if 'email' in request.session :
+        #The user is already logged in
+        email = request.session['email']
+        try:
+            record = Match.objects.get(caregiver_email = email)
+            context['user'] = Senior.objects.get(email = record.senior_email)
+            return render(request, 'display_matched_seniors.html', context)
+        except Match.DoesNotExist:
+            messages.add_message(request, messages.INFO, 'No Seniors Found!')
+            return redirect('caregiver_dashboard_view')
         
