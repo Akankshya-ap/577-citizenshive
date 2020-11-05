@@ -41,10 +41,10 @@
                     <a class="nav-link" href="{% url 'search_caregivers' %}"> Search Caregivers </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'display_matched_caregivers' %}"> My Caregivers </a>
+                  <a class="nav-link" href="#"> My Caregivers </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'get_chats' %}">My Messages</a>
+                  <a class="nav-link" href="#">My Messages</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'order_summary' %}">My Payments</a>
@@ -74,37 +74,37 @@
         </div>
     </nav>
 
-    <div id="modal1" class="modal">
-        <form class="modal-content animate" action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
-                        <img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 40%; margin-top: 5%;">
-                        <br><br>
-                        <input type="file" name="profile_image" id="profile_image" class="profile_image">
-                    </div>
-
-                    <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
-                        <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <label for="dob"><b>Date of Birth</b></label>
-                                    </td>
-                                    <td>
-                                        <input type="date" value="{{ record.dob}}" name="dob" id="dob">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <label for="availability"> <b> Availability Preference</b></label>
-                                    </td>
-                                    <td>
-                                        <select name="availability" value="{{ record.availability }}" id="availability">
-                                            <option value="at_seniors">Move-In</option>
-                                            <option value="at_caregivers">Move-Out</option>
+          <div id="modal1" class="modal">
+            <form  class="modal-content animate" action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container">
+              <div class="row">
+                  <div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
+                      <img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 40%; margin-top: 5%;">
+                      <br><br>
+                      <input type="file" name="profile_image" id="profile_image" class="profile_image">
+                  </div>
+  
+                  <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
+                    <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+                    <table>
+                      <tr>
+                        <td>
+                          <label for="dob"><b>Date of Birth</b></label>
+                        </td>
+                        <td>
+                          <input type="date" value="{{ record.dob}}" name="dob" id="dob">
+                        </td>
+                      </tr>
+                    
+                      <tr>
+                        <td>
+                          <label for="availability"> <b> Availability Preference</b></label>
+                        </td>
+                        <td>
+                          <select name="availability" value="{{ record.availability }}" id="availability">
+                                        <option value="at_seniors">Living at my place</option>
+                                        <option value="at_caregivers">Living at Caregiver's place</option>
                                         </select>
                                     </td>
                                 </tr>
