@@ -15,7 +15,11 @@
   </style>
   <title>All Chat Rooms</title>
 </head>
-
+{% if user_type == 'senior' %}
+{% include "navbar_senior.html" %}
+{% else %}
+{% include "navbar_caregiver.html" %}
+{% endif %}
 <body>
   <section class="hero is-info">
     <div class="hero-body has-text-centered">

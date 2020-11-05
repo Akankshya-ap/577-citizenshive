@@ -20,51 +20,17 @@
 
 
     </head>
-
+    {% if user_type == 'senior' %}
+    {% include "navbar_senior.html" %}
+    {% else %}
+    {% include "navbar_caregiver.html" %}
+    {% endif %}
 
     <body>
         <!-- <h1>
             {{ record.email }}
         </h1> -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="#">My Profile</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
         
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contact Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'search_seniors' %}"> Search Seniors </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> My Seniors </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">My Messages</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="#">My Payments</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'forum' %}">Forum 
-                    <!-- <span class="sr-only">(current)</span> -->
-                </a>
-              </li>
-            </ul>
-
-            <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
-              <li class="nav-item"> 
-                  <a class="nav-link" href="{% url 'logout' %}"> 
-                    Logout 
-                  </a> 
-              </li> 
-            </ul>
-          </div>
-        </nav>
 
 
 
