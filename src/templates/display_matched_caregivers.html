@@ -34,6 +34,7 @@
                 <p class="card-text">
                   <b>Email : </b> {{ caregiver.email }}
                   <b>Zip Code: </b> {{ caregiver.zip_code }}
+                  
                 </p>
                 <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
               </div>
