@@ -358,31 +358,37 @@ def handle_login(request, *args, **kwargs) :
     records = CommonRegistration.objects.filter(email = email)
 
     if len(records) == 0 :
+        messages.add_message(request, messages.INFO, 'This email is not registered!!')
         return redirect('landing_page')
     else :
-        # record = records.first()
-        user_type = records.first().userType
-        request.session['user_type'] = user_type
-        request.session['email'] = email
-        request.session['password'] = password
-        if user_type == 'senior' :
-            record = Senior.objects.get(email = email)
-        else :
-            record = Caregiver.objects.get(email = email)
-        context = {
-            'record' : record
-        }
-        request.session['name'] = record.name
+        password_record = CommonRegistration.objects.filter(password = password)
+        if len(password_record) == 0:
+              messages.add_message(request, messages.INFO, 'Incorrect Password!!')
+              return redirect('landing_page')
+        else:
+            # record = records.first()
+            user_type = records.first().userType
+            request.session['user_type'] = user_type
+            request.session['email'] = email
+            request.session['password'] = password
+            if user_type == 'senior' :
+                record = Senior.objects.get(email = email)
+            else :
+                record = Caregiver.objects.get(email = email)
+            context = {
+                'record' : record
+            }
+            request.session['name'] = record.name
 
-        #Add values to the session
-        # request.session['isLoggedIn']  = True
-        # request.session['email'] = email
-        # request.session['userType'] = user_type
-        context['user_type'] = request.session['user_type']
-        if user_type == 'senior' :
-            return render(request, 'senior_dashboard.html', context)
-        else :
-            return render(request, 'caregiver_dashboard.html', context)
+            #Add values to the session
+            # request.session['isLoggedIn']  = True
+            # request.session['email'] = email
+            # request.session['userType'] = user_type
+            context['user_type'] = request.session['user_type']
+            if user_type == 'senior' :
+                return render(request, 'senior_dashboard.html', context)
+            else :
+                return render(request, 'caregiver_dashboard.html', context)
         
 
 
@@ -412,6 +418,7 @@ def registration_page(request, *args, **kwargs) :
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['psw']
+        repeat_password = request.POST['psw-repeat']
         user_type = request.POST['optradio']
 
         record_exists = CommonRegistration.objects.filter(email = email).count() > 0
@@ -420,12 +427,16 @@ def registration_page(request, *args, **kwargs) :
             context['error_msg'] = 'This user exists already'
             return render(request, 'registration_page.html', context)
         else :
-            common_registration_obj = CommonRegistration.objects.create(email=email, password=password, userType=user_type)
+            if password != repeat_password:
+                messages.add_message(request, messages.INFO, 'Repeat Password does not Match with Password!')
+                return render(request, 'registration_page.html', context)
+            else:
+                common_registration_obj = CommonRegistration.objects.create(email=email, password=password, userType=user_type)
 
-            if user_type == 'senior' :
-                senior_obj = Senior.objects.create(name=name, email=email, password=password)
-            else :
-                caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
+                if user_type == 'senior' :
+                    senior_obj = Senior.objects.create(name=name, email=email, password=password)
+                else :
+                    caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
             # return render(request, 'login_page.html', {})
             return redirect('landing_page')
 
