@@ -29,12 +29,12 @@ fake = Faker()
 
 def all_rooms(request) :
     rooms = Room.objects.all()
-    return render(request, 'chat_index.html', {'rooms': rooms})
+    return render(request, 'chat_index.html', {'rooms': rooms, 'user_type' : request.session['user_type']})
 
 
 def room_detail(request, slug) :
     room = Room.objects.get(slug = slug)
-    return render(request, 'chat_room_detail.html',{'room': room})
+    return render(request, 'chat_room_detail.html',{'room': room, 'user_type' : request.session['user_type']})
 
 def token(request):
     # identity = request.GET.get('identity', fake.user_name())
@@ -121,6 +121,7 @@ def get_chats(request) :
     chats = UserChats.objects.filter(user = user_type + "_" + str(user_obj.id))
     
     context['chats'] = chats
+    context['user_type'] = request.session['user_type']
     return render(request, 'view_all_chats.html', context)
 
 def logout(request, *args, **kwargs) :
@@ -136,16 +137,19 @@ def view_caregiver_details(request, caregiver_id) :
     context = {}
     caregiver_obj = Caregiver.objects.get(id=caregiver_id)
     context['caregiver'] = caregiver_obj
+    context['user_type'] = request.session['user_type']
     return render(request, 'caregiver_details_for_senior.html', context)
 
 def view_senior_details(request, senior_id) :
     context = {}
     senior_obj = Senior.objects.get(id=senior_id)
     context['caregiver'] = senior_obj
+    context['user_type'] = request.session['user_type']
     return render(request, 'senior_details_for_caregiver.html', context)
 
 def search_caregivers(request, *args, **kwargs) :
     context = {}
+    context['user_type'] = request.session['user_type']
     # zcdb = ZipCodeDatabase()
     # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius('90007', 8)] # ('ZIP', radius in miles)
     # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
@@ -169,6 +173,7 @@ def search_caregivers(request, *args, **kwargs) :
 
 def search_seniors(request, *args, **kwargs) :
     context = {}
+    context['user_type'] = request.session['user_type']
     # zcdb = ZipCodeDatabase()
     # in_radius = [z.zip for z in zcdb.get_zipcodes_around_radius('90007', 8)] # ('ZIP', radius in miles)
     # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
@@ -200,6 +205,7 @@ def dashboard_view(request, *args, **kwargs) :
 
 def caregiver_dashboard_view(request, *args, **kwargs) :
     context = {}
+    context['user_type'] = request.session['user_type']
     if 'email' in request.session :
         email = request.session['email']
 
@@ -239,6 +245,7 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
 
 def senior_dashboard_view(request, *args, **kwargs) :
     context = {}
+    context['user_type'] = request.session['user_type']
     if 'email' in request.session :
         email = request.session['email']
 
@@ -306,6 +313,7 @@ def forum(request, *args, **kwargs) :
     context = {
         'posts_array': posts_array
     }
+    context['user_type'] = request.session['user_type']
     return render(request, 'forum_page.html', context)
 
 def handle_login(request, *args, **kwargs) :
@@ -335,7 +343,7 @@ def handle_login(request, *args, **kwargs) :
         # request.session['isLoggedIn']  = True
         # request.session['email'] = email
         # request.session['userType'] = user_type
-
+        context['user_type'] = request.session['user_type']
         if user_type == 'senior' :
             return render(request, 'senior_dashboard.html', context)
         else :
@@ -345,6 +353,8 @@ def handle_login(request, *args, **kwargs) :
 
 def landing_page(request, *args, **kwargs) :
     context = {}
+    if 'user_type' in request.session:
+        context['user_type'] = request.session['user_type']
     if 'email' in request.session :
         #The user is already logged in
         user_type = request.session['user_type']
@@ -354,6 +364,7 @@ def landing_page(request, *args, **kwargs) :
             context['record'] = Senior.objects.get(email = email)
         else :
             context['record'] = Caregiver.objects.get(email = email)
+        
         return render(request, 'senior_dashboard.html', context)
     else :
         return render(request, 'landing_page.html', context)
@@ -361,6 +372,7 @@ def landing_page(request, *args, **kwargs) :
 def registration_page(request, *args, **kwargs) :
     # return HttpResponse("<h1> Hello Mugdha </h1>")
     context = {}
+    context['user_type'] = request.session['user_type']
     if request.method == 'POST' :
         # return HttpResponse("<h1> Response Received </h1>")
         name = request.POST['name']
@@ -389,6 +401,7 @@ def registration_page(request, *args, **kwargs) :
     
 def about_us(request, *args, **kwargs):
     context = {}
+    context['user_type'] = request.session['user_type']
     return render(request, 'about_us.html', context)
 
 def order_summary(request, *args, **kwargs):
@@ -396,18 +409,30 @@ def order_summary(request, *args, **kwargs):
         context = {
             
         }
+        context['user_type'] = request.session['user_type']
         return render(request, 'order_summary.html', context)
     except ObjectDoesNotExist:
         messages.warning(request, "You do not have an active order")
+        context['user_type'] = request.session['user_type']
         return render(request, 'order_summary.html', context)
 
 
 def services(request, *args, **kwargs):
     context = {}
+    try:
+        context['user_type'] = request.session['user_type']
+
+    except: 
+        context = {}
     return render(request, 'services.html', context)
 
 def contact(request, *args, **kwargs):
     context = {}
+    try:
+        context['user_type'] = request.session['user_type']
+
+    except: 
+        context = {}
     return render(request, 'contact.html', context)
 
 def is_valid_form(values):

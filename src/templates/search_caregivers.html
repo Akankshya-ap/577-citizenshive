@@ -16,7 +16,7 @@
         <script type="text/javascript" src="{% static 'javascript/search_caregivers.js' %}">
         </script> 
     </head>
-
+    {% include "navbar_senior.html" %}
     <body>
         
         <!-- <h1>
@@ -24,42 +24,6 @@
             
         </h1> -->
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="{% url 'senior_dashboard_view' %}">My Profile</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'forum' %}">Forum 
-                    <!-- <span class="sr-only">(current)</span> -->
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contact Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> Search Caregivers </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> My Caregivers </a>
-              </li>
-            </ul>
-            
-
-            <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
-              <li class="nav-item"> 
-                  <a class="nav-link" href="{% url 'logout' %}"> 
-                    Logout 
-                  </a> 
-              </li> 
-            </ul>
-
-
-          </div>
-        </nav>
 
         <div class="container">
             <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
@@ -93,8 +57,17 @@
                       
                         </select>
                       </div>
-                      
-                      <div class="col-auto" style="position: relative; left: 53%;" >
+                      <div class="col-auto my-1">
+                        <label class="mr-sm-2 sr-only" for="start">Start Date</label>
+                        <input type="date" name="start" id="start">
+                      </div>
+
+                      <div class="col-auto my-1">
+                        <label class="mr-sm-2 sr-only" for="end">End Date</label>
+                        <input type="date" name="end" id="end">
+                      </div>
+
+                      <div class="col-auto" style="position: relative; left: 23%;" >
                         <button type="submit" class="btn btn-primary mb-2" style="height: 49px;"> &#128269;</button>
                         
                       </div>

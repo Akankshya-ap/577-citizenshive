@@ -118,6 +118,7 @@
                   <b>Zip Code: </b> {{ senior.zip_code }}
                 </p>
                 <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
+                <a href="{% url 'add_or_get_chatroom' user_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
               </div>
             </div>
             <!-- <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;">
