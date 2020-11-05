@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponse
-from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address
+from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address, Match
 import json
 from pyzipcode import ZipCodeDatabase  
 # 
@@ -648,4 +648,27 @@ class PaymentView(View):
 
         messages.warning(self.request, "Invalid data received")
         return redirect("/payment/stripe/")
+
+def match_caregiver_to_senior(request, caregiver_id) :
+    # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
+    context = {}
+    if 'email' in request.session :
+        senior_email = request.session['email']
+    caregiver_obj = Caregiver.objects.get(id=caregiver_id)
+    context['caregiver'] = caregiver_obj
+    if request.method == 'POST' :
+        record = Match.objects.create(
+            senior_email=senior_email,
+            caregiver_email=caregiver_obj.email)
+    #return redirect('match_caregiver_to_senior/')
+    return render(request, 'caregiver_details_for_senior.html', context)
+
+def display_matched_caregivers(request, *args, **kwargs) :
+    context = {}
+    if 'email' in request.session :
+        #The user is already logged in
+        email = request.session['email']
+        record = Match.objects.get(senior_email = email)
+        context['caregiver'] = Caregiver.objects.get(email = record.caregiver_email)
+        return render(request, 'display_matched_caregivers.html', context)
 
