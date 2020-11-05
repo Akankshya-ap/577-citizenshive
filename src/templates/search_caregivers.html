@@ -16,7 +16,7 @@
         <script type="text/javascript" src="{% static 'javascript/search_caregivers.js' %}">
         </script> 
     </head>
-
+    {% include "navbar_senior.html" %}
     <body>
         
         <!-- <h1>
@@ -24,42 +24,6 @@
             
         </h1> -->
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="{% url 'senior_dashboard_view' %}">My Profile</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'forum' %}">Forum 
-                    <!-- <span class="sr-only">(current)</span> -->
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contact Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> Search Caregivers </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> My Caregivers </a>
-              </li>
-            </ul>
-            
-
-            <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
-              <li class="nav-item"> 
-                  <a class="nav-link" href="{% url 'logout' %}"> 
-                    Logout 
-                  </a> 
-              </li> 
-            </ul>
-
-
-          </div>
-        </nav>
 
         <div class="container">
             <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
@@ -88,29 +52,29 @@
                         <label class="mr-sm-2 sr-only" for="availability">Availability</label>
                         <select class="custom-select mr-sm-2" id="availability" name="availability" style="height: 50px;">
                         
-                          <option value="at_seniors">At my home</option>
-                          <option value="at_caregivers">At Caregiver's place</option>
-                      
-                        </select>
-                      </div>
-
-                      <div class="col-auto my-1">
-                        <label class="mr-sm-2 sr-only" for="type_of_care">Type of care</label>
-                        <select class="custom-select mr-sm-2" id="type_of_care" name="type_of_care" style="height: 50px;">
-                        
-                          <option value="Move-In">Move-In</option>
-                          <option value="Move-out">Move-out</option>
+                          <option value="at_seniors">Move-In</option>
+                          <option value="at_caregivers">Move-Out</option>
                           <option value="Hourly">Hourly</option>
-
                       
                         </select>
                       </div>
+
                       
-                      <div class="col-auto" style="position: relative; left: 53%;" >
+                      <!-- <div class="col-auto" style="position: relative; left: 53%;" > -->
+                      <div class="col-auto">
+                        <label class="mr-sm-2 sr-only" for="start_date">Start Date</label>
+                        <input type="date" class="form-control mb-2" id="start_date"  name="start_date" required style="height: 50px;margin-top: 5px;margin-left: 5px;">
+                      </div>
+                      <div class="col-auto">
+                        <label class="mr-sm-2 sr-only" for="end_date">End Date</label>
+                        <input type="date" class="form-control mb-2" id="end_date"  name="end_date" required style="height: 50px;margin-top: 5px;margin-left: 5px;">
+                      </div>
+
+                      <div class="col-auto" >
                         <button type="submit" class="btn btn-primary mb-2" style="height: 49px;"> &#128269;</button>
                         
                       </div>
-                    </div>
+                    <!-- </div> -->
                   </form>
             </div>
 

@@ -21,6 +21,8 @@ class Senior(models.Model) :
     state = models.CharField(max_length=25,blank = True)
     bio = models.TextField(max_length=1024, blank = True)
     profile_image = models.ImageField(upload_to='images/', blank = True, default = 'images/person_avatar.png')
+    start_date = models.DateField(null=True, blank = True)
+    end_date = models.DateField(null=True, blank = True)
 
 class Caregiver(models.Model) :
     email = models.CharField(max_length=200)
@@ -33,6 +35,8 @@ class Caregiver(models.Model) :
     state = models.CharField(max_length=25,blank = True)
     bio = models.TextField(max_length=1024, blank = True)
     profile_image = models.ImageField(upload_to='images/', blank = True, default='images/person_avatar.png')
+    start_date = models.DateField(null=True, blank = True)
+    end_date = models.DateField(null=True, blank = True)
     
 
 class Rating_Review(models.Model) :
@@ -79,6 +83,14 @@ class Address(models.Model):
     zip = models.CharField(max_length=100)
     # address_type = models.CharField(max_length=1, type=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
+
+class Transaction(models.Model):
+    senior_id= models.CharField(max_length=200)
+    caregiver_id= models.CharField(max_length=200)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    start= models.DateField(null=True, blank = True)
+    end=models.DateField(null=True, blank = True)
+    amount = models.FloatField()
 
 class Payment(models.Model):
     stripe_charge_id = models.CharField(max_length=50)

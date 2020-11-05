@@ -9,7 +9,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css" />
   <link rel="stylesheet" href="{% static 'css/room_detail.css' %}">
 </head>
-
+{% if user_type == 'senior' %}
+{% include "navbar_senior.html" %}
+{% else %}
+{% include "navbar_caregiver.html" %}
+{% endif %}
 <body>
   <div class="container">
 

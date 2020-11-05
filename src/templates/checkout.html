@@ -40,6 +40,11 @@
   
 
 </head>
+{% if user_type == 'senior' %}
+{% include "navbar_senior.html" %}
+{% else %}
+{% include "navbar_caregiver.html" %}
+{% endif %}
 <body>
 <div class="container wow fadeIn">
     <div class="row">

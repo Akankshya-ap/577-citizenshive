@@ -16,7 +16,11 @@
         <script type="text/javascript" src="{% static 'javascript/search_seniors.js' %}">
         </script> 
     </head>
-
+    {% if user_type == 'senior' %}
+    {% include "navbar_senior.html" %}
+    {% else %}
+    {% include "navbar_caregiver.html" %}
+    {% endif %}
     <body>
         
         <!-- <h1>
@@ -24,39 +28,6 @@
             
         </h1> -->
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="{% url 'caregiver_dashboard_view' %}">My Profile</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'forum' %}">Forum 
-                    <!-- <span class="sr-only">(current)</span> -->
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contact Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> Search Seniors </a>
-              </li>
-            </ul>
-            
-
-            <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
-              <li class="nav-item"> 
-                  <a class="nav-link" href="{% url 'logout' %}"> 
-                    Logout 
-                  </a> 
-              </li> 
-            </ul>
-
-
-          </div>
-        </nav>
 
         <div class="container">
             <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
@@ -90,8 +61,16 @@
                       
                         </select>
                       </div>
+                      <div class="col-auto">
+                        <label class="mr-sm-2 sr-only" for="start_date">Start Date</label>
+                        <input type="date" class="form-control mb-2" id="start_date"  name="start_date" required style="height: 50px;margin-top: 5px;margin-left: 5px;">
+                      </div>
+                      <div class="col-auto">
+                        <label class="mr-sm-2 sr-only" for="end_date">End Date</label>
+                        <input type="date" class="form-control mb-2" id="end_date"  name="end_date" required style="height: 50px;margin-top: 5px;margin-left: 5px;">
+                      </div>
                       
-                      <div class="col-auto" style="position: relative; left: 53%;" >
+                      <div class="col-auto" style="position: relative; left: 23%;" >
                         <button type="submit" class="btn btn-primary mb-2" style="height: 49px;"> &#128269;</button>
                         
                       </div>
@@ -118,6 +97,7 @@
                   <b>Zip Code: </b> {{ senior.zip_code }}
                 </p>
                 <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
+                <a href="{% url 'add_or_get_chatroom' user_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
               </div>
             </div>
             <!-- <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;">

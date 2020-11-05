@@ -16,7 +16,11 @@
         <script type="text/javascript" src="{% static 'javascript/search_caregivers.js' %}">
         </script>  -->
     </head>
-
+    {% if user_type == 'senior' %}
+    {% include "navbar_senior.html" %}
+    {% else %}
+    {% include "navbar_caregiver.html" %}
+    {% endif %}
     <body>
 
         
