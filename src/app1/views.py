@@ -148,13 +148,15 @@ def view_caregiver_details(request, caregiver_id) :
     context['caregiver'] = caregiver_obj
     rating_rows = Rating_Review.objects.filter(caregiver_email = caregiver_obj.email)
     rating = 0
-    for row in rating_rows :
-        rating += row.rating
-        review = row.review
-    rating = rating/len(rating_rows)
+    if len(rating_rows)!=0:
+        for row in rating_rows :
+            rating += row.rating
+            review = row.review
+        rating = rating/len(rating_rows)
+        context['review'] = review
     # review=rating_rows.review 
     context['rating'] = rating
-    context['review'] = review
+    
     context['user_type'] = request.session['user_type']
     return render(request, 'caregiver_details_for_senior.html', context)
 
@@ -723,25 +725,33 @@ def match_caregiver_to_senior(request, caregiver_id) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
     context = {}
     if 'email' in request.session :
-        senior_email = request.session['email']
-        senior_obj = Senior.objects.get(email = senior_email)
-    caregiver_obj = Caregiver.objects.get(id=caregiver_id)
-    
-    # For Payments
-    subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
-    subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
-    Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability, paid = 'False')
+        try:
+            record = Match.objects.get(senior_email = request.session['email'])
+            if request.method == 'POST' :
+                messages.add_message(request, messages.INFO, 'You have Already Selected your Caregiver!!')
+                # return render(request, 'senior_dashboard.html', context)
+                return redirect('senior_dashboard_view')
+        except Match.DoesNotExist:
+            senior_email = request.session['email']
+            senior_obj = Senior.objects.get(email = senior_email)
+            caregiver_obj = Caregiver.objects.get(id=caregiver_id)
+            
+            # For Payments
+            subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
+            subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
+            Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability, paid = 'False')
 
-    context['caregiver'] = caregiver_obj
-    context['start_date'] = subset_start_date
-    context['end_date'] = subset_end_date
-    context['number_of_days'] = (subset_end_date - subset_start_date).days
-    if request.method == 'POST' :
-        record = Match.objects.create(
-            senior_email=senior_email,
-            caregiver_email=caregiver_obj.email)
-    #return redirect('match_caregiver_to_senior/')
-    return render(request, 'caregiver_details_for_senior.html', context)
+            context['caregiver'] = caregiver_obj
+            context['start_date'] = subset_start_date
+            context['end_date'] = subset_end_date
+            context['number_of_days'] = (subset_end_date - subset_start_date).days
+            if request.method == 'POST' :
+                record = Match.objects.create(
+                    senior_email=senior_email,
+                    caregiver_email=caregiver_obj.email)
+                messages.add_message(request, messages.INFO, 'You have Successfully Selected Your Caregiver!!')
+            #return redirect('match_caregiver_to_senior/')
+            return render(request, 'caregiver_details_for_senior.html', context)
 
 def rating_review(request) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
@@ -769,6 +779,12 @@ def rating_review(request) :
 def display_matched_caregivers(request, *args, **kwargs) :
     context = {}
     context['user_type'] = request.session['user_type']
+    user_type = request.session['user_type']
+    email = request.session['email']
+    if user_type == 'senior' :
+            context['record'] = Senior.objects.get(email = email)
+    else :
+        context['record'] = Caregiver.objects.get(email = email)
     if 'email' in request.session :
         #The user is already logged in
         email = request.session['email']
@@ -778,5 +794,5 @@ def display_matched_caregivers(request, *args, **kwargs) :
             return render(request, 'display_matched_caregivers.html', context)
         except Match.DoesNotExist:
             messages.add_message(request, messages.INFO, 'No Caregivers Found!')
-            return render(request, 'senior_dashboard.html')
+            return redirect('senior_dashboard_view')
         
