@@ -42,7 +42,7 @@
             <body>
             <div class="card" style="margin: 15px;">
               <div class="card-header">
-                {{ user.name }}
+                {{ .name }}
               </div>
               <div class="card-body">
                 <!-- <h5 class="card-title">Special title treatment</h5> -->
@@ -55,47 +55,11 @@
                   <b>Zip Code: </b> {{ user.zip_code }}
                   
                 </p>
-                <a href="{% url 'view_caregiver_details' caregiver_id=user.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
+                <a href="{% url 'view_senior_details' senior_id=user.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
                 <a href="{% url 'add_or_get_chatroom' user_id=user.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
                 <!-- payment -->
-                <a href="{% url 'pay_order' caregiver_email=user.email %}" style="text-decoration: none; color: black;" class="btn btn-default">Pay &#8599;</a>
                 <br><br>
-                <div>
-                    <form action="{% url 'rating_review' %}" method="POST" >
-                      {% csrf_token %}
-                      <label for="rating">Choose rating for the caregiver</label>
-
-                      <select name="rating" id="rating" onChange="getOption();" name="rating">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
-                      <!-- <button onclick="getOption()"> 
-                        Check option 
-                    </button>  -->
-
-                    <input type="text" value="{{ user.id }}" hidden name="caregiver_id" id="caregiver_id">
-                      
-                    <script type="text/javascript">
-                        function getOption() { 
-                            selectElement = document.querySelector('#rating'); 
-                                      
-                            output =  
-                              selectElement.options[selectElement.selectedIndex].value; 
-                            console.log(output)
-                            //document.querySelector('.output').textContent = output; 
-                        } 
-                      </script>
-                   <br>
-                     <textarea rows="4" cols="50" id="review" name="review">
-                    
-                    </textarea>
-                    <br>
-                    <input type="submit" value="Submit Review">
-                    </form>
-                  </div>
+                
                 </div>
               </div>
             </div>
