@@ -23,51 +23,18 @@
         <script type="text/javascript" src="{% static 'javascript/forum_page.js' %}">
         </script> 
     </head>
-
+{% if user_type == 'senior' %}
+{% include "navbar_senior.html" %}
+{% else %}
+{% include "navbar_caregiver.html" %}
+{% endif %}
     <body>
         <!-- <a href="{% url 'add_new_post' %}">
             <button>
                 Add new
             </button>
         </a> -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
-            <a class="navbar-brand" href="{% url 'dashboard_view' %}">My Profile</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'forum' %}">Forum 
-                      <!-- <span class="sr-only">(current)</span> -->
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Contact Us</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'search_caregivers' %}"> Search Caregivers </a>
-                </li>
-              </ul>
-
-              <ul class="navbar-nav ml-auto" style="position: absolute; right: 5%;"> 
-                <li class="nav-item"> 
-                    <a class="nav-link" href="{% url 'logout' %}"> 
-                      Logout 
-                    </a> 
-                </li> 
-              </ul>
-              <!-- <form class="form-inline my-2 my-lg-0">
-                
-                <button class="btn btn-outline-success my-2 my-sm-9" type="submit">  
-                    Logout
-                </button>
-
-              </form> -->
-            </div>
-          </nav>
-          
+        
 
         <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;" >
             Add New Post

@@ -21,8 +21,8 @@ class Senior(models.Model) :
     state = models.CharField(max_length=25,blank = True)
     bio = models.TextField(max_length=1024, blank = True)
     profile_image = models.ImageField(upload_to='images/', blank = True, default = 'images/person_avatar.png')
-    start= models.DateField(null=True, blank = True)
-    end=models.DateField(null=True, blank = True)
+    start_date = models.DateField(null=True, blank = True)
+    end_date = models.DateField(null=True, blank = True)
 
 class Caregiver(models.Model) :
     email = models.CharField(max_length=200)
@@ -35,8 +35,8 @@ class Caregiver(models.Model) :
     state = models.CharField(max_length=25,blank = True)
     bio = models.TextField(max_length=1024, blank = True)
     profile_image = models.ImageField(upload_to='images/', blank = True, default='images/person_avatar.png')
-    start= models.DateField(null=True, blank = True)
-    end=models.DateField(null=True, blank = True)
+    start_date = models.DateField(null=True, blank = True)
+    end_date = models.DateField(null=True, blank = True)
 
 class Posts(models.Model) :
     created_by = models.CharField(max_length=200)

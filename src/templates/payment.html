@@ -100,7 +100,11 @@ button:hover {
 {% endblock extra_head %}
 
 {% block content %}
-
+{% if user_type == 'senior' %}
+{% include "navbar_senior.html" %}
+{% else %}
+{% include "navbar_caregiver.html" %}
+{% endif %}
   <main >
     <div class="container wow fadeIn">
 
