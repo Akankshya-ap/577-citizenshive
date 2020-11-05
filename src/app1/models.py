@@ -93,6 +93,7 @@ class Transaction(models.Model):
     number_of_days = models.IntegerField(null=True, blank=True)
     amount = models.FloatField(null=True, blank=True)
     availability = models.CharField(max_length = 25, null=True, blank=True)
+    paid = models.BooleanField(null=True, blank=True, default='False')
 
 class Payment(models.Model):
     stripe_charge_id = models.CharField(max_length=50)

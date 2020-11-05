@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse
 from .models import CommonRegistration, Senior, Caregiver, Posts, Comments, Room, UserChats, Address, Match, Transaction, Rating_Review
 import json
 from pyzipcode import ZipCodeDatabase  
-# 
+from django.core.exceptions import ObjectDoesNotExist
 import random
 import string
 
@@ -405,7 +405,6 @@ def landing_page(request, *args, **kwargs) :
 def registration_page(request, *args, **kwargs) :
     # return HttpResponse("<h1> Hello Mugdha </h1>")
     context = {}
-    context['user_type'] = request.session['user_type']
     if request.method == 'POST' :
         # return HttpResponse("<h1> Response Received </h1>")
         name = request.POST['name']
@@ -434,7 +433,6 @@ def registration_page(request, *args, **kwargs) :
     
 def about_us(request, *args, **kwargs):
     context = {}
-    context['user_type'] = request.session['user_type']
     return render(request, 'about_us.html', context)
 
 def order_summary(request, *args, **kwargs):
@@ -449,6 +447,19 @@ def order_summary(request, *args, **kwargs):
         context['user_type'] = request.session['user_type']
         return render(request, 'order_summary.html', context)
 
+def pay_order(request, caregiver_email):
+    try:
+        email = request.session['email']
+        transactions = Transaction.objects.filter(senior_email = email, caregiver_email = caregiver_email, paid = 'False')
+        context = {
+            'transactions' : transactions
+        }
+        context['user_type'] = request.session['user_type']
+        return render(request, 'order_summary.html', context)
+    except ObjectDoesNotExist:
+        messages.warning(request, "You do not have an active order")
+        context['user_type'] = request.session['user_type']
+        return render(request, 'order_summary.html', context)
 
 def services(request, *args, **kwargs):
     context = {}
@@ -481,6 +492,7 @@ class CheckoutView(View):
             form = CheckoutForm()
             context = {
                 'form': form,
+                'user_type' : self.request.session['user_type']
             }
 
             billing_address_qs = Address.objects.filter(
@@ -718,7 +730,7 @@ def match_caregiver_to_senior(request, caregiver_id) :
     # For Payments
     subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
     subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
-    Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability)
+    Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability, paid = 'False')
 
     context['caregiver'] = caregiver_obj
     context['start_date'] = subset_start_date
@@ -756,6 +768,7 @@ def rating_review(request) :
 
 def display_matched_caregivers(request, *args, **kwargs) :
     context = {}
+    context['user_type'] = request.session['user_type']
     if 'email' in request.session :
         #The user is already logged in
         email = request.session['email']
