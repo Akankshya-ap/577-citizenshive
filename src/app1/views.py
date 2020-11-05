@@ -716,6 +716,7 @@ def match_caregiver_to_senior(request, caregiver_id) :
 
 def display_matched_caregivers(request, *args, **kwargs) :
     context = {}
+    context['user_type'] = request.session['user_type']
     if 'email' in request.session :
         #The user is already logged in
         email = request.session['email']
