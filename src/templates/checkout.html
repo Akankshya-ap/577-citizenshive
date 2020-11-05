@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +54,7 @@
             <div class='hideable_billing_form'>
               <div class="md-form mb-5">
                 <input type='text' placeholder='Address' id='billing_address' name='billing_address' class='form-control' />
-                <label for="billing_address" class="">Address</label>
+                <br><br><label for="billing_address" class="">Address</label>
               </div>
 
               <div class="md-form mb-5">
@@ -107,10 +107,12 @@
 
   </div>
 </body>
+
+</html>
 <script>
     var hideable_shipping_form = $('.hideable_shipping_form');
     var hideable_billing_form = $('.hideable_billing_form');
-    
+
     use_default_billing.addEventListener('change', function() {
       if (this.checked) {
         hideable_billing_form.hide();
@@ -118,6 +120,5 @@
         hideable_billing_form.show();
       }
     })
-    
-    </script>
-</html>
+
+</script>

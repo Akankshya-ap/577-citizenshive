@@ -49,7 +49,7 @@ class Comments(models.Model) :
 
 
 class Address(models.Model):
-    # name = models.CharField(max_length=200)
+    #user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     email = models.CharField(max_length=200)
     street_address = models.CharField(max_length=100)
     apartment_address = models.CharField(max_length=100)
@@ -66,11 +66,26 @@ class Address(models.Model):
 #     price = models.DecimalField(decimal_places=2, max_digits=1000)
 #     summary = models.TextField(blank=False, null=False)
 #     featured = models.BooleanField(default=True) #null = True, default = True
+class UserProfile(models.Model):
+    email = models.CharField(max_length=200)
+    stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
+    one_click_purchasing = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.email
+class Payment(models.Model):
+    stripe_charge_id = models.CharField(max_length=50)
+    email = models.CharField(max_length=200)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.email
 admin.site.register(CommonRegistration)
 admin.site.register(Senior)
 admin.site.register(Caregiver)
 admin.site.register(Posts)
 admin.site.register(Comments)
 admin.site.register(Address)
+admin.site.register(Payment)
+admin.site.register(UserProfile)
