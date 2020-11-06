@@ -1,288 +1,273 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Citizens Hive</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1" >
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        
-        <link rel="stylesheet" type="text/css" href="{% static 'css/senior_dashboard.css' %}">
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-        <script type="text/javascript" src="{% static 'javascript/senior_dashboard.js' %}">
-        </script>
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/landing_page.css' %}">
-<meta name="viewport" content="width=device-width, initial-scale=1" >
-
-
-    </head>
-    {% include "navbar_senior.html" %}
-
-    <body>
-          <div id="modal1" class="modal">
-            <form  class="modal-content animate"  style="margin: 0 auto" action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="container">
-              <div class="row">
-                  <div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
-                      <img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 40%; margin-top: 5%;">
-                      <br><br>
-                      <input type="file" name="profile_image" id="profile_image" class="profile_image">
-                  </div>
-  
-                  <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
-                    <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
-                    <table>
-                      <tr>
-                        <td>
-                          <label for="dob"><b>Date of Birth</b></label>
-                        </td>
-                        <td>
-                          <input type="date" value="{{ record.dob}}" name="dob" id="dob">
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="availability"> <b> Type of Care</b></label>
-                        </td>
-                        <td>
-                          <select name="availability" value="{{ record.availability }}" id="availability">
-                                        <option value="at_seniors">At my own home</option>
-                                        <option value="at_caregivers">At Caregiver's place</option>
-                                        </select>
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="zip"><b>Zip Code</b></label>
-                        </td>
-                        <td>
-                          <input type="text" value="{{ record.zip_code }}" name="zip" id="zip">
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="city"><b>City</b></label>
-                        </td>
-                        <td>
-                           <input type="text" value="{{ record.city }}" name="city" id="city">
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="state"><b>State</b></label>
-                        </td>
-                        <td>
-                          <input type="text" name="state" value="{{ record.state }}" id="state">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label for="start_date"><b>Start Date</b></label>
-                        </td>
-                        <td>
-                          <input type="date" value="{{ record.start_date}}" name="start_date" id="sd">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label for="end_date"><b>End Date</b></label>
-                        </td>
-                        <td>
-                          <input type="date" value="{{ record.end_date}}" name="end_date" id="en">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                            <label for="bio"><b>Bio</b></label>
-                        </td>
-                        <td>
-                            <input type="text" name="bio" value="{{ record.bio }}" id="bio">
-                        </td>
-                      </tr>
-                    
-                    </table>
-                      
-                      <input type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" style="color: black;" >
-                      
-              </div>
-          </div>
-                </div>
-          </form>
-          </div>
-          <!-- Senior Profile Data -->
-          <!-- <h1> {{ image_object }} </h1> -->
-          <div class="container">
+	<head>
+		<title>Citizens Hive</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1" >
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/senior_dashboard.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{% static 'javascript/senior_dashboard.js' %}"></script>
+		<style type="text/css">
+			.card {
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			margin: 8px;
+			width: 100%;
+			float: center;
+			}
+			label {
+			text-align: left;
+      color: #474e5d;
+      font-size:16px;
+      }
+      h1 {
+        color: #474e5d;
+      }
+		</style>
+	</head>
+	{% include "navbar_senior.html" %}
+	<body>
+		<!-- <h1>
+			{{ record.email }}
+			</h1> -->
+		<div id="modal1" class="modal">
+			<form  class="modal-content animate" action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
+							<img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 40%; margin-top: 5%;">
+							<br><br>
+							<input type="file" name="profile_image" id="profile_image" class="profile_image">
+						</div>
+						<div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
+			<form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+			<table>
+			<tr>
+			<td>
+			<label for="dob">Date of Birth</label>
+			</td>
+			<td>
+			<input type="date" value="{{ record.dob}}" name="dob" id="dob">
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="availability">  Type of Care</label>
+			</td>
+			<td>
+			<select name="availability" value="{{ record.availability }}" id="availability">
+			<option value="at_seniors">At my own home</option>
+			<option value="at_caregivers">At Caregiver's place</option>
+			</select>
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="zip">Zip Code</label>
+			</td>
+			<td>
+			<input type="text" value="{{ record.zip_code }}" name="zip" id="zip">
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="city">City</label>
+			</td>
+			<td>
+			<input type="text" value="{{ record.city }}" name="city" id="city">
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="state">State</label>
+			</td>
+			<td>
+			<input type="text" name="state" value="{{ record.state }}" id="state">
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="start_date">Start Date</label>
+			</td>
+			<td>
+			<input type="date" value="{{ record.start_date}}" name="start_date" id="sd">
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="end_date">End Date</label>
+			</td>
+			<td>
+			<input type="date" value="{{ record.end_date}}" name="end_date" id="en">
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label for="bio">Bio</label>
+			</td>
+			<td>
+			<input type="text" name="bio" value="{{ record.bio }}" id="bio">
+			</td>
+			</tr>
+      </table>
+      <div class="mx-auto">
+        <input class="btn btn-sm btn-dark" style="" type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" >
+      </div>  
+    </div>
+			</div>
+			</div>
+			</form>
+		</div>
+		<!-- Senior Profile Data -->
+		<!-- <h1> {{ image_object }} </h1> -->
+      <div class="container text-center" style="border-bottom: 1px solid #E8E8E8;">
+        <h1>My Profile</h1>
+      </div>
+		<div class="container">
+		<form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+			<div class="row">
+				<!-- Profile photo -->
+				<div class="col-md-3 pt-5" style="border-right: 1px solid #E8E8E8;">
+					<div class="">
+						<!-- {% if profile_image_url == 'default' %}
+							<img src="{% static 'images/person_avatar.png' %}" alt="" style="width: 100%; height: 40%;">
+							{% else %}
+							<img src="{{ profile_image_url }}" alt="" style="width: 100%; height: 40%;">
+							{% endif %} -->
+						<img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 40%;">
+					</div>
+				</div>
+				<!-- Profile details -->
+				<div class="col-md-9 py-4" style="border-left: 1px solid #E8E8E8;">
+					<div class="card1 mx-1" style="border-radius:10px;">
             <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-            <div class="row" style="border: 1px solid black;">
-                <div class="col-md-3" style="border-right: 1px solid #E8E8E8; height: 35%; width: 35%;">
-                    <!-- {% if profile_image_url == 'default' %}
-                      <img src="{% static 'images/person_avatar.png' %}" alt="" style="width: 100%; height: 40%;">
-                    {% else %}
-                      <img src="{{ profile_image_url }}" alt="" style="width: 100%; height: 40%;">
-                    {% endif %} -->
-                    <img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 100%;">
-                    
-            
+              <div class="row">
+                <div class="col" style="float:left;">
+                  <h1>{{ record.name }}</h>
                 </div>
-
-                <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
-                    <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                    <button onclick="document.getElementById('modal1').style.display='block'" type="button" class="btn btn-default btn-sm" class="edit_profile" id="edit_profile" style="right: 0; position: absolute;width: 100px;">
-                        <span class="glyphicon glyphicon-edit"></span> Edit
+                <div class="col"  style="float:right;">
+                  <button onclick="document.getElementById('modal1').style.display='block'" type="button" class="btn btn-dark btn-sm" class="edit_profile" id="edit_profile" style="width: 100px; float:right;">
+                    <span class="glyphicon glyphicon-edit"></span> Edit
                     </button>
 
-                    <br>
+                </div>
 
-                    <table>
-                      <tr>
-                        <td>
-                          <label for="name"> <b>Name</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.name }}</body>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label for="email"><b>Email</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.email }}</body>
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="dob"><b>Date of Birth</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.dob}}</body>
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="availability"> <b> Type of Care</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.availability }}</body>
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="zip"><b>Zip Code</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.zip_code }}</body>
-                        </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="city"><b>City</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.city }}</body>
-                       </td>
-                      </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="state"><b>State</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.state }}</body>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label for="start_date"><b>Start Date</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.start_date }}</body>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label for="end_date"><b>End Date</b></label>
-                        </td>
-                        <td>
-                          <body>{{ record.end_date }}</body>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <b>Bio</b>
-                        </td>
-                        <td>
-                          <body>{{ record.bio }}</body>
-                        </td>
-                      </tr>
-                    
-                    </table>
-                    <!-- <label for="name"> <b>Name</b></label>
-                    <input type="text" value="{{ record.name }}" name="name" id="name" disabled> <br>
-
-                    <label for="email"><b>Email</b></label>
-                    <input type="text" value="{{ record.email }}" name="email" id="email" disabled><br>
-
-                    <label for="dob"><b>Date of Birth</b></label>
-                    <input type="date" name="dob" id="dob" disabled><br>
-
-                    <label for="availability"> <b> Availability Preference</b></label>
-
-                    <select name="availability" id="availability" disabled>
-                    <option value="at_seniors">Living at my place</option>
-                    <option value="at_caregivers">Living at Caregiver's place</option>
-                    </select>
-                    <br>
-
-                    <label for="zip"><b>Zip Code</b></label>
-                    <input type="text" name="zip" id="zip" disabled><br>
-
-                    <label for="city"><b>City</b></label>
-                    <input type="text" name="city" id="city" disabled><br>
-
-                    <label for="state"><b>State</b></label>
-                    <input type="text" name="state" id="state" disabled><br> -->
-
-                    <!-- <b>Bio</b><br>
-                    
-                    <textarea name="bio" id="bio" style="width: 90%;" rows="10" disabled></textarea><br> -->
-                   
-                    
-                    <!-- <input type="submit" name="submit_edit" id="submit_edit" value="Submit Edits" > -->
-                <!-- </form> -->
-                    
+              </div>
+              
+              <br>
+              
+              <table>
+            <tr>
+            <td>
+            <label for="email">Email</label>
+            </td>
+            <td>
+            {{ record.email }}
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="dob">Date of Birth</label>
+            </td>
+            <td>
+            {{ record.dob}}
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="availability">  Type of Care</label>
+            </td>
+            <td>
+            <body>{{ record.availability }}</body>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="zip">Zip Code</label>
+            </td>
+            <td>
+            <body>{{ record.zip_code }}</body>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="city">City</label>
+            </td>
+            <td>
+            <body>{{ record.city }}</body>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="state">State</label>
+            </td>
+            <td>
+            <body>{{ record.state }}</body>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="start_date">Start Date</label>
+            </td>
+            <td>
+            <body>{{ record.start_date }}</body>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="end_date">End Date</label>
+            </td>
+            <td>
+            <body>{{ record.end_date }}</body>
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <label for="bio">Bio</label>
+            </td>
+            <td>
+            <body>{{ record.bio }}</body>
+            </td>
+            </tr>
+            </table>
+            <!-- <label for="name"> <b>Name</label>
+              <input type="text" value="{{ record.name }}" name="name" id="name" disabled> <br>
+              
+              <label for="email"><b>Email</b></label>
+              <input type="text" value="{{ record.email }}" name="email" id="email" disabled><br>
+              
+              <label for="dob"><b>Date of Birth</b></label>
+              <input type="date" name="dob" id="dob" disabled><br>
+              
+              <label for="availability"> <b> Availability Preference</b></label>
+              
+              <select name="availability" id="availability" disabled>
+              <option value="at_seniors">Living at my place</option>
+              <option value="at_caregivers">Living at Caregiver's place</option>
+              </select>
+              <br>
+              
+              <label for="zip"><b>Zip Code</b></label>
+              <input type="text" name="zip" id="zip" disabled><br>
+              
+              <label for="city"><b>City</b></label>
+              <input type="text" name="city" id="city" disabled><br>
+              
+              <label for="state"><b>State</b></label>
+              <input type="text" name="state" id="state" disabled><br> -->
+            <!-- <b>Bio</b><br>
+              <textarea name="bio" id="bio" style="width: 90%;" rows="10" disabled></textarea><br> -->
+            <!-- <input type="submit" name="submit_edit" id="submit_edit" value="Submit Edits" > -->
+            <!-- </form> -->
             </div>
-          </div>
-        </form>
-    </body>
-    <script>
-        // Get the modal
-        var modal = document.getElementById('modal1');
-        
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            //event.preventDefault();
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-        </script>
+            </div>
+          </form>
+	</div>
+	</body>
 </html>
+
