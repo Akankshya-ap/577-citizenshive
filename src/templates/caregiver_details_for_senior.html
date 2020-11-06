@@ -19,6 +19,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <script type="text/javascript" src="{% static 'javascript/senior_dashboard.js' %}"></script>
+        <script src="{% static 'javscript/jquery.rating.js' %"></script>
+        
     </head>
     {% include "navbar_senior.html" %}
     <body>
@@ -94,10 +96,12 @@
 
                         <tr>
                           <td>
-                            <label for="Rating"><b>Rating</b></label>
+                            <label for="Rating" id="rating"><b>Rating</b></label>
                           </td>
                           <td>
-                            <body>{{ rating }}</body>
+                            <body><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                              {{rating}}
+                            </body>
                           </td>
                         </tr>
 

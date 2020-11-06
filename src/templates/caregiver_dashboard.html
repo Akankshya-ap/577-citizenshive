@@ -25,15 +25,10 @@
     
 
     <body>
-        <!-- <h1>
-            {{ record.email }}
-        </h1> -->
-        
-
 
 
         <div id="modal1" class="modal">
-          <form  class="modal-content animate" action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+          <form  class="modal-content animate" style="margin: 0 auto" action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="container">
             <div class="row">
@@ -131,6 +126,8 @@
 
           <!-- Caregiver Profile Data -->
           <div class="container">
+            <form action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
             <div class="row" style="border: 1px solid black;">
                 <div class="col-md-3" style="border-right: 1px solid black;">
                     <img src="{% static 'images/caregiver1.png' %}" alt="" style="max-width: 90%;">
@@ -264,9 +261,22 @@
                   <textarea name="bio" id="bio" style="width: 90%;" rows="10" disabled></textarea><br> -->
                  
                    
-              </form>
+              
                   
           </div>
           </div>
+        </form>
     </body>
+    <script>
+        // Get the modal
+        var modal = document.getElementById('modal1');
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            //event.preventDefault();
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        </script>
 </html>
