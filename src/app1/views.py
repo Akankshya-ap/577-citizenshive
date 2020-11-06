@@ -160,6 +160,25 @@ def view_caregiver_details(request, caregiver_id) :
     context['user_type'] = request.session['user_type']
     return render(request, 'caregiver_details_for_senior.html', context)
 
+def visit_profile(request, caregiver_id) :
+    # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
+    context = {}
+    caregiver_obj = Caregiver.objects.get(id=caregiver_id)
+    context['user'] = caregiver_obj
+    rating_rows = Rating_Review.objects.filter(caregiver_email = caregiver_obj.email)
+    rating = 0
+    if len(rating_rows)!=0:
+        for row in rating_rows :
+            rating += row.rating
+            review = row.review
+        rating = rating/len(rating_rows)
+        context['review'] = review
+    # review=rating_rows.review 
+    context['rating'] = rating
+    
+    context['user_type'] = request.session['user_type']
+    return render(request, 'visit_profile.html', context)
+
 def view_senior_details(request, senior_id) :
     context = {}
     senior_obj = Senior.objects.get(id=senior_id)

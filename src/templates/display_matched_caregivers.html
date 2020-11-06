@@ -55,7 +55,7 @@
                   <b>Zip Code: </b> {{ user.zip_code }}
                   
                 </p>
-                <a href="{% url 'view_caregiver_details' caregiver_id=user.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
+                <a href="{% url 'visit_profile' caregiver_id=user.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
                 <a href="{% url 'add_or_get_chatroom' user_id=user.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
                 <!-- payment -->
                 <a href="{% url 'pay_order' caregiver_email=user.email %}" style="text-decoration: none; color: black;" class="btn btn-default">Pay &#8599;</a>
