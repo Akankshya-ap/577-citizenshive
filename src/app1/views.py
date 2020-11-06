@@ -456,10 +456,11 @@ def payment_summary(request, *args, **kwargs):
         email = request.session['email']
         user_type = request.session['user_type']
         if user_type =='senior':
-            transactions = Transaction.objects.filter(senior_email = email, paid = 'True')
+            transactions = Transaction.objects.filter(senior_email = email, paid = True)
         elif user_type == 'caregiver':
-            transactions = Transaction.objects.filter(caregiver_email = email, paid = 'True')
+            transactions = Transaction.objects.filter(caregiver_email = email, paid = True)
         context['user_type'] = request.session['user_type']
+        context['transactions'] = transactions
         return render(request, 'payment_summary.html', context)
     except ObjectDoesNotExist:
         messages.warning(request, "You do not have any payments")
@@ -604,28 +605,20 @@ class PaymentView(View):
     def get(self, *args, **kwargs):
         # order = Order.objects.get(user=self.request.user, ordered=False)
         user_type = self.request.session['user_type']
+        email = mail=self.request.session['email']
+        t = Transaction.objects.get(senior_email=email)
+        t.paid=True
+        t.save()
+        # transaction = context['transaction']
         bill = Address.objects.filter(email=self.request.session['email'])
         if bill:
             context = {
                 # 'order': order,
                 # 'DISPLAY_COUPON_FORM': False,
+                # 'transaction' :transaction,
                 'user_type' : user_type,
                 'STRIPE_PUBLIC_KEY' : settings.STRIPE_PUBLIC_KEY
             }
-            # userprofile = self.request.user.userprofile
-            # if userprofile.one_click_purchasing:
-            #     # fetch the users card list
-            #     cards = stripe.Customer.list_sources(
-            #         userprofile.stripe_customer_id,
-            #         limit=3,
-            #         object='card'
-            #     )
-            #     card_list = cards['data']
-            #     if len(card_list) > 0:
-            #         # update the context with the default card
-            #         context.update({
-            #             'card': card_list[0]
-            #         })
             return render(self.request, "payment.html", context)
         else:
             messages.warning(
@@ -635,7 +628,11 @@ class PaymentView(View):
     def post(self, *args, **kwargs):
         # order = Order.objects.get(user=self.request.user, ordered=False)
         form = PaymentForm(self.request.POST)
-        userprofile = UserProfile.objects.get(user=self.request.user)
+        email = mail=self.request.session['email']
+        t = Transaction.objects.get(senior_email=email)
+        t.paid=True
+        t.save()
+        userprofile = UserProfile.objects.get(email=email)
         if form.is_valid():
             token = form.cleaned_data.get('stripeToken')
             save = form.cleaned_data.get('save')
@@ -649,7 +646,7 @@ class PaymentView(View):
 
                 else:
                     customer = stripe.Customer.create(
-                        email=self.request.user.email,
+                        email=email,
                     )
                     customer.sources.create(source=token)
                     userprofile.stripe_customer_id = customer['id']
