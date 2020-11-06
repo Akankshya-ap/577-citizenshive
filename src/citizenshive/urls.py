@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, search_seniors, view_senior_details, room_detail, all_rooms, token, add_or_get_chatroom, get_chats, order_summary, CheckoutView, services, contact, PaymentView, display_matched_caregivers,display_matched_seniors, match_caregiver_to_senior, rating_review, pay_order
+from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, search_seniors, view_senior_details, room_detail, all_rooms, token, add_or_get_chatroom, get_chats, payment_summary, CheckoutView, services, contact, PaymentView, display_matched_caregivers,display_matched_seniors, match_caregiver_to_senior, rating_review, pay_order
 from pyzipcode import ZipCodeDatabase
 
 
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'token$',token, name="token" ),
     path('add_or_get_chatroom/<int:user_id>', add_or_get_chatroom, name='add_or_get_chatroom'),
     path('get_chats', get_chats, name='get_chats'),
-    path('order_summary',order_summary, name='order_summary'),
+    path('payment_summary',payment_summary, name='payment_summary'),
     path('checkout',CheckoutView.as_view(), name='checkout'),
     path('services', services, name='services'),
     path('contact', contact, name='contact'),
