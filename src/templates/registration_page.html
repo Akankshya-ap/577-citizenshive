@@ -10,9 +10,22 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
   function goBack() {
-    window.history.back();
+    window.location.href = "{% url 'landing_page' %}";
   }
   </script>
+
+<script>
+  var password = document.getElementById("psw")
+, confirm_password = document.getElementById("psw-repeat");
+
+function validatePassword(){
+if(password.value != confirm_password.value) {
+confirm_password.setCustomValidity("Passwords Don't Match");
+} else {
+confirm_password.setCustomValidity('');
+}
+}
+</script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/registration_page.css' %}">
     </head>
     <body>
@@ -31,14 +44,21 @@
       <input type="text" placeholder="Enter Full Name" name="name" required>
 
       <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
+      <input type="email" placeholder="Enter Email" name="email" required>
   
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
   
       <label for="psw-repeat"><b>Repeat Password</b></label>
-      <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-      
+      <input type="password" placeholder="Repeat Password" name="psw-repeat" id="pws-repeat" onkeyup="validatePassword()"  required>
+      {% if messages %}
+      {% for message in messages %}
+      {% if message.tags %}
+      <script>alert("{{ message }}")</script> {% endif %}
+
+      {% endfor %}
+
+      {% endif %}
       <label class="radio-inline"><input type="radio" name="optradio" value="senior" checked>Senior</label>
       <label class="radio-inline"><input type="radio" name="optradio" value="caregiver">Caregiver</label>
 
@@ -61,4 +81,5 @@
   </form>
 
 </body>
+
 </html>

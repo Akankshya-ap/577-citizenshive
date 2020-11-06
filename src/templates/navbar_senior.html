@@ -11,13 +11,20 @@
         <a class="nav-link" href="{% url 'search_caregivers' %}"> Search Caregivers </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'display_matched_caregivers' %}"> My Caregivers </a>
+        <a class="nav-link" href="{% url 'display_matched_caregivers' %}">{% if messages %}
+          {% for message in messages %}
+          {% if message.tags %}
+          <script>alert("{{ message }}")</script> {% endif %}
+
+          {% endfor %}
+
+          {% endif %} My Caregivers </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'get_chats' %}">My Messages</a>
       </li>
       <li class="nav-item">
-          <a class="nav-link" href="{% url 'order_summary' %}">My Payments</a>
+          <a class="nav-link" href="{% url 'payment_summary' %}">My Payments</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'forum' %}">Forum 

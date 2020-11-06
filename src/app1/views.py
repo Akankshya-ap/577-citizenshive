@@ -145,23 +145,25 @@ def view_caregiver_details(request, caregiver_id) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
     context = {}
     caregiver_obj = Caregiver.objects.get(id=caregiver_id)
-    context['caregiver'] = caregiver_obj
+    context['user'] = caregiver_obj
     rating_rows = Rating_Review.objects.filter(caregiver_email = caregiver_obj.email)
     rating = 0
-    for row in rating_rows :
-        rating += row.rating
-        review = row.review
-    rating = rating/len(rating_rows)
+    if len(rating_rows)!=0:
+        for row in rating_rows :
+            rating += row.rating
+            review = row.review
+        rating = rating/len(rating_rows)
+        context['review'] = review
     # review=rating_rows.review 
     context['rating'] = rating
-    context['review'] = review
+    
     context['user_type'] = request.session['user_type']
     return render(request, 'caregiver_details_for_senior.html', context)
 
 def view_senior_details(request, senior_id) :
     context = {}
     senior_obj = Senior.objects.get(id=senior_id)
-    context['caregiver'] = senior_obj
+    context['user'] = senior_obj
     context['user_type'] = request.session['user_type']
     return render(request, 'senior_details_for_caregiver.html', context)
 
@@ -356,31 +358,37 @@ def handle_login(request, *args, **kwargs) :
     records = CommonRegistration.objects.filter(email = email)
 
     if len(records) == 0 :
+        messages.add_message(request, messages.INFO, 'This email is not registered!!')
         return redirect('landing_page')
     else :
-        # record = records.first()
-        user_type = records.first().userType
-        request.session['user_type'] = user_type
-        request.session['email'] = email
-        request.session['password'] = password
-        if user_type == 'senior' :
-            record = Senior.objects.get(email = email)
-        else :
-            record = Caregiver.objects.get(email = email)
-        context = {
-            'record' : record
-        }
-        request.session['name'] = record.name
+        password_record = CommonRegistration.objects.filter(password = password)
+        if len(password_record) == 0:
+              messages.add_message(request, messages.INFO, 'Incorrect Password!!')
+              return redirect('landing_page')
+        else:
+            # record = records.first()
+            user_type = records.first().userType
+            request.session['user_type'] = user_type
+            request.session['email'] = email
+            request.session['password'] = password
+            if user_type == 'senior' :
+                record = Senior.objects.get(email = email)
+            else :
+                record = Caregiver.objects.get(email = email)
+            context = {
+                'record' : record
+            }
+            request.session['name'] = record.name
 
-        #Add values to the session
-        # request.session['isLoggedIn']  = True
-        # request.session['email'] = email
-        # request.session['userType'] = user_type
-        context['user_type'] = request.session['user_type']
-        if user_type == 'senior' :
-            return render(request, 'senior_dashboard.html', context)
-        else :
-            return render(request, 'caregiver_dashboard.html', context)
+            #Add values to the session
+            # request.session['isLoggedIn']  = True
+            # request.session['email'] = email
+            # request.session['userType'] = user_type
+            context['user_type'] = request.session['user_type']
+            if user_type == 'senior' :
+                return render(request, 'senior_dashboard.html', context)
+            else :
+                return render(request, 'caregiver_dashboard.html', context)
         
 
 
@@ -410,6 +418,7 @@ def registration_page(request, *args, **kwargs) :
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['psw']
+        repeat_password = request.POST['psw-repeat']
         user_type = request.POST['optradio']
 
         record_exists = CommonRegistration.objects.filter(email = email).count() > 0
@@ -418,12 +427,16 @@ def registration_page(request, *args, **kwargs) :
             context['error_msg'] = 'This user exists already'
             return render(request, 'registration_page.html', context)
         else :
-            common_registration_obj = CommonRegistration.objects.create(email=email, password=password, userType=user_type)
+            if password != repeat_password:
+                messages.add_message(request, messages.INFO, 'Repeat Password does not Match with Password!')
+                return render(request, 'registration_page.html', context)
+            else:
+                common_registration_obj = CommonRegistration.objects.create(email=email, password=password, userType=user_type)
 
-            if user_type == 'senior' :
-                senior_obj = Senior.objects.create(name=name, email=email, password=password)
-            else :
-                caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
+                if user_type == 'senior' :
+                    senior_obj = Senior.objects.create(name=name, email=email, password=password)
+                else :
+                    caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
             # return render(request, 'login_page.html', {})
             return redirect('landing_page')
 
@@ -435,17 +448,24 @@ def about_us(request, *args, **kwargs):
     context = {}
     return render(request, 'about_us.html', context)
 
-def order_summary(request, *args, **kwargs):
+def payment_summary(request, *args, **kwargs):
     try:
         context = {
             
         }
+        email = request.session['email']
+        user_type = request.session['user_type']
+        if user_type =='senior':
+            transactions = Transaction.objects.filter(senior_email = email, paid = True)
+        elif user_type == 'caregiver':
+            transactions = Transaction.objects.filter(caregiver_email = email, paid = True)
         context['user_type'] = request.session['user_type']
-        return render(request, 'order_summary.html', context)
+        context['transactions'] = transactions
+        return render(request, 'payment_summary.html', context)
     except ObjectDoesNotExist:
-        messages.warning(request, "You do not have an active order")
+        messages.warning(request, "You do not have any payments")
         context['user_type'] = request.session['user_type']
-        return render(request, 'order_summary.html', context)
+        return render(request, 'payment_summary.html', context)
 
 def pay_order(request, caregiver_email):
     try:
@@ -509,6 +529,7 @@ class CheckoutView(View):
 
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
+        context = {'user_type': self.request.session['user_type']}
         try:
             # order = Order.objects.get(user=self.request.user, ordered=False)
             if form.is_valid():
@@ -517,7 +538,7 @@ class CheckoutView(View):
                     'use_default_billing')
 
                 if use_default_billing:
-                    print("Using the defualt billing address")
+                    print("Using the default billing address")
                     address_qs = Address.objects.filter(
                         email=self.request.session['email'],
                         default=True
@@ -529,7 +550,7 @@ class CheckoutView(View):
                     else:
                         messages.info(
                             self.request, "No default billing address available")
-                        return redirect('checkout')
+                        return redirect('checkout', context)
                 else:
                     print("User is entering a new billing address")
                     billing_address1 = form.cleaned_data.get(
@@ -567,7 +588,7 @@ class CheckoutView(View):
                 # payment_option = form.cleaned_data.get('payment_option')
 
                 # if payment_option == 'S':
-                return redirect('payment') #, payment_option='stripe')
+                return redirect('payment')#, context) #, payment_option='stripe')
                 # elif payment_option == 'P':
                 #     return redirect('core:payment', payment_option='paypal')
                 # else:
@@ -576,34 +597,28 @@ class CheckoutView(View):
                 return redirect('checkout')
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
-            return redirect("order_summary")
+            return redirect("pay_order")
 
 
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
         # order = Order.objects.get(user=self.request.user, ordered=False)
-        bill = Address.objects.get(email=self.request.session['email'])
+        user_type = self.request.session['user_type']
+        email = mail=self.request.session['email']
+        t = Transaction.objects.get(senior_email=email)
+        t.paid=True
+        t.save()
+        # transaction = context['transaction']
+        bill = Address.objects.filter(email=self.request.session['email'])
         if bill:
             context = {
                 # 'order': order,
                 # 'DISPLAY_COUPON_FORM': False,
+                # 'transaction' :transaction,
+                'user_type' : user_type,
                 'STRIPE_PUBLIC_KEY' : settings.STRIPE_PUBLIC_KEY
             }
-            # userprofile = self.request.user.userprofile
-            # if userprofile.one_click_purchasing:
-            #     # fetch the users card list
-            #     cards = stripe.Customer.list_sources(
-            #         userprofile.stripe_customer_id,
-            #         limit=3,
-            #         object='card'
-            #     )
-            #     card_list = cards['data']
-            #     if len(card_list) > 0:
-            #         # update the context with the default card
-            #         context.update({
-            #             'card': card_list[0]
-            #         })
             return render(self.request, "payment.html", context)
         else:
             messages.warning(
@@ -611,9 +626,13 @@ class PaymentView(View):
             return redirect("checkout")
 
     def post(self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
+        # order = Order.objects.get(user=self.request.user, ordered=False)
         form = PaymentForm(self.request.POST)
-        userprofile = UserProfile.objects.get(user=self.request.user)
+        email = mail=self.request.session['email']
+        t = Transaction.objects.get(senior_email=email)
+        t.paid=True
+        t.save()
+        userprofile = UserProfile.objects.get(email=email)
         if form.is_valid():
             token = form.cleaned_data.get('stripeToken')
             save = form.cleaned_data.get('save')
@@ -627,7 +646,7 @@ class PaymentView(View):
 
                 else:
                     customer = stripe.Customer.create(
-                        email=self.request.user.email,
+                        email=email,
                     )
                     customer.sources.create(source=token)
                     userprofile.stripe_customer_id = customer['id']
@@ -723,25 +742,36 @@ def match_caregiver_to_senior(request, caregiver_id) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
     context = {}
     if 'email' in request.session :
-        senior_email = request.session['email']
-        senior_obj = Senior.objects.get(email = senior_email)
-    caregiver_obj = Caregiver.objects.get(id=caregiver_id)
-    
-    # For Payments
-    subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
-    subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
-    Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability, paid = 'False')
+        try:
+            record = Match.objects.get(senior_email = request.session['email'])
+            if request.method == 'POST' :
+                messages.add_message(request, messages.INFO, 'You have Already Selected your Caregiver!!')
+                # return render(request, 'senior_dashboard.html', context)
+                return redirect('senior_dashboard_view')
+        except Match.DoesNotExist:
+            senior_email = request.session['email']
+            senior_obj = Senior.objects.get(email = senior_email)
+            caregiver_obj = Caregiver.objects.get(id=caregiver_id)
+            
+            # For Payments
+            subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
+            subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
+            number_of_days = (subset_end_date - subset_start_date).days
+            amount = number_of_days*1500/14
+            Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
 
-    context['caregiver'] = caregiver_obj
-    context['start_date'] = subset_start_date
-    context['end_date'] = subset_end_date
-    context['number_of_days'] = (subset_end_date - subset_start_date).days
-    if request.method == 'POST' :
-        record = Match.objects.create(
-            senior_email=senior_email,
-            caregiver_email=caregiver_obj.email)
-    #return redirect('match_caregiver_to_senior/')
-    return render(request, 'caregiver_details_for_senior.html', context)
+            context['caregiver'] = caregiver_obj
+            context['start_date'] = subset_start_date
+            context['end_date'] = subset_end_date
+            context['number_of_days'] = number_of_days
+            context['amount'] = amount
+            if request.method == 'POST' :
+                record = Match.objects.create(
+                    senior_email=senior_email,
+                    caregiver_email=caregiver_obj.email)
+                messages.add_message(request, messages.INFO, 'You have Successfully Selected Your Caregiver!!')
+            #return redirect('match_caregiver_to_senior/')
+            return render(request, 'caregiver_details_for_senior.html', context)
 
 def rating_review(request) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
@@ -763,20 +793,47 @@ def rating_review(request) :
         # record.save()
     #return redirect('match_caregiver_to_senior/')
     #return render(request, 'display_matched_caregiver.html', context)
-    return redirect('senior_dashboard_view')
+    # return redirect('senior_dashboard_view')
+    return redirect('display_matched_caregivers')
 
 
 def display_matched_caregivers(request, *args, **kwargs) :
     context = {}
     context['user_type'] = request.session['user_type']
+    user_type = request.session['user_type']
+    email = request.session['email']
+    if user_type == 'senior' :
+            context['record'] = Senior.objects.get(email = email)
+    else :
+        context['record'] = Caregiver.objects.get(email = email)
     if 'email' in request.session :
         #The user is already logged in
         email = request.session['email']
         try:
             record = Match.objects.get(senior_email = email)
-            context['caregiver'] = Caregiver.objects.get(email = record.caregiver_email)
+            context['user'] = Caregiver.objects.get(email = record.caregiver_email)
             return render(request, 'display_matched_caregivers.html', context)
         except Match.DoesNotExist:
             messages.add_message(request, messages.INFO, 'No Caregivers Found!')
-            return render(request, 'senior_dashboard.html')
+            return redirect('senior_dashboard_view')
+
+def display_matched_seniors(request, *args, **kwargs) :
+    context = {}
+    context['user_type'] = request.session['user_type']
+    user_type = request.session['user_type']
+    email = request.session['email']
+    if user_type == 'senior' :
+            context['record'] = Senior.objects.get(email = email)
+    else :
+        context['record'] = Caregiver.objects.get(email = email)
+    if 'email' in request.session :
+        #The user is already logged in
+        email = request.session['email']
+        try:
+            record = Match.objects.get(caregiver_email = email)
+            context['user'] = Senior.objects.get(email = record.senior_email)
+            return render(request, 'display_matched_seniors.html', context)
+        except Match.DoesNotExist:
+            messages.add_message(request, messages.INFO, 'No Seniors Found!')
+            return redirect('caregiver_dashboard_view')
         

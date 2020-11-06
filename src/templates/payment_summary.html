@@ -55,35 +55,44 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Caregiver</th>
+            <th scope="col">{% if user_type == 'senior' %}
+                Caregiver
+                {% else %}
+                Senior
+                {% endif %}</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Total number of days</th>
-            <th scope="col">Total amount due</th>
+            <th scope="col">Total amount</th>
         </tr>
         </thead>
         <tbody>
         {% for transaction in transactions %}
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ transaction.caregiver_email }}</td>
+            <td>{% if user_type == 'senior' %}
+                {{ transaction.caregiver_email }}
+                {% else %}
+                {{ transaction.senior_email }}
+                {% endif %}
+                </td>
             <td>{{ transaction.start_date }}</td>
             <td>{{ transaction.end_date }} </td>
             <td>{{ transaction.number_of_days }} </td>
+            {% if user_type == 'senior' %}
             <td>$ {{ transaction.amount }} </td>
+                {% else %}
+                <td>   Transaction in review </td>
+                {% endif %}
         </tr>
         {% empty %}
         <tr>
-            <td colspan='5'>You have no payments to make</td>
+            <td colspan='5'>You have no payments</td>
         </tr>
         
+        
         {% endfor %}
-        <tr>
-            <td colspan="6">
-                <a class='btn btn-warning float-right ml-2' href="{%url 'checkout' %}">Proceed to checkout</a>
-            
-            </td>
-        </tr>
+        
         
         
         </tbody>

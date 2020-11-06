@@ -36,7 +36,7 @@
                           <label for="name"> <b>Name</b></label>
                         </td>
                         <td>
-                          <body>{{ caregiver.name }}</body>
+                          <body>{{ user.name }}</body>
                         </td>
                       </tr>
                       <tr>
@@ -44,25 +44,16 @@
                           <label for="email"><b>Email</b></label>
                         </td>
                         <td>
-                          <body>{{ caregiver.email }}</body>
+                          <body>{{ user.email }}</body>
                         </td>
                       </tr>
-                    
-                      <tr>
-                        <td>
-                          <label for="dob"><b>Date of Birth</b></label>
-                        </td>
-                        <td>
-                          <body>{{ caregiver.dob}}</body>
-                        </td>
-                      </tr>
-                    
+                                        
                       <tr>
                         <td>
                           <label for="availability"> <b> Type of Care</b></label>
                         </td>
                         <td>
-                          <body>{{ caregiver.availability }}</body>
+                          <body>{{ user.availability }}</body>
                         </td>
                       </tr>
                     
@@ -71,7 +62,7 @@
                           <label for="zip"><b>Zip Code</b></label>
                         </td>
                         <td>
-                          <body>{{ caregiver.zip_code }}</body>
+                          <body>{{ user.zip_code }}</body>
                         </td>
                       </tr>
                     
@@ -80,7 +71,7 @@
                           <label for="city"><b>City</b></label>
                         </td>
                         <td>
-                          <body>{{ caregiver.city }}</body>
+                          <body>{{ user.city }}</body>
                        </td>
                       </tr>
                     
@@ -89,7 +80,7 @@
                           <label for="state"><b>State</b></label>
                         </td>
                         <td>
-                          <body>{{ caregiver.state }}</body>
+                          <body>{{ user.state }}</body>
                         </td>
                       </tr>
 
@@ -98,7 +89,7 @@
                           <b>Bio</b>
                         </td>
                         <td>
-                          <body>{{ caregiver.bio }}</body>
+                          <body>{{ user.bio }}</body>
                         </td>
 
                         <tr>
@@ -126,7 +117,7 @@
                           <b>Expected Start Date of service</b>
                         </td>
                         <td>
-                          <body>{{ start_date }}</body>
+                          <body>{{ user.start_date }}</body>
                         </td>
                       </tr>
 
@@ -135,7 +126,7 @@
                           <b>Expected End Date of service</b>
                         </td>
                         <td>
-                          <body>{{ end_date }}</body>
+                          <body>{{ user.end_date }}</body>
                         </td>
                       </tr>
                       
@@ -144,7 +135,7 @@
                           <b>Number of days of service</b>
                         </td>
                         <td>
-                          <body>{{ number_of_days }}</body>
+                          <body>{{ user.number_of_days }}</body>
                         </td>
                       </tr>
                     
@@ -152,21 +143,24 @@
                      
             </div>
             <div class="col-md-2">
-                <form action="{% url 'match_caregiver_to_senior' caregiver_id=caregiver.id %}" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'match_caregiver_to_senior' caregiver_id=user.id %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="submit" name="submit_edit" id="submit_edit" value="I'm interested">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags %}
+                    <script>alert("{{ message }}")</script> {% endif %}
+
+                    {% endfor %}
+
+                    {% endif %}
+
                 </form>
 
             </div>
           </div>
           </div>
-<!--         
-        <h1>Caregiver details page visible to seniors</h1>
-        <h2>
-            Name: {{ caregiver.name }}
-            Id: {{ caregiver.id }}
-            Email: {{ caregiver.email }}
-        </h2> -->
+
 
     </body>
 </html>

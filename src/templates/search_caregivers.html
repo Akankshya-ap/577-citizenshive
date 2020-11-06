@@ -83,21 +83,29 @@
             {% else %}
             {% for caregiver in caregivers %}
             
-            <div class="card" style="margin: 15px;">
+            <div class="card" style="margin: 2%;width:70%;">
               <div class="card-header">
                 {{ caregiver.name }}
               </div>
-              <div class="card-body">
+              <!-- <div class="card-body"> -->
                 <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <div class="col-md-3">
+                <div style="display: flex;">
+                    <!-- <div style="float: left; width:25%; border: 1px solid red;"> -->
+                        <div>
                   <img src="{{ caregiver.profile_image.url }}" alt="" style="height: 150px;" >
                 </div>
+                <div style = "margin-left: 15%;">
+                    
                 <p class="card-text">
                   <b>Email : </b> {{ caregiver.email }}
+                  <br>
                   <b>Zip Code: </b> {{ caregiver.zip_code }}
                 </p>
+                
                 <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
                 <a href="{% url 'add_or_get_chatroom' user_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
+              
+              </div>
               </div>
             </div>
             <!-- <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;">
