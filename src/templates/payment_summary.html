@@ -79,7 +79,11 @@
             <td>{{ transaction.start_date }}</td>
             <td>{{ transaction.end_date }} </td>
             <td>{{ transaction.number_of_days }} </td>
+            {% if user_type == 'senior' %}
             <td>$ {{ transaction.amount }} </td>
+                {% else %}
+                <td>   Transaction in review </td>
+                {% endif %}
         </tr>
         {% empty %}
         <tr>

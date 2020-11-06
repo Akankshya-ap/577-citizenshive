@@ -230,6 +230,51 @@ def dashboard_view(request, *args, **kwargs) :
     else :
         return redirect('caregiver_dashboard_view')
 
+# def caregiver_dashboard_view(request, *args, **kwargs) :
+#     context = {}
+#     context['user_type'] = request.session['user_type']
+#     if 'email' in request.session :
+#         email = request.session['email']
+
+#     if request.method == 'POST' :
+#         # name = request.session['name']
+#         # email = request.session['email']
+#         dob = request.POST['dob']
+#         availability = request.POST['availability']
+#         zip_code = request.POST['zip']
+#         city = request.POST['city']
+#         state = request.POST['state']
+#         start_date = request.POST['start_date']
+#         end_date = request.POST['end_date']
+#         bio = request.POST['bio']
+#         profile_image = request.FILES['profile_image']
+
+#         record = Caregiver.objects.get(email=email)
+#         record.name = record.name 
+#         record.availability = availability
+#         record.zip_code = zip_code
+#         record.city = city
+#         record.state = state
+#         record.start_date = start_date
+#         record.end_date = end_date
+#         record.bio = bio
+#         record.dob = dob if dob!="" else None
+#         # try:
+#         record.profile_image = profile_image
+#         # except:
+#         #     x=1
+
+#         record.save()
+#         context['record'] = record
+#         context['profile_image_url'] = record.profile_image.url
+#         context['image_object'] = record.profile_image
+#         return render(request, 'caregiver_dashboard.html', context)
+#     else :
+#         context['record'] = Caregiver.objects.get(email = request.session['email'])
+#         context['profile_image_url'] = 'default'
+#         context['image_object'] = record.profile_image
+#         return render(request, 'caregiver_dashboard.html', context)
+
 def caregiver_dashboard_view(request, *args, **kwargs) :
     context = {}
     context['user_type'] = request.session['user_type']
@@ -244,10 +289,8 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
-        start_date = request.POST['start_date']
-        end_date = request.POST['end_date']
         bio = request.POST['bio']
-        # profile_image = request.FILES['profile_image']
+        profile_image = request.FILES['profile_image']
 
         record = Caregiver.objects.get(email=email)
         record.name = record.name 
@@ -255,24 +298,20 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         record.zip_code = zip_code
         record.city = city
         record.state = state
-        record.start_date = start_date
-        record.end_date = end_date
         record.bio = bio
         record.dob = dob if dob!="" else None
-        # record.profile_image = profile_image
+        record.profile_image = profile_image
 
         record.save()
         context['record'] = record
-        #context['profile_image_url'] = record.profile_image.url
-        #context['image_object'] = record.profile_image
+        context['profile_image_url'] = record.profile_image.url
+        context['image_object'] = record.profile_image
         return render(request, 'caregiver_dashboard.html', context)
     else :
         context['record'] = Caregiver.objects.get(email = request.session['email'])
-        #context['profile_image_url'] = 'default'
-        #context['image_object'] = record.profile_image
+        # context['profile_image_url'] = record.profile_image.url
+        # context['image_object'] = record.profile_image
         return render(request, 'caregiver_dashboard.html', context)
-
-
 
 def senior_dashboard_view(request, *args, **kwargs) :
     context = {}
@@ -289,9 +328,7 @@ def senior_dashboard_view(request, *args, **kwargs) :
         city = request.POST['city']
         state = request.POST['state']
         bio = request.POST['bio']
-        start_date = request.POST['start_date']
-        end_date = request.POST['end_date']
-        # profile_image = request.FILES['profile_image']
+        profile_image = request.FILES['profile_image']
 
         record = Senior.objects.get(email=email)
         record.name = record.name 
@@ -299,21 +336,19 @@ def senior_dashboard_view(request, *args, **kwargs) :
         record.zip_code = zip_code
         record.city = city
         record.state = state
-        record.start_date = start_date
-        record.end_date = end_date
         record.bio = bio
         record.dob = dob if dob!="" else None
-        # record.profile_image = profile_image
+        record.profile_image = profile_image
 
         record.save()
         context['record'] = record
-        #context['profile_image_url'] = record.profile_image.url
-        #context['image_object'] = record.profile_image
+        context['profile_image_url'] = record.profile_image.url
+        context['image_object'] = record.profile_image
         return render(request, 'senior_dashboard.html', context)
     else :
         context['record'] = Senior.objects.get(email = request.session['email'])
-        #context['profile_image_url'] = 'default'
-        #context['image_object'] = record.profile_image
+        # context['profile_image_url'] = 'default'
+        # context['image_object'] = record.profile_image
         return render(request, 'senior_dashboard.html', context)
 
 
@@ -456,10 +491,11 @@ def payment_summary(request, *args, **kwargs):
         email = request.session['email']
         user_type = request.session['user_type']
         if user_type =='senior':
-            transactions = Transaction.objects.filter(senior_email = email, paid = 'True')
+            transactions = Transaction.objects.filter(senior_email = email, paid = True)
         elif user_type == 'caregiver':
-            transactions = Transaction.objects.filter(caregiver_email = email, paid = 'True')
+            transactions = Transaction.objects.filter(caregiver_email = email, paid = True)
         context['user_type'] = request.session['user_type']
+        context['transactions'] = transactions
         return render(request, 'payment_summary.html', context)
     except ObjectDoesNotExist:
         messages.warning(request, "You do not have any payments")
@@ -604,28 +640,20 @@ class PaymentView(View):
     def get(self, *args, **kwargs):
         # order = Order.objects.get(user=self.request.user, ordered=False)
         user_type = self.request.session['user_type']
+        email = mail=self.request.session['email']
+        t = Transaction.objects.get(senior_email=email)
+        t.paid=True
+        t.save()
+        # transaction = context['transaction']
         bill = Address.objects.filter(email=self.request.session['email'])
         if bill:
             context = {
                 # 'order': order,
                 # 'DISPLAY_COUPON_FORM': False,
+                # 'transaction' :transaction,
                 'user_type' : user_type,
                 'STRIPE_PUBLIC_KEY' : settings.STRIPE_PUBLIC_KEY
             }
-            # userprofile = self.request.user.userprofile
-            # if userprofile.one_click_purchasing:
-            #     # fetch the users card list
-            #     cards = stripe.Customer.list_sources(
-            #         userprofile.stripe_customer_id,
-            #         limit=3,
-            #         object='card'
-            #     )
-            #     card_list = cards['data']
-            #     if len(card_list) > 0:
-            #         # update the context with the default card
-            #         context.update({
-            #             'card': card_list[0]
-            #         })
             return render(self.request, "payment.html", context)
         else:
             messages.warning(
@@ -635,7 +663,11 @@ class PaymentView(View):
     def post(self, *args, **kwargs):
         # order = Order.objects.get(user=self.request.user, ordered=False)
         form = PaymentForm(self.request.POST)
-        userprofile = UserProfile.objects.get(user=self.request.user)
+        email = mail=self.request.session['email']
+        t = Transaction.objects.get(senior_email=email)
+        t.paid=True
+        t.save()
+        userprofile = UserProfile.objects.get(email=email)
         if form.is_valid():
             token = form.cleaned_data.get('stripeToken')
             save = form.cleaned_data.get('save')
@@ -649,7 +681,7 @@ class PaymentView(View):
 
                 else:
                     customer = stripe.Customer.create(
-                        email=self.request.user.email,
+                        email=email,
                     )
                     customer.sources.create(source=token)
                     userprofile.stripe_customer_id = customer['id']
