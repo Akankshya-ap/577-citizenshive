@@ -97,9 +97,13 @@
                 <div style = "margin-left: 15%;">
                     
                 <p class="card-text">
-                  <b>Email : </b> {{ caregiver.email }}
+                  <b>Name : </b> {{ caregiver.name }}
                   <br>
                   <b>Zip Code: </b> {{ caregiver.zip_code }}
+                  <br>
+                  <b>Start Date: </b> {{ caregiver.start_date }}
+                  <br>
+                  <b>End Date: </b> {{ caregiver.end_date }}
                 </p>
                 
                 <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
