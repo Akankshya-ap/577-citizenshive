@@ -289,6 +289,8 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
         bio = request.POST['bio']
         profile_image = request.FILES['profile_image']
 
@@ -298,6 +300,8 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         record.zip_code = zip_code
         record.city = city
         record.state = state
+        record.start_date = start_date
+        record.end_date = end_date
         record.bio = bio
         record.dob = dob if dob!="" else None
         record.profile_image = profile_image
@@ -322,13 +326,26 @@ def senior_dashboard_view(request, *args, **kwargs) :
     if request.method == 'POST' :
         # name = request.session['name']
         # email = request.session['email']
-        dob = request.POST['dob']
-        availability = request.POST['availability']
+        record = Senior.objects.get(email=email)
+        try:
+            dob = request.POST['dob']
+        except:
+            dob = record.dob
+        try:
+            availability = request.POST['availability']
+        except:
+            availability = record.availability
+        # availability = request.POST['availability']
         zip_code = request.POST['zip']
         city = request.POST['city']
         state = request.POST['state']
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
         bio = request.POST['bio']
-        profile_image = request.FILES['profile_image']
+        try:
+            profile_image = request.FILES['profile_image']
+        except:
+            profile_image = record.profile_image
 
         record = Senior.objects.get(email=email)
         record.name = record.name 
@@ -336,6 +353,9 @@ def senior_dashboard_view(request, *args, **kwargs) :
         record.zip_code = zip_code
         record.city = city
         record.state = state
+        record.start_date = start_date
+        print(start_date, end_date)
+        record.end_date = end_date
         record.bio = bio
         record.dob = dob if dob!="" else None
         record.profile_image = profile_image
@@ -343,7 +363,7 @@ def senior_dashboard_view(request, *args, **kwargs) :
         record.save()
         context['record'] = record
         context['profile_image_url'] = record.profile_image.url
-        context['image_object'] = record.profile_image
+        # context['image_object'] = record.profile_image
         return render(request, 'senior_dashboard.html', context)
     else :
         context['record'] = Senior.objects.get(email = request.session['email'])
@@ -778,6 +798,7 @@ def match_caregiver_to_senior(request, caregiver_id) :
     context = {}
     if 'email' in request.session :
         try:
+            print(request.session['email'])
             record = Match.objects.get(senior_email = request.session['email'])
             if request.method == 'POST' :
                 messages.add_message(request, messages.INFO, 'You have Already Selected your Caregiver!!')
@@ -789,6 +810,7 @@ def match_caregiver_to_senior(request, caregiver_id) :
             caregiver_obj = Caregiver.objects.get(id=caregiver_id)
             
             # For Payments
+            # try:
             subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
             subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
             number_of_days = (subset_end_date - subset_start_date).days
@@ -800,13 +822,15 @@ def match_caregiver_to_senior(request, caregiver_id) :
             context['end_date'] = subset_end_date
             context['number_of_days'] = number_of_days
             context['amount'] = amount
+            # except:
+            #     x=1
             if request.method == 'POST' :
                 record = Match.objects.create(
                     senior_email=senior_email,
                     caregiver_email=caregiver_obj.email)
                 messages.add_message(request, messages.INFO, 'You have Successfully Selected Your Caregiver!!')
-            #return redirect('match_caregiver_to_senior/')
-            return render(request, 'caregiver_details_for_senior.html', context)
+            return redirect('match_caregiver_to_senior')
+            # return render(request, 'caregiver_details_for_senior.html', context)
 
 def rating_review(request) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
