@@ -363,7 +363,7 @@ def add_post_comment(request, *args, **kwargs) :
 def add_new_post(request, *args, **kwargs) :
     # return HttpResponse("<h1> Hey </h1>")
     #Add the content to posts
-    Posts.objects.create(created_by=request.POST['email'], content = request.POST['content'], title = request.POST['title'])
+    Posts.objects.create(created_by=request.session['email'], content = request.POST['content'], title = request.POST['title'])
     return redirect('forum')
 
 def forum(request, *args, **kwargs) :
