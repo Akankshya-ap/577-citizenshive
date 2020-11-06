@@ -18,19 +18,16 @@
         <script type="text/javascript" src="{% static 'javascript/senior_dashboard.js' %}">
         </script>
 
-        
+<link rel="stylesheet" type="text/css" href="{% static 'css/landing_page.css' %}">
+<meta name="viewport" content="width=device-width, initial-scale=1" >
+
 
     </head>
     {% include "navbar_senior.html" %}
 
     <body>
-        <!-- <h1>
-            {{ record.email }}
-        </h1> -->
-        
-
           <div id="modal1" class="modal">
-            <form  class="modal-content animate" action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+            <form  class="modal-content animate"  style="margin: 0 auto" action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="container">
               <div class="row">
@@ -129,7 +126,7 @@
           <div class="container">
             <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-            <div class="row">
+            <div class="row" style="border: 1px solid black;">
                 <div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
                     <!-- {% if profile_image_url == 'default' %}
                       <img src="{% static 'images/person_avatar.png' %}" alt="" style="width: 100%; height: 40%;">
@@ -276,4 +273,16 @@
           </div>
         </form>
     </body>
+    <script>
+        // Get the modal
+        var modal = document.getElementById('modal1');
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            //event.preventDefault();
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        </script>
 </html>
