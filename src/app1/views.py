@@ -448,17 +448,23 @@ def about_us(request, *args, **kwargs):
     context = {}
     return render(request, 'about_us.html', context)
 
-def order_summary(request, *args, **kwargs):
+def payment_summary(request, *args, **kwargs):
     try:
         context = {
             
         }
+        email = request.session['email']
+        user_type = request.session['user_type']
+        if user_type =='senior':
+            transactions = Transaction.objects.filter(senior_email = email, paid = 'True')
+        elif user_type == 'caregiver':
+            transactions = Transaction.objects.filter(caregiver_email = email, paid = 'True')
         context['user_type'] = request.session['user_type']
-        return render(request, 'order_summary.html', context)
+        return render(request, 'payment_summary.html', context)
     except ObjectDoesNotExist:
-        messages.warning(request, "You do not have an active order")
+        messages.warning(request, "You do not have any payments")
         context['user_type'] = request.session['user_type']
-        return render(request, 'order_summary.html', context)
+        return render(request, 'payment_summary.html', context)
 
 def pay_order(request, caregiver_email):
     try:
@@ -522,6 +528,7 @@ class CheckoutView(View):
 
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
+        context = {'user_type': self.request.session['user_type']}
         try:
             # order = Order.objects.get(user=self.request.user, ordered=False)
             if form.is_valid():
@@ -530,7 +537,7 @@ class CheckoutView(View):
                     'use_default_billing')
 
                 if use_default_billing:
-                    print("Using the defualt billing address")
+                    print("Using the default billing address")
                     address_qs = Address.objects.filter(
                         email=self.request.session['email'],
                         default=True
@@ -542,7 +549,7 @@ class CheckoutView(View):
                     else:
                         messages.info(
                             self.request, "No default billing address available")
-                        return redirect('checkout')
+                        return redirect('checkout', context)
                 else:
                     print("User is entering a new billing address")
                     billing_address1 = form.cleaned_data.get(
@@ -580,7 +587,7 @@ class CheckoutView(View):
                 # payment_option = form.cleaned_data.get('payment_option')
 
                 # if payment_option == 'S':
-                return redirect('payment') #, payment_option='stripe')
+                return redirect('payment')#, context) #, payment_option='stripe')
                 # elif payment_option == 'P':
                 #     return redirect('core:payment', payment_option='paypal')
                 # else:
@@ -589,18 +596,20 @@ class CheckoutView(View):
                 return redirect('checkout')
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
-            return redirect("order_summary")
+            return redirect("pay_order")
 
 
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
         # order = Order.objects.get(user=self.request.user, ordered=False)
-        bill = Address.objects.get(email=self.request.session['email'])
+        user_type = self.request.session['user_type']
+        bill = Address.objects.filter(email=self.request.session['email'])
         if bill:
             context = {
                 # 'order': order,
                 # 'DISPLAY_COUPON_FORM': False,
+                'user_type' : user_type,
                 'STRIPE_PUBLIC_KEY' : settings.STRIPE_PUBLIC_KEY
             }
             # userprofile = self.request.user.userprofile
@@ -624,7 +633,7 @@ class PaymentView(View):
             return redirect("checkout")
 
     def post(self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
+        # order = Order.objects.get(user=self.request.user, ordered=False)
         form = PaymentForm(self.request.POST)
         userprofile = UserProfile.objects.get(user=self.request.user)
         if form.is_valid():
@@ -750,12 +759,15 @@ def match_caregiver_to_senior(request, caregiver_id) :
             # For Payments
             subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
             subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
-            Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = (subset_end_date - subset_start_date).days, availability = caregiver_obj.availability, paid = 'False')
+            number_of_days = (subset_end_date - subset_start_date).days
+            amount = number_of_days*1500/14
+            Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
 
             context['caregiver'] = caregiver_obj
             context['start_date'] = subset_start_date
             context['end_date'] = subset_end_date
-            context['number_of_days'] = (subset_end_date - subset_start_date).days
+            context['number_of_days'] = number_of_days
+            context['amount'] = amount
             if request.method == 'POST' :
                 record = Match.objects.create(
                     senior_email=senior_email,
