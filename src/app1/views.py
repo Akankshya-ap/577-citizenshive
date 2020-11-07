@@ -285,9 +285,10 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         record = Caregiver.objects.get(email=request.session['email'])
         # context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'],'unfilled':True}
         # return render(request, 'senior_dashboard.html', context)
-        print(request.POST['start_date'])
+        # print(request.POST['start_date'])
         if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
             context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
+            messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
             return render(request, 'senior_dashboard.html', context)
         else:
             if request.POST['zip']!=None:
@@ -299,7 +300,7 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
             if request.POST['end_date'] != None:
                 record.end_date = request.POST['end_date']
             # datetime.datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
-            if request.POST['dob'] != None:
+            if ('dob' in request.POST) and (request.POST['dob'] != None):
                 record.dob = request.POST['dob']
             if request.POST['city'] != '':
                 record.city = request.POST['city']
@@ -331,9 +332,10 @@ def senior_dashboard_view(request, *args, **kwargs) :
         record = Senior.objects.get(email=request.session['email'])
         # context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'],'unfilled':True}
         # return render(request, 'senior_dashboard.html', context)
-        print(request.POST['start_date'])
+        # print(request.POST['start_date'])
         if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
             context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
+            messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
             return render(request, 'senior_dashboard.html', context)
         else:
             if request.POST['zip']!=None:
@@ -345,7 +347,7 @@ def senior_dashboard_view(request, *args, **kwargs) :
             if request.POST['end_date'] != None:
                 record.end_date = request.POST['end_date']
             # datetime.datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
-            if request.POST['dob'] != None:
+            if ('dob' in request.POST) and (request.POST['dob'] != None):
                 record.dob = request.POST['dob']
             if request.POST['city'] != '':
                 record.city = request.POST['city']

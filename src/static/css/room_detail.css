@@ -6,7 +6,11 @@ body {
   width: 100%;
   background-color: #f7f7f7;
 }
-
+nav{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
 section {
   height: 70%;
   position: fixed;
