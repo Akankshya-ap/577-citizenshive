@@ -230,50 +230,6 @@ def dashboard_view(request, *args, **kwargs) :
     else :
         return redirect('caregiver_dashboard_view')
 
-# def caregiver_dashboard_view(request, *args, **kwargs) :
-#     context = {}
-#     context['user_type'] = request.session['user_type']
-#     if 'email' in request.session :
-#         email = request.session['email']
-
-#     if request.method == 'POST' :
-#         # name = request.session['name']
-#         # email = request.session['email']
-#         dob = request.POST['dob']
-#         availability = request.POST['availability']
-#         zip_code = request.POST['zip']
-#         city = request.POST['city']
-#         state = request.POST['state']
-#         start_date = request.POST['start_date']
-#         end_date = request.POST['end_date']
-#         bio = request.POST['bio']
-#         profile_image = request.FILES['profile_image']
-
-#         record = Caregiver.objects.get(email=email)
-#         record.name = record.name 
-#         record.availability = availability
-#         record.zip_code = zip_code
-#         record.city = city
-#         record.state = state
-#         record.start_date = start_date
-#         record.end_date = end_date
-#         record.bio = bio
-#         record.dob = dob if dob!="" else None
-#         # try:
-#         record.profile_image = profile_image
-#         # except:
-#         #     x=1
-
-#         record.save()
-#         context['record'] = record
-#         context['profile_image_url'] = record.profile_image.url
-#         context['image_object'] = record.profile_image
-#         return render(request, 'caregiver_dashboard.html', context)
-#     else :
-#         context['record'] = Caregiver.objects.get(email = request.session['email'])
-#         context['profile_image_url'] = 'default'
-#         context['image_object'] = record.profile_image
-#         return render(request, 'caregiver_dashboard.html', context)
 
 def caregiver_dashboard_view(request, *args, **kwargs) :
     context = {}
