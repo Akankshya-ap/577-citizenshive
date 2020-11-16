@@ -268,7 +268,7 @@ a {
 
   <div id="id01" class="modal">
   
-    <form class="modal-content animate" action="{% url 'handle_login' %}" method="post">
+    <form class="modal-content animate p-4" action="{% url 'handle_login' %}" method="post">
       {% csrf_token %}
       <!-- <div class="imgcontainer">
         <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
@@ -282,14 +282,14 @@ a {
         <label for="password"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>
           
-        <button type="submit">Login</button>
+        <button type="submit" class="btn btn-dark" style="width:20%;">Login</button><br>
         <label>
           <input type="checkbox" checked="checked" name="remember"> Remember me
         </label>
       </div>
   
-      <div class="container" style="background-color:#f1f1f1">
-        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      <div class="container" >
+        <button type="button"  onclick="document.getElementById('id01').style.display='none'" class="cancelbtn btn btn-secondary">Cancel</button>
         <span class="psw"><a href="#">Forgot password?</a></span>
       </div>
     </form>
