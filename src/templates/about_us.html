@@ -12,7 +12,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
         body {
-  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
 }
 
@@ -34,8 +33,12 @@ html {
 }
 
 .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-top:1px solid grey;
+  border-bottom:0px;
+  border-left:0px;
+  border-right:0px;
   margin: 8px;
+  border-radius: 0px;
 }
 
 .about-section {
@@ -75,6 +78,7 @@ html {
   background-color: #555;
 }
 
+
 @media screen and (max-width: 650px) {
   .column {
     width: 100%;
@@ -99,48 +103,37 @@ html {
 
           
           <hr>
+          <div class="container">
           <div class="row">
-            <div class="column">
+            <div class="col">
               <div class="card">
                 <div class="container">
                 </br>
             </br>
-        </br>
-    </br>
                   <h2>OUR STORY</h2>
                   <p></br>
                       The Citizens Hive company was founded in 2019 with a clear idea of what problems have become stagnant in the senior care industry. According to the American Geriatric Society, over 40% of seniors that reside in nursing homes experience depression.
                   </p>
                   <p></br>
                       Our solution is to bring compassionate, personalized, one on one care to seniors. At Citizens Hive, seniors will obtain the consistency and aid they need in order to thrive. Caregivers will also have the benefit of creating their own client experience and the ability to help seniors within their community.</p>
-                  </br>
-                </br>
-            </br>
-        </br>
-    </br>
-</br>
+              
                   
                 </div>
               </div>
             </div>
 
-            <div class="column">
-                
-                  
-                  <div class="container">
-                    <img src="/static/images/about_us.jpg" alt="bee" style="width:100%">
-                  
-                </div>
-              </div>
+            <div class="col">
+              <br>
+              <img src="/static/images/about_us.jpg" alt="bee" style="width:100%">
+            </div>
           
            
-            <div class="column">
+            <div class="col">
               <div class="card">
             
                 <div class="container">
                 </br>
             </br>
-        </br>
 
                   <h2>OUR GOAL</h2>
                 </br>
@@ -150,10 +143,6 @@ html {
             </br>
                 <p>The goal of the Citizens Hive platform is to minimize the number of seniors experiencing depression and bring them into a space of compassion and helping hands.</p>
             </br>
-        </br>
-    </br>
-</br>
-</br>
                 </div>
               </div>
             </div>
@@ -162,7 +151,7 @@ html {
             
 
           </div>
-          
+        </div>
         
     </body>
 </html>
