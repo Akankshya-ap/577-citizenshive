@@ -1,5 +1,4 @@
 input, select{
-  width: 200px;
   border-radius: 5px;
   height: 40px;
 	box-shadow: none;
@@ -10,7 +9,7 @@ table{
   border-spacing: 8px;
 }
 
-body,html{
+html{
   height: 100%;
   width: 100%;
   margin: 0;
@@ -53,7 +52,7 @@ body,html{
  /* Full-width input fields */
  input[type=text], input[type=password] {
    width: 100%;
-   padding: 12px 20px;
+   padding: 6px;
    margin: 8px 0;
    display: inline-block;
    border: 1px solid #ccc;
@@ -174,3 +173,9 @@ body,html{
    margin-right: 110px;
    padding-top: 2px;
   }
+
+  .btn:hover {
+    color: white;
+  }
+  
+  
