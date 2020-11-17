@@ -332,6 +332,12 @@ def senior_dashboard_view(request, *args, **kwargs) :
                 record.bio = request.POST['bio']
             if 'profile_image' in request.FILES:
                 record.profile_image = request.FILES['profile_image']
+            #change
+            
+            if request.POST['day'] != '':
+                record.day = request.POST['day']
+            if request.POST['hour'] != '':
+                record.hour = request.POST['hour']
             
             record.save()
             record = Senior.objects.get(email=email)
