@@ -766,28 +766,28 @@ def match_caregiver_to_senior(request, caregiver_id) :
             senior_obj = Senior.objects.get(email = senior_email)
             caregiver_obj = Caregiver.objects.get(id=caregiver_id)
             
-            # For Payments
-            # try:
-            subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
-            subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
-            number_of_days = (subset_end_date - subset_start_date).days
-            amount = number_of_days*1500/14
-            Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
+            #For Payments
+            try:
+                subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
+                subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
+                number_of_days = (subset_end_date - subset_start_date).days
+                amount = number_of_days*1500/14
+                Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
 
-            context['caregiver'] = caregiver_obj
-            context['start_date'] = subset_start_date
-            context['end_date'] = subset_end_date
-            context['number_of_days'] = number_of_days
-            context['amount'] = amount
-            # except:
-            #     x=1
+                context['caregiver'] = caregiver_obj
+                context['start_date'] = subset_start_date
+                context['end_date'] = subset_end_date
+                context['number_of_days'] = number_of_days
+                context['amount'] = amount
+            except:
+                x=1
             if request.method == 'POST' :
                 record = Match.objects.create(
                     senior_email=senior_email,
                     caregiver_email=caregiver_obj.email)
                 messages.add_message(request, messages.INFO, 'You have Successfully Selected Your Caregiver!!')
-            # return redirect('match_caregiver_to_senior')
-            return render(request, 'caregiver_details_for_senior.html', context)
+            return redirect('senior_dashboard_view')
+            #return render(request, 'senior_details_for_caregiver.html', context)
 
 def rating_review(request) :
     # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
