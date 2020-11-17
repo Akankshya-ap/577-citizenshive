@@ -50,12 +50,14 @@ class Posts(models.Model) :
     created_at = models.DateField(default=datetime.now())
     title = models.CharField(max_length=200)
     content = models.TextField()
+    created_by_name = models.CharField(max_length=2048, null=True, blank=True)
 
 class Comments(models.Model) :
     post_id = models.ForeignKey(Posts, on_delete = models.CASCADE)
     created_by = models.CharField(max_length=200)
     created_at = models.DateField(default=datetime.now())
     content = models.TextField()
+    created_by_name = models.CharField(max_length=2048, null=True, blank=True)
 
 class Room(models.Model) :
     ''' Represents chat rooms that users can join '''

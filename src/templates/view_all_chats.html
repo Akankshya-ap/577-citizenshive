@@ -33,10 +33,11 @@
             {{ record.email }}
         </h1> -->
 
-
-          <h1>
-              Hey, you can view all your chats here!
-          </h1>
+        <div class="container">
+          <h2 class="text-center">My Messages</h2>
+          <h4 class="text-center">
+              You can view all your chats here!
+          </h4>
 
 
           {% for chat in chats %}
@@ -45,16 +46,21 @@
 
               <div class="card-body">
                 <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <div class="col-md-3">
-                  {{ forloop.counter }} {{ chat.with_user }}
+                <div class="row">
+                  <div class="col-xs-6 col-sm-9">
+                    {{ forloop.counter }}. &nbsp {{ chat.with_user }}
+                  </div>
+                  <div class="col-xs-6 col-sm-3">
+                    <p class="card-text text-right">
+                      <a href="{% url 'room_detail' slug=chat.chat_slug %}" style="text-decoration: none; color: white; background-color: #474e5d";" class="btn btn-default"> Chat &#8599;</a>
+                    </p>
                 </div>
-                <p class="card-text">
-                  <a href="{% url 'room_detail' slug=chat.chat_slug %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
-                </p>
+              </div>
                 
 
               </div>
             </div>
         {% endfor %}
+      </div>
     </body>
 </html>

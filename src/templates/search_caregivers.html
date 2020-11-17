@@ -26,7 +26,7 @@
 
 
         <div class="container">
-            <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
+            <div class="row m-0" style="background-color: #E8E8E8;">
              
               
                 <form action="{% url 'search_caregivers' %}" method="POST" style="width: 100%;">
@@ -52,9 +52,9 @@
                         <label class="mr-sm-2 sr-only" for="availability">Availability</label>
                         <select class="custom-select mr-sm-2" id="availability" name="availability" style="height: 50px;">
                         
-                          <option value="at_seniors">Move-In</option>
-                          <option value="at_caregivers">Move-Out</option>
-                          <option value="Hourly">Hourly</option>
+                          <option value="at_seniors">At my home</option>
+                          <option value="at_caregivers">At caregiver's place</option>
+                          <!-- <option value="Hourly">Hourly</option> -->
                       
                         </select>
                       </div>
@@ -71,34 +71,32 @@
                       </div>
 
                       <div class="col-auto" >
-                        <button type="submit" class="btn btn-primary mb-2" style="height: 49px;"> &#128269;</button>
+                        <button type="submit" class="btn btn-primary mb-2" style="height: 49px; background-color:#474e5d ;"> &#128269;</button>
                         
                       </div>
-                    <!-- </div> -->
+                    </div>
                   </form>
             </div>
             
-            <div style="float: left; width: 100%">
             {% if caregivers|length == 0 and isPostRequest %}
-             <h2 style="margin-left: 2%;">No Results match the current search criteria</h2>            
-             {% else %}
-             {% if caregivers|length > 0 and isPostRequest %}
-                 <h2 style="margin-left: 2%;">No. of caregivers: {{ caregivers|length }}</h2>
-            </div>
+              <h4>No Results match the current search criteria</h4>            
+            {% else %}
+            {% if caregivers|length > 0 and isPostRequest %}
+                <h4>Number of caregivers: {{ caregivers|length }}</h4>
+          
             {% for caregiver in caregivers %}
-            <br>
-            <div class="card" style="float:left; margin: 2%; width:70%;">
+            <div class="card" style="margin: 15px;">
               <div class="card-header">
                 {{ caregiver.name }}
               </div>
               <div class="card-body">
                 <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <div style="display: flex;">
+                <div class="row">
+                <div class="col-3" style="display: flex; height: 50%; width: 50%;">
                     <!-- <div style="float: left; width:25%; border: 1px solid red;"> -->
-                        <div>
-                  <img src="{{ caregiver.profile_image.url }}" alt="" style="height: 150px;" >
+                  <img src="{{ caregiver.profile_image.url }}" alt="" class="img-fluid my-auto" style="width: 100%; " >
                 </div>
-                <div style = "margin-left: 15%;">
+                <div class="col-9" style="border-left: 1px solid #E8E8E8;">
                     
                 <p class="card-text">
                   <b>Name : </b> {{ caregiver.name }}
@@ -108,17 +106,20 @@
                   <b>Start Date: </b> {{ caregiver.start_date }}
                   <br>
                   <b>End Date: </b> {{ caregiver.end_date }}
-                </p>
+                  <br>
                 
-                <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
-                <a href="{% url 'add_or_get_chatroom' user_id=caregiver.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
-              
+                  <a href="{% url 'view_caregiver_details' caregiver_id=caregiver.id %}" style="text-decoration: none; color: white; background-color: #474e5d;" class="btn btn-dark mt-2">Visit Profile &#8599;</a>
+                  <a href="{% url 'add_or_get_chatroom' user_id=caregiver.id %}" style="text-decoration: none; color: white; background-color: #474e5d" class="btn btn-dark mt-2"> Chat &#8599;</a>
+                  
+                </p>
+                </div>
               </div>
               </div>
             </div>
-            </div>
-           
+            
         {% endfor %}
+        </div> <!-- container end -->
+           
         {% endif %}
         {% endif %}
         
