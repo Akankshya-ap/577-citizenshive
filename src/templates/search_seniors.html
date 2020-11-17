@@ -30,7 +30,7 @@
 
 
         <div class="container">
-            <div class="row" style="background-color: #E8E8E8; border-radius: 5px;">
+            <div class="row m-0" style="background-color: #E8E8E8;">
              
               
                 <form action="{% url 'search_seniors' %}" method="POST" style="width: 100%;">
@@ -70,8 +70,8 @@
                         <input type="date" class="form-control mb-2" id="end_date"  name="end_date" required style="height: 50px;margin-top: 5px;margin-left: 5px;">
                       </div>
                       
-                      <div class="col-auto" style="position: relative; left: 23%;" >
-                        <button type="submit" class="btn btn-primary mb-2" style="height: 49px;"> &#128269;</button>
+                      <div class="col-auto">
+                        <button type="submit" class="btn btn-primary mb-2" style="height: 49px; background-color:#474e5d ;"> &#128269;</button>
                         
                       </div>
                     </div>
@@ -79,7 +79,7 @@
             </div>
 
             {% if seniors|length == 0 and isPostRequest %}
-                <h2>No Results match the current search criteria</h2>
+                <h4>No Results match the current search criteria</h4>
             {% else %}
             {% for senior in seniors %}
             
@@ -89,16 +89,21 @@
               </div>
               <div class="card-body">
                 <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <div class="col-md-3" style="display: flex; border-right: 1px solid #E8E8E8; height: 50%; width: 50%;">
-                  <img src="{{ senior.profile_image.url }}" alt="" style="width: 100%; height: 100%;" >
+                <div class="row">
+                <div class="col-3" style="display: flex; height: 50%; width: 50%;">
+                  <img src="{{ senior.profile_image.url }}" alt="" class="img-fluid" style="width: 100%; " >
                 </div>
-                <p class="card-text">
-                  <b>Email : </b> {{ senior.email }}
-                  <b>Zip Code: </b> {{ senior.zip_code }}
-                </p>
-                <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default">Visit Profile &#8599;</a>
-                <a href="{% url 'add_or_get_chatroom' user_id=senior.id %}" style="text-decoration: none; color: black;" class="btn btn-default"> Chat &#8599;</a>
+                <div class="col-9" style="border-left: 1px solid #E8E8E8;">
+                  <p class="card-text">
+                    <b>Email : </b> {{ senior.email }} <br><br>
+                    <b>Zip Code: </b> {{ senior.zip_code }}<br><br>
+                    <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: white; background-color: #474e5d" class="btn btn-dark mt-2">Visit Profile &#8599;</a>
+                    <a href="{% url 'add_or_get_chatroom' user_id=senior.id %}" style="text-decoration: none; color: white; background-color: #474e5d" class="btn btn-dark mt-2"> Chat &#8599;</a>
+              
+                  </p>
+                </div>
               </div>
+                </div>
             </div>
             <!-- <a href="{% url 'view_senior_details' senior_id=senior.id %}" style="text-decoration: none; color: black;">
                 <div class="row" style="margin: 10px; border: 1px solid black;">
