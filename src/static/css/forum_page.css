@@ -22,7 +22,7 @@ input[type=text]:focus, input[type=password]:focus {
 
 /* Set a style for all buttons */
 button {
-  background-color: #4CAF50;
+  background-color:   #B8B8B8;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -109,4 +109,12 @@ hr {
   .cancelbtn, .signupbtn {
      width: 100%;
   }
+}
+
+body{
+  width:100%;
+}
+
+nav{
+  width: 100%;
 }

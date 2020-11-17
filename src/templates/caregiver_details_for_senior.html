@@ -27,9 +27,9 @@
         
           <div class="container">
             <div class="row">
-                <div class="col-md-3" style="border-right: 1px solid #E8E8E8;">
-                    <img src="" alt="" style="width: 100%; height: 40%;">
-                </div>
+              <div class="col-md-3" style="border-right: 1px solid #E8E8E8; height: 35%; width: 35%;">
+                <img src="{{ user.profile_image.url }}" alt="" style="width: 100%; height: 100%;">
+            </div>
 
                 <div class="col-md-7" style="border-right: 1px solid #E8E8E8;">
                     <table>
@@ -154,11 +154,8 @@
                     {% for message in messages %}
                     {% if message.tags %}
                     <script>alert("{{ message }}")</script> {% endif %}
-
                     {% endfor %}
-
                     {% endif %}
-
                 </form>
 
             </div>

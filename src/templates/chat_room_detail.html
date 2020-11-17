@@ -10,11 +10,25 @@
   <link rel="stylesheet" href="{% static 'css/room_detail.css' %}">
 </head>
 {% if user_type == 'senior' %}
-{% include "navbar_senior.html" %}
+<a class="navbar-brand" href="{% url 'senior_dashboard_view' %}">My Profile</a>
 {% else %}
-{% include "navbar_caregiver.html" %}
+<a class="navbar-brand" href="{% url 'caregiver_dashboard_view' %}">My Profile</a>
 {% endif %}
+
+<style>
+  .nav{
+    display: flex;
+    flex-direction: column;
+  }
+  .navbarTogglerDemo02{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+</style>
 <body>
+
+
   <div class="container">
 
     <div class="columns">

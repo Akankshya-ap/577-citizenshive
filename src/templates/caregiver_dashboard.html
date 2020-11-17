@@ -17,36 +17,64 @@
 
         <script type="text/javascript" src="{% static 'javascript/caregiver_dashboard.js' %}">
         </script>
+        <style>
+          .card {
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          margin: 8px;
+          width: 100%;
+          float: center;
+          }
+          label {
+          text-align: left;
+          color: #474e5d;
+          font-size:16px;
+          }
+          h1 {
+            color: #474e5d;
+          }
+          </style>
 
-
+{% if messages %}
+{% for message in messages %}
+{% if message.tags %}
+<script>alert("{{ message }}")</script> {% endif %}
+{% endfor %}
+{% endif %}
     </head>
     
     {% include "navbar_caregiver.html" %}
     
 
     <body>
+      <div class="container text-center" style="border-bottom: 1px solid #E8E8E8;">
 
+        <h1>My Profile</h1>
+      </div>
 
         <div id="modal1" class="modal">
           <form  class="modal-content animate" style="margin: 0 auto" action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="container">
-            <div class="row">
-                <div class="col-md-3" style="border-right: 1px solid #E8E8E8;  height: 35%; width: 35%;">
+            <div class="row p-4" >
+                <div class="col-md-3 pt-5" style="border-right: 1px solid #E8E8E8;  height: 35%; width: 35%;">
                     <img src="{{ record.profile_image.url }}" alt="" style="width: 100%; height: 100%; margin-top: 5%;">
                     <br><br>
                     <input type="file" name="profile_image" id="profile_image" class="profile_image">
                 </div>
 
-                <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
-                  <form action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
+                <div class="col-md-9 py-4" style="border-left: 1px solid #E8E8E8;">
+                  <!-- <form action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data"> -->
                   <table>
                     <tr>
                       <td>
                         <label for="dob"><b>Date of Birth</b></label>
                       </td>
                       <td>
-                        <input type="date" value="{{ record.dob}}" name="dob" id="dob">
+                        {% if record.dob == None %}
+                          <input type="date" placeholder="Enter Date of Birth" name="dob" id="dob" >
+                          {% else %}
+                          <body>{{ record.dob}}</body>
+                          {% endif %}
                       </td>
                     </tr>
                   
@@ -67,7 +95,11 @@
                         <label for="zip"><b>Zip Code</b></label>
                       </td>
                       <td>
-                        <input type="text" value="{{ record.zip_code }}" name="zip" id="zip">
+                        {% if record.zip_code == '' %}
+                          <input type="text" placeholder="Enter Zip Code" name="zip" id="zip" >
+                          {% else %}
+                          <input type="text" value="{{ record.zip_code }}" name="zip" id="zip">
+                          {% endif %}
                       </td>
                     </tr>
                   
@@ -93,7 +125,11 @@
                         <label for="start_date"><b>Start Date</b></label>
                       </td>
                       <td>
-                        <input type="date" value="{{ record.start_date}}" name="start_date" id="sd">
+                        {% if record.start_date == None %}
+                          <input type="date" placeholder="Enter Start Date" name="start_date" id="sd" >
+                          {% else %}
+                          <input type="date" value="{{ record.start_date}}" name="start_date" id="sd">
+                          {% endif %}
                       </td>
                     </tr>
                     <tr>
@@ -101,7 +137,11 @@
                         <label for="end_date"><b>End Date</b></label>
                       </td>
                       <td>
-                        <input type="date" value="{{ record.end_date}}" name="end_date" id="en">
+                        {% if record.end_date == None %}
+                          <input type="date" placeholder="Enter End Date" name="end_date" id="ed" >
+                          {% else %}
+                          <input type="date" value="{{ record.end_date}}" name="end_date" id="ed">
+                          {% endif %}
                       </td>
                     </tr>
 
@@ -116,7 +156,7 @@
                   
                   </table>
                     
-                    <input type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" style="color: black;" >
+                    <input class="btn btn-sm btn-dark"  type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" style="color: black;" >
                     
             </div>
         </div>
@@ -141,7 +181,7 @@
             </div>
 
                 <div class="col-md-9" style="border-right: 1px solid #E8E8E8;">
-                  <form action="{% url 'caregiver_dashboard_view' %}" method="POST">
+                  <!-- <form action="{% url 'caregiver_dashboard_view' %}" method="POST"> -->
                       {% csrf_token %}
                   <button type="button" onclick="document.getElementById('modal1').style.display='block'" class="btn btn-default btn-sm" class="edit_profile" id="edit_profile" style="right: 0; position: absolute;width: 100px;">
                       <span class="glyphicon glyphicon-edit"></span> Edit
@@ -190,7 +230,13 @@
                         <label for="zip"><b>Zip Code</b></label>
                       </td>
                       <td>
-                        <body>{{ record.zip_code }}</body>
+                        <body>
+                          {% if record.zip_code == '' %}
+                          <script> document.getElementById('modal1').style.display='block';</script>
+                          {% else %}
+                          {{ record.zip_code }}
+                          {% endif %}
+                        </body>
                       </td>
                     </tr>
                   
@@ -216,7 +262,14 @@
                         <label for="start_date"><b>Start Date</b></label>
                       </td>
                       <td>
-                        <body>{{ record.start_date }}</body>
+                        <body>
+                            
+                          {% if record.start_date == None %}
+                          <script> document.getElementById('modal1').style.display='block';</script>
+                          {% else %}
+                          {{ record.start_date }}
+                          {% endif %}
+                          </body>
                       </td>
                     </tr>
                     <tr>
@@ -224,7 +277,11 @@
                         <label for="end_date"><b>End Date</b></label>
                       </td>
                       <td>
-                        <body>{{ record.end_date }}</body>
+                        <body>{% if record.end_date == None %}
+                          <script> document.getElementById('modal1').style.display='block';</script>
+                          {% else %}
+                          {{ record.end_date }}
+                          {% endif %}</body>
                       </td>
                     </tr>
                     <tr>
@@ -272,7 +329,7 @@
                   
           </div>
           </div>
-        </form>
+        <!-- </form> -->
     </body>
     <script>
         // Get the modal

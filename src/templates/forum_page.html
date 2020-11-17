@@ -28,7 +28,7 @@
 {% else %}
 {% include "navbar_caregiver.html" %}
 {% endif %}
-    <body>
+    <body style="width: 100%;">
         <!-- <a href="{% url 'add_new_post' %}">
             <button>
                 Add new
@@ -41,9 +41,9 @@
         </button>
         <!-- <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Sign Up</button> -->
           {% for post in posts_array %}
-            <div class="card" style="width: 50%;">
-                <div class="card-header">
-                    Posted by: {{ post.post_created_by }} at {{ post.post_created_at }}
+            <div class="card" style="width: 50%;margin: 20px;">
+                <div class="card-header" >
+                    <b style="font-size: 20;"> {{ post.post_title }} </b>  <i style="font-size: 15;">(Posted by: {{ post.post_created_by }} on {{ post.post_created_at }}) </i>
                 </div>
                 <div class="card-body">
                     <p>

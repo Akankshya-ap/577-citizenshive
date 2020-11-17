@@ -230,50 +230,6 @@ def dashboard_view(request, *args, **kwargs) :
     else :
         return redirect('caregiver_dashboard_view')
 
-# def caregiver_dashboard_view(request, *args, **kwargs) :
-#     context = {}
-#     context['user_type'] = request.session['user_type']
-#     if 'email' in request.session :
-#         email = request.session['email']
-
-#     if request.method == 'POST' :
-#         # name = request.session['name']
-#         # email = request.session['email']
-#         dob = request.POST['dob']
-#         availability = request.POST['availability']
-#         zip_code = request.POST['zip']
-#         city = request.POST['city']
-#         state = request.POST['state']
-#         start_date = request.POST['start_date']
-#         end_date = request.POST['end_date']
-#         bio = request.POST['bio']
-#         profile_image = request.FILES['profile_image']
-
-#         record = Caregiver.objects.get(email=email)
-#         record.name = record.name 
-#         record.availability = availability
-#         record.zip_code = zip_code
-#         record.city = city
-#         record.state = state
-#         record.start_date = start_date
-#         record.end_date = end_date
-#         record.bio = bio
-#         record.dob = dob if dob!="" else None
-#         # try:
-#         record.profile_image = profile_image
-#         # except:
-#         #     x=1
-
-#         record.save()
-#         context['record'] = record
-#         context['profile_image_url'] = record.profile_image.url
-#         context['image_object'] = record.profile_image
-#         return render(request, 'caregiver_dashboard.html', context)
-#     else :
-#         context['record'] = Caregiver.objects.get(email = request.session['email'])
-#         context['profile_image_url'] = 'default'
-#         context['image_object'] = record.profile_image
-#         return render(request, 'caregiver_dashboard.html', context)
 
 def caregiver_dashboard_view(request, *args, **kwargs) :
     context = {}
@@ -282,40 +238,45 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
         email = request.session['email']
 
     if request.method == 'POST' :
-        # name = request.session['name']
-        # email = request.session['email']
-        dob = request.POST['dob']
-        availability = request.POST['availability']
-        zip_code = request.POST['zip']
-        city = request.POST['city']
-        state = request.POST['state']
-        start_date = request.POST['start_date']
-        end_date = request.POST['end_date']
-        bio = request.POST['bio']
-        profile_image = request.FILES['profile_image']
-
-        record = Caregiver.objects.get(email=email)
-        record.name = record.name 
-        record.availability = availability
-        record.zip_code = zip_code
-        record.city = city
-        record.state = state
-        record.start_date = start_date
-        record.end_date = end_date
-        record.bio = bio
-        record.dob = dob if dob!="" else None
-        record.profile_image = profile_image
-
-        record.save()
-        context['record'] = record
-        context['profile_image_url'] = record.profile_image.url
-        context['image_object'] = record.profile_image
-        return render(request, 'caregiver_dashboard.html', context)
+        record = Caregiver.objects.get(email=request.session['email'])
+        # context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'],'unfilled':True}
+        # return render(request, 'senior_dashboard.html', context)
+        # print(request.POST['start_date'])
+        if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
+            context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
+            messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
+            return render(request, 'senior_dashboard.html', context)
+        else:
+            if request.POST['zip']!=None:
+                record.zip_code = request.POST['zip']
+            if request.POST['availability'] != None:
+                record.availability =  request.POST['availability'] 
+            if request.POST['start_date'] != None:
+                record.start_date = request.POST['start_date']
+            if request.POST['end_date'] != None:
+                record.end_date = request.POST['end_date']
+            # datetime.datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
+            if ('dob' in request.POST) and (request.POST['dob'] != None):
+                record.dob = request.POST['dob']
+            if request.POST['city'] != '':
+                record.city = request.POST['city']
+            if request.POST['state'] != '':
+                record.state = request.POST['state']
+            if request.POST['bio'] != '':
+                record.bio = request.POST['bio']
+            if 'profile_image' in request.FILES:
+                record.profile_image = request.FILES['profile_image']
+            
+            record.save()
+            record = Caregiver.objects.get(email=email)
+            context['record'] = record
+            return render(request, 'caregiver_dashboard.html', context)
     else :
         context['record'] = Caregiver.objects.get(email = request.session['email'])
-        # context['profile_image_url'] = record.profile_image.url
+        # context['profile_image_url'] = 'default'
         # context['image_object'] = record.profile_image
         return render(request, 'caregiver_dashboard.html', context)
+
 
 def senior_dashboard_view(request, *args, **kwargs) :
     context = {}
@@ -324,47 +285,39 @@ def senior_dashboard_view(request, *args, **kwargs) :
         email = request.session['email']
 
     if request.method == 'POST' :
-        # name = request.session['name']
-        # email = request.session['email']
-        record = Senior.objects.get(email=email)
-        try:
-            dob = request.POST['dob']
-        except:
-            dob = record.dob
-        try:
-            availability = request.POST['availability']
-        except:
-            availability = record.availability
-        # availability = request.POST['availability']
-        zip_code = request.POST['zip']
-        city = request.POST['city']
-        state = request.POST['state']
-        start_date = request.POST['start_date']
-        end_date = request.POST['end_date']
-        bio = request.POST['bio']
-        try:
-            profile_image = request.FILES['profile_image']
-        except:
-            profile_image = record.profile_image
-
-        record = Senior.objects.get(email=email)
-        record.name = record.name 
-        record.availability = availability
-        record.zip_code = zip_code
-        record.city = city
-        record.state = state
-        record.start_date = start_date
-        print(start_date, end_date)
-        record.end_date = end_date
-        record.bio = bio
-        record.dob = dob if dob!="" else None
-        record.profile_image = profile_image
-
-        record.save()
-        context['record'] = record
-        context['profile_image_url'] = record.profile_image.url
-        # context['image_object'] = record.profile_image
-        return render(request, 'senior_dashboard.html', context)
+        record = Senior.objects.get(email=request.session['email'])
+        # context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'],'unfilled':True}
+        # return render(request, 'senior_dashboard.html', context)
+        # print(request.POST['start_date'])
+        if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
+            context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
+            messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
+            return render(request, 'senior_dashboard.html', context)
+        else:
+            if request.POST['zip']!=None:
+                record.zip_code = request.POST['zip']
+            if request.POST['availability'] != None:
+                record.availability =  request.POST['availability'] 
+            if request.POST['start_date'] != None:
+                record.start_date = request.POST['start_date']
+            if request.POST['end_date'] != None:
+                record.end_date = request.POST['end_date']
+            # datetime.datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
+            if ('dob' in request.POST) and (request.POST['dob'] != None):
+                record.dob = request.POST['dob']
+            if request.POST['city'] != '':
+                record.city = request.POST['city']
+            if request.POST['state'] != '':
+                record.state = request.POST['state']
+            if request.POST['bio'] != '':
+                record.bio = request.POST['bio']
+            if 'profile_image' in request.FILES:
+                record.profile_image = request.FILES['profile_image']
+            
+            record.save()
+            record = Senior.objects.get(email=email)
+            context['record'] = record
+            return render(request, 'senior_dashboard.html', context)
     else :
         context['record'] = Senior.objects.get(email = request.session['email'])
         # context['profile_image_url'] = 'default'
@@ -383,7 +336,11 @@ def add_post_comment(request, *args, **kwargs) :
 def add_new_post(request, *args, **kwargs) :
     # return HttpResponse("<h1> Hey </h1>")
     #Add the content to posts
-    Posts.objects.create(created_by=request.session['email'], content = request.POST['content'], title = request.POST['title'])
+    if request.session['user_type'] == 'senior' :
+        record = Senior.objects.get(email = request.session['email'])
+    else :
+        record = Caregiver.objects.get(email = request.session['email'])
+    Posts.objects.create(created_by=request.session['email'], content = request.POST['content'], title = request.POST['title'], created_by_name= record.name)
     return redirect('forum')
 
 def forum(request, *args, **kwargs) :
@@ -393,7 +350,7 @@ def forum(request, *args, **kwargs) :
     for post in posts :
         post_details = {
             'post_id' : post.id,
-            'post_created_by': post.created_by ,
+            'post_created_by': post.created_by_name ,
             'post_created_at' : post.created_at ,
             'post_content' : post.content ,
             'post_title' : post.title ,
