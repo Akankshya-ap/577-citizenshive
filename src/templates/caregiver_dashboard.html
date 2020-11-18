@@ -84,11 +84,34 @@
                       </td>
                       <td>
                         <select name="availability" value="{{ record.availability }}" id="availability">
-                                      <option value="at_caregivers">Living at my place</option>
-                                      <option value="at_seniors">Living at Senior's place</option>
+                                      <option value="at_seniors">At my own home</option>
+                                      <option value="at_caregivers">At Caregiver's place</option>
+                                      <option value="hourly">Hourly</option>
                                       </select>
                       </td>
                     </tr>
+
+                    <tr>
+                      <td>
+                        <label for="free"><b>Days available (if hourly)</b></label>
+                      </td>
+                        <td>
+                        <input type="text" placeholder="None" name="day" id="day" >
+                      </td>
+
+                    </tr>
+                    
+                    <tr>
+
+                        <td>
+                        <label for="free"><b>Hours/day (if hourly)</b></label>
+                      </td>
+                      <td>
+                          <input type="text" placeholder="None" name="hour" id="hour" >
+                      </td>
+                     
+                    </tr>
+                  
                   
                     <tr>
                       <td>
