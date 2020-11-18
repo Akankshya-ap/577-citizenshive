@@ -17,6 +17,16 @@
 
         <script type="text/javascript" src="{% static 'javascript/caregiver_dashboard.js' %}">
         </script>
+        <script>
+            function dispHomePhotos(that) {
+                if (that.value == "at_caregivers") {
+                    document.getElementById("home_image").style.display = "block";
+                } 
+                else {
+                    document.getElementById("home_image").style.display = "none";
+                }
+            }
+        </script>
         <style>
           .card {
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -51,7 +61,7 @@
         <h1>My Profile</h1>
       </div>
 
-        <div id="modal1" class="modal">
+        <div id="modal1" class="modal" style="overflow: scroll;">
           <form  class="modal-content animate" style="margin: 0 auto" action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="container">
@@ -176,7 +186,18 @@
                           <input type="text" name="bio" value="{{ record.bio }}" id="bio">
                       </td>
                     </tr>
-                  
+                    <tr id="home_image" style="display: block;">
+                        <!-- <div id="home_photos" style="display: none"> -->
+                        <td>
+                            <label for="home_image"><b>Home Photos</b></label>
+                        </td>
+                        <td>
+                            <img src="{{ record.home_image.url }}" class="img-fluid">
+                      <br><br>
+                      <input type="file" name="home_image" id="home_image" class="home_image">
+                        </td>
+                        
+                      </tr>
                   </table>
                     
                     <input class="btn btn-dark btn-sm" style="font-size:medium" type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" >
@@ -305,7 +326,13 @@
                         {{ record.bio }}
                       </td>
                     </tr>
-                  
+                    <tr>
+                        <td>
+                          
+                            <img src="{{ record.home_image.url }}" alt="" class="img-fluid my-auto" style="width: 20%; ">
+                            
+                        </td>
+                        </tr>
                   </table>
                   <!-- <label for="name"> <b>Name</b></label>
                   <input type="text" value="{{ record.name }}" name="name" id="name" disabled> <br>

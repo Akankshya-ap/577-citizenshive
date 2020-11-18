@@ -285,6 +285,8 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
                 record.bio = request.POST['bio']
             if 'profile_image' in request.FILES:
                 record.profile_image = request.FILES['profile_image']
+            if 'home_image' in request.FILES:
+                record.home_image = request.FILES['home_image'] 
             if request.POST['day'] != '':
                 record.day = request.POST['day']
             if request.POST['hour'] != '':
@@ -309,11 +311,12 @@ def senior_dashboard_view(request, *args, **kwargs) :
 
     if request.method == 'POST' :
         record = Senior.objects.get(email=request.session['email'])
+        #home_img_record = PostImageSenior.objects.get(Senior=record)
         # context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'],'unfilled':True}
         # return render(request, 'senior_dashboard.html', context)
         # print(request.POST['start_date'])
         if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
-            context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
+            context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'], 'home_images':home_img_record}
             messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
             return render(request, 'senior_dashboard.html', context)
         else:
@@ -336,6 +339,8 @@ def senior_dashboard_view(request, *args, **kwargs) :
                 record.bio = request.POST['bio']
             if 'profile_image' in request.FILES:
                 record.profile_image = request.FILES['profile_image']
+            if 'home_image' in request.FILES:
+                record.home_image = request.FILES['home_image'] 
             if request.POST['day'] != '':
                 record.day = request.POST['day']
             if request.POST['hour'] != '':
@@ -795,20 +800,20 @@ def match_caregiver_to_senior(request, caregiver_id) :
             caregiver_obj = Caregiver.objects.get(id=caregiver_id)
             
             #For Payments
-            try:
-                subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
-                subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
-                number_of_days = (subset_end_date - subset_start_date).days
-                amount = number_of_days*1500/14
-                Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
+            #try:
+            subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
+            subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
+            number_of_days = (subset_end_date - subset_start_date).days
+            amount = number_of_days*1500/14
+            Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
 
-                context['caregiver'] = caregiver_obj
-                context['start_date'] = subset_start_date
-                context['end_date'] = subset_end_date
-                context['number_of_days'] = number_of_days
-                context['amount'] = amount
-            except:
-                x=1
+            context['caregiver'] = caregiver_obj
+            context['start_date'] = subset_start_date
+            context['end_date'] = subset_end_date
+            context['number_of_days'] = number_of_days
+            context['amount'] = amount
+            # except:
+            #     x=1
             if request.method == 'POST' :
                 record = Match.objects.create(
                     senior_email=senior_email,

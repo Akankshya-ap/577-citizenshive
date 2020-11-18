@@ -23,6 +23,10 @@ class Senior(models.Model) :
     profile_image = models.ImageField(upload_to='images/', blank = True, default = 'images/person_avatar.png')
     start_date = models.DateField(null=True, blank = True)
     end_date = models.DateField(null=True, blank = True)
+    home_image = models.ImageField(upload_to='images/', blank = True, default = 'images/home_avatar.png')
+# class PostImageSenior(models.Model):
+#     senior_post = models.ForeignKey(Senior, default=None, on_delete=models.CASCADE)
+#     images = models.FileField(upload_to = 'images/')
     day = models.CharField(max_length=20, blank = True)
     hour = models.CharField(max_length=20, blank = True)
 
@@ -39,6 +43,10 @@ class Caregiver(models.Model) :
     profile_image = models.ImageField(upload_to='images/', blank = True, default='images/person_avatar.png')
     start_date = models.DateField(null=True, blank = True)
     end_date = models.DateField(null=True, blank = True)
+    home_image = models.ImageField(upload_to='images/', blank = True, default = 'images/home_avatar.png')
+# class PostImageCaregiver(models.Model):
+#     caregiver_post = models.ForeignKey(Caregiver, default=None, on_delete=models.CASCADE)
+#     images = models.FileField(upload_to = 'images/')
     day = models.CharField(max_length=20, blank = True)
     hour = models.CharField(max_length=20, blank = True)
     
