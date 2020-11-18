@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, search_seniors, view_senior_details, room_detail, all_rooms, token, add_or_get_chatroom, get_chats, payment_summary, CheckoutView, services, contact, PaymentView, display_matched_caregivers,display_matched_seniors, match_caregiver_to_senior, rating_review, pay_order
+from app1.views import landing_page, registration_page, handle_login, forum, add_new_post, add_post_comment, senior_dashboard_view, caregiver_dashboard_view, search_caregivers, view_caregiver_details, logout, dashboard_view, about_us, search_seniors, view_senior_details, room_detail, all_rooms, token, add_or_get_chatroom, get_chats, payment_summary, CheckoutView, services, contact, PaymentView, display_matched_caregivers,display_matched_seniors, match_caregiver_to_senior, rating_review, pay_order, visit_profile
 from pyzipcode import ZipCodeDatabase
 
 
@@ -51,7 +51,8 @@ urlpatterns = [
     path('match_caregiver_to_senior/<int:caregiver_id>', match_caregiver_to_senior, name='match_caregiver_to_senior'),
     path('rating_review', rating_review, name='rating_review'),
     path('pay_order/<str:caregiver_email>', pay_order, name='pay_order'),
-    path('display_matched_seniors', display_matched_seniors, name='display_matched_seniors')
+    path('display_matched_seniors', display_matched_seniors, name='display_matched_seniors'),
+    path('visit_profile/<int:caregiver_id>', visit_profile, name='visit_profile')
 
 ]
 
