@@ -23,13 +23,14 @@ $(document).ready(function(){
             day = '0' + day;
         
         var current_date = year + "-" + month + "-" + day;
-        
+        console.log("current date: " + current_date);
+        console.log("dob: "+dob);
         // alert("Start Date = " + start_date);
         // alert("End Date" + end_date);
         // alert("Current Date = " + current_date);
-        if(dob < current_date) 
+        if(dob > current_date) 
         {
-            alert("Date of birth cannot precede the current date");
+            alert("Date of birth cannot be after the current date");
             e.preventDefault();
         }
         if(start_date < current_date) 

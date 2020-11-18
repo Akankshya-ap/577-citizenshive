@@ -31,9 +31,9 @@ $(document).ready(function(){
         // alert("Start Date = " + start_date);
         // alert("End Date" + end_date);
         // alert("Current Date = " + current_date);
-        if(dob < current_date) 
+        if(dob > current_date) 
         {
-            alert("Date of birth cannot precede the current date");
+            alert("Date of birth cannot be after the current date");
             e.preventDefault();
         }
         if(start_date < current_date) 
