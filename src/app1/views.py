@@ -316,7 +316,7 @@ def senior_dashboard_view(request, *args, **kwargs) :
         # return render(request, 'senior_dashboard.html', context)
         # print(request.POST['start_date'])
         if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
-            context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type'], 'home_images':home_img_record}
+            context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
             messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
             return render(request, 'senior_dashboard.html', context)
         else:
