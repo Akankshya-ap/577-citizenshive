@@ -84,11 +84,34 @@
                       </td>
                       <td>
                         <select name="availability" value="{{ record.availability }}" id="availability">
-                                      <option value="at_caregivers">Living at my place</option>
-                                      <option value="at_seniors">Living at Senior's place</option>
+                                      <option value="at_seniors">At my own home</option>
+                                      <option value="at_caregivers">At Caregiver's place</option>
+                                      <option value="hourly">Hourly</option>
                                       </select>
                       </td>
                     </tr>
+
+                    <tr>
+                      <td>
+                        <label for="free"><b>Days available (if hourly)</b></label>
+                      </td>
+                        <td>
+                        <input type="text" placeholder="None" name="day" id="day" >
+                      </td>
+
+                    </tr>
+                    
+                    <tr>
+
+                        <td>
+                        <label for="free"><b>Hours/day (if hourly)</b></label>
+                      </td>
+                      <td>
+                          <input type="text" placeholder="None" name="hour" id="hour" >
+                      </td>
+                     
+                    </tr>
+                  
                   
                     <tr>
                       <td>
@@ -168,12 +191,6 @@
           <div class="container">
             <form action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-<<<<<<< HEAD
-            <div class="row" style="border: 1px solid black;">
-                <div class="col-md-3" style="border-right: 1px solid black;">
-                    <img src="{% static 'images/caregiver1.png' %}" alt="" style="max-width: 90%;">
-                </div>
-=======
             <div class="row">
               <div class="col-md-3" style="border-right: 1px solid #E8E8E8; height: 35%; width: 35%;">
                 <!-- {% if profile_image_url == 'default' %}
@@ -185,7 +202,6 @@
                 
         
             </div>
->>>>>>> 12392f0bcb6a0d2d00b34902d419a0929f6a5070
 
                 <div class="col-md-9" style="border-left: 1px solid #E8E8E8;">
                   <!-- <form action="{% url 'caregiver_dashboard_view' %}" method="POST"> -->

@@ -285,6 +285,10 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
                 record.bio = request.POST['bio']
             if 'profile_image' in request.FILES:
                 record.profile_image = request.FILES['profile_image']
+            if request.POST['day'] != '':
+                record.day = request.POST['day']
+            if request.POST['hour'] != '':
+                record.hour = request.POST['hour']
             
             record.save()
             record = Caregiver.objects.get(email=email)
@@ -332,8 +336,6 @@ def senior_dashboard_view(request, *args, **kwargs) :
                 record.bio = request.POST['bio']
             if 'profile_image' in request.FILES:
                 record.profile_image = request.FILES['profile_image']
-            #change
-            
             if request.POST['day'] != '':
                 record.day = request.POST['day']
             if request.POST['hour'] != '':
@@ -831,11 +833,14 @@ def rating_review(request) :
             caregiver_email=caregiver_obj.email,
             rating=rating,
             review=review)
+        
+    messages.success(self.request, "Successfully posted")
+    return redirect('display_matched_caregivers')
         # record.save()
     #return redirect('match_caregiver_to_senior/')
     #return render(request, 'display_matched_caregiver.html', context)
     # return redirect('senior_dashboard_view')
-    return redirect('display_matched_caregivers')
+    # return redirect('display_matched_caregivers')
 
 
 def display_matched_caregivers(request, *args, **kwargs) :

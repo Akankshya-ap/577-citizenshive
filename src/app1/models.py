@@ -23,7 +23,6 @@ class Senior(models.Model) :
     profile_image = models.ImageField(upload_to='images/', blank = True, default = 'images/person_avatar.png')
     start_date = models.DateField(null=True, blank = True)
     end_date = models.DateField(null=True, blank = True)
-    #change
     day = models.CharField(max_length=20, blank = True)
     hour = models.CharField(max_length=20, blank = True)
 
@@ -40,7 +39,6 @@ class Caregiver(models.Model) :
     profile_image = models.ImageField(upload_to='images/', blank = True, default='images/person_avatar.png')
     start_date = models.DateField(null=True, blank = True)
     end_date = models.DateField(null=True, blank = True)
-    #change
     day = models.CharField(max_length=20, blank = True)
     hour = models.CharField(max_length=20, blank = True)
     
