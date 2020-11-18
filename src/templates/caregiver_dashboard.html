@@ -93,9 +93,9 @@
                         <label for="availability"> <b> Type of Care</b></label>
                       </td>
                       <td>
-                        <select name="availability" value="{{ record.availability }}" id="availability">
-                                      <option value="at_seniors">At my own home</option>
-                                      <option value="at_caregivers">At Caregiver's place</option>
+                        <select name="availability" value="{{ record.availability }}" id="availability" onchange="dispHomePhotos(this);">
+                                      <option value="at_caregivers">At my own home</option>
+                                      <option value="at_seniors">At Senior's place</option>
                                       <option value="hourly">Hourly</option>
                                       </select>
                       </td>
@@ -189,7 +189,7 @@
                     <tr id="home_image" style="display: block;">
                         <!-- <div id="home_photos" style="display: none"> -->
                         <td>
-                            <label for="home_image"><b>Home Photos</b></label>
+                            <label for="home_image"><b>Home Photo</b></label>
                         </td>
                         <td>
                             <img src="{{ record.home_image.url }}" class="img-fluid">
@@ -327,6 +327,9 @@
                       </td>
                     </tr>
                     <tr>
+                        <td>
+                            <b>Home Photo</b>
+                          </td>
                         <td>
                           
                             <img src="{{ record.home_image.url }}" alt="" class="img-fluid my-auto" style="width: 20%; ">
