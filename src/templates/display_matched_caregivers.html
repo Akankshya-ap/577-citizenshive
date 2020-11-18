@@ -94,6 +94,13 @@
                     <input type="submit" value="Submit Review">
                     </form>
                   </div>
+                  {% if messages %}
+                  <ul class="messages">
+                   {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p> 
+                  {% endfor %} 
+                  </ul>
+                  {% endif %}
                 </div>
               </div>
             </div>

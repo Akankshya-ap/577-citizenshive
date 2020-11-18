@@ -834,7 +834,7 @@ def rating_review(request) :
             rating=rating,
             review=review)
         
-    messages.success(self.request, "Successfully posted")
+    messages.success(request, 'You have successfully given feedback!')
     return redirect('display_matched_caregivers')
         # record.save()
     #return redirect('match_caregiver_to_senior/')
