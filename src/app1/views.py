@@ -160,6 +160,25 @@ def view_caregiver_details(request, caregiver_id) :
     context['user_type'] = request.session['user_type']
     return render(request, 'caregiver_details_for_senior.html', context)
 
+def visit_profile(request, caregiver_id) :
+    # return HttpResponse("<h1> Hey" + str(caregiver_id) + "</h1>")
+    context = {}
+    caregiver_obj = Caregiver.objects.get(id=caregiver_id)
+    context['user'] = caregiver_obj
+    rating_rows = Rating_Review.objects.filter(caregiver_email = caregiver_obj.email)
+    rating = 0
+    if len(rating_rows)!=0:
+        for row in rating_rows :
+            rating += row.rating
+            review = row.review
+        rating = rating/len(rating_rows)
+        context['review'] = review
+    # review=rating_rows.review 
+    context['rating'] = rating
+    
+    context['user_type'] = request.session['user_type']
+    return render(request, 'visit_profile.html', context)
+
 def view_senior_details(request, senior_id) :
     context = {}
     senior_obj = Senior.objects.get(id=senior_id)
@@ -268,6 +287,11 @@ def caregiver_dashboard_view(request, *args, **kwargs) :
                 record.profile_image = request.FILES['profile_image']
             if 'home_image' in request.FILES:
                 record.home_image = request.FILES['home_image'] 
+            if request.POST['day'] != '':
+                record.day = request.POST['day']
+            if request.POST['hour'] != '':
+                record.hour = request.POST['hour']
+            
             record.save()
             record = Caregiver.objects.get(email=email)
             context['record'] = record
@@ -317,6 +341,11 @@ def senior_dashboard_view(request, *args, **kwargs) :
                 record.profile_image = request.FILES['profile_image']
             if 'home_image' in request.FILES:
                 record.home_image = request.FILES['home_image'] 
+            if request.POST['day'] != '':
+                record.day = request.POST['day']
+            if request.POST['hour'] != '':
+                record.hour = request.POST['hour']
+            
             record.save()
             record = Senior.objects.get(email=email)
             context['record'] = record
@@ -435,7 +464,7 @@ def registration_page(request, *args, **kwargs) :
         password = request.POST['psw']
         repeat_password = request.POST['psw-repeat']
         user_type = request.POST['optradio']
-
+        
         record_exists = CommonRegistration.objects.filter(email = email).count() > 0
 
         if record_exists :
@@ -453,6 +482,7 @@ def registration_page(request, *args, **kwargs) :
                 else :
                     caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
             # return render(request, 'login_page.html', {})
+            messages.add_message(request, messages.INFO, 'Registration Successful!!')
             return redirect('landing_page')
 
 
@@ -809,11 +839,14 @@ def rating_review(request) :
             caregiver_email=caregiver_obj.email,
             rating=rating,
             review=review)
+        
+    messages.success(request, 'You have successfully given feedback!')
+    return redirect('display_matched_caregivers')
         # record.save()
     #return redirect('match_caregiver_to_senior/')
     #return render(request, 'display_matched_caregiver.html', context)
     # return redirect('senior_dashboard_view')
-    return redirect('display_matched_caregivers')
+    # return redirect('display_matched_caregivers')
 
 
 def display_matched_caregivers(request, *args, **kwargs) :

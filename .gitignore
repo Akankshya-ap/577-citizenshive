@@ -11,3 +11,5 @@ extra/migrations/__pycache__/
 extra/settings.json
 src/db.sqlite3
 
+src/db.sqlite3
+src/db.sqlite3

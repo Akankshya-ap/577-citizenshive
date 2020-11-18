@@ -27,6 +27,8 @@ class Senior(models.Model) :
 # class PostImageSenior(models.Model):
 #     senior_post = models.ForeignKey(Senior, default=None, on_delete=models.CASCADE)
 #     images = models.FileField(upload_to = 'images/')
+    day = models.CharField(max_length=20, blank = True)
+    hour = models.CharField(max_length=20, blank = True)
 
 class Caregiver(models.Model) :
     email = models.CharField(max_length=200)
@@ -45,6 +47,9 @@ class Caregiver(models.Model) :
 # class PostImageCaregiver(models.Model):
 #     caregiver_post = models.ForeignKey(Caregiver, default=None, on_delete=models.CASCADE)
 #     images = models.FileField(upload_to = 'images/')
+    day = models.CharField(max_length=20, blank = True)
+    hour = models.CharField(max_length=20, blank = True)
+    
 
 class Rating_Review(models.Model) :
     senior_email = models.CharField(max_length=200)

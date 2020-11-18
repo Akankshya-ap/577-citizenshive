@@ -92,9 +92,32 @@
                           <select name="availability" value="{{ record.availability }}" id="availability" onchange="dispHomePhotos(this);">
                                         <option value="at_seniors">At my own home</option>
                                         <option value="at_caregivers">At Caregiver's place</option>
+                                        <option value="hourly">Hourly</option>
                                         </select>
                         </td>
                       </tr>
+
+
+                      <tr>
+                        <td>
+                          <label for="free"><b>Days available (if hourly)</b></label>
+                        </td>
+                          <td>
+                          <input type="text" placeholder="None" name="day" id="day" >
+                        </td>
+
+                      </tr>
+                      <tr>
+
+                          <td>
+                          <label for="free"><b>Hours/day (if hourly)</b></label>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="None" name="hour" id="hour" >
+                        </td>
+                       
+                      </tr>
+                    
                     
                       <tr>
                         <td>
@@ -173,6 +196,33 @@
                       </tr>
                      
                     <!-- </div> -->
+                      
+                      <tr>
+                        <td>
+                          <label for="days"><b>Days Available</b></label>
+                        </td>
+                        <td>
+                          <body>{% if record.day == None %}
+                            <script> document.getElementById('modal1').style.display='block';</script>
+                            {% else %}
+                            {{ record.day }}
+                            {% endif %}</body>
+                        </td>
+                      </tr>
+
+                        <tr>
+                        <td>
+                          <label for="days"><b>Hours/Day</b></label>
+                        </td>
+                        <td>
+                          <body>{% if record.hour == None %}
+                            <script> document.getElementById('modal1').style.display='block';</script>
+                            {% else %}
+                            {{ record.hour }}
+                            {% endif %}
+                          </body>
+                        </td>
+                      </tr>
                     </table>
                       
                     <input type="submit" style="font-size:medium" onclick="document.getElementById('modal1').style.display='none'" class="btn btn-dark btn-sm" name="submit_edit" id="submit_edit" value="Submit" >
