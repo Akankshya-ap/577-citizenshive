@@ -459,7 +459,7 @@ def registration_page(request, *args, **kwargs) :
         password = request.POST['psw']
         repeat_password = request.POST['psw-repeat']
         user_type = request.POST['optradio']
-
+        
         record_exists = CommonRegistration.objects.filter(email = email).count() > 0
 
         if record_exists :
@@ -477,6 +477,7 @@ def registration_page(request, *args, **kwargs) :
                 else :
                     caregiver_obj = Caregiver.objects.create(name=name, email=email, password=password)
             # return render(request, 'login_page.html', {})
+            messages.add_message(request, messages.INFO, 'Registration Successful!!')
             return redirect('landing_page')
 
 

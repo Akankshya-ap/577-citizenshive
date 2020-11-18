@@ -281,7 +281,14 @@ a {
   
         <label for="password"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>
-          
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags %}
+        <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+        {% endif %}
         <button type="submit" class="btn btn-dark" style="width:20%;">Login</button><br>
         <!-- <label>
           <input type="checkbox" checked="checked" name="remember"> Remember me
