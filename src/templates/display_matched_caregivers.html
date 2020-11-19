@@ -64,7 +64,7 @@
                     <form action="{% url 'rating_review' %}" method="POST" >
                       {% csrf_token %}
                       <label for="rating">Choose rating for the caregiver</label>
-
+                        &nbsp;
                       <select name="rating" id="rating" onChange="getOption();" name="rating">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -88,9 +88,9 @@
                             //document.querySelector('.output').textContent = output; 
                         } 
                       </script>
-                   <br>
+                   <br><br>
                      <textarea rows="4"cols="50"id="review"name="review"></textarea>
-                    <br>
+                    <br><br>
                     <input type="submit" value="Submit Review">
                     </form>
                   </div>
