@@ -164,20 +164,6 @@ a {
     <!-- Copyright -->
   
   </footer>
-  <!-- Footer -->
-
-  <!--
-  <div class="card">
-    <div class="row"  style="background-color:red;">
-      <div class="col-6" style="background-color:yellow;">
-        hey
-      </div>
-      <div class="col-6"  style="background-color:orange;">
-        there
-      </div>
-    </div>
-  </div>
-  -->
   <div class="container my-4">
     <h4 class="text-center mb-5">Welcome to Citizens Hive!</h4>
     <div class="row">
@@ -289,15 +275,17 @@ a {
         {% endfor %}
 
         {% endif %}
-        <button type="submit" class="btn btn-dark" style="width:20%;">Login</button><br>
+        
         <!-- <label>
           <input type="checkbox" checked="checked" name="remember"> Remember me
         </label> -->
       </div>
   
-      <div class="container" >
-        <button type="button"  onclick="document.getElementById('id01').style.display='none'" class="cancelbtn btn btn-secondary">Cancel</button>
-        <span class="psw"><a href="#">Forgot password?</a></span>
+      <div class="container" style="display: flex;" >
+        <button type="button"  onclick="document.getElementById('id01').style.display='none'" class="cancelbtn btn btn-secondary" style="width: 10%; margin-right: 3%;">Cancel</button>
+        <!-- <button type="submit" class="btn btn-dark" style="width:20%;">Login</button><br> -->
+        <button type="submit" class="btn btn-dark"  style="width:10%;">Login</button>
+        <!-- <span class="psw"><a href="#">Forgot password?</a></span> -->
       </div>
     </form>
   </div>
