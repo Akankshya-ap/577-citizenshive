@@ -66,13 +66,12 @@
               {% csrf_token %}
               <div class="container">
             <div class="row p-4" >
-                <div class="col-md-3 pt-5" style="border-right: 1px solid #E8E8E8;  height: 35%; width: 35%;">
+                <div class="col-md-3 pt-5" style="height: 35%; width: 35%;">
                     <img src="{{ record.profile_image.url }}" alt="" class="img-fluid" style="width: 100%; margin-top: 5%;">
                     <br><br>
                     <input type="file" name="profile_image" id="profile_image" class="profile_image">
                 </div>
-
-                <div class="col-md-9 py-4" style="border-left: 1px solid #E8E8E8;">
+                <div class="col-md-8 py-4" style="border-left: 1px solid #E8E8E8; margin-left: 26px;">
                   <!-- <form action="{% url 'caregiver_dashboard_view' %}" method="POST" enctype="multipart/form-data"> -->
                   <table>
                     <tr>
@@ -191,13 +190,20 @@
                         <td>
                             <label for="home_image"><b>Home Photo</b></label>
                         </td>
-                        <td>
-                            <img src="{{ record.home_image.url }}" class="img-fluid">
-                      <br><br>
-                      <input type="file" name="home_image" id="home_image" class="home_image">
-                        </td>
                         
                       </tr>
+                  </table>
+                  
+                  <table>                    
+                      <tr id="home_image" style="display: block;">
+                      <!-- <div id="home_photos" style="display: none"> -->
+                      <td>
+                          <img src="{{ record.home_image.url }}" class="img-fluid" style="max-width:120px">
+                    <br><br>
+                    <input type="file" name="home_image" id="home_image" class="home_image">
+                      </td>
+                      
+                    </tr>
                   </table>
                     
                     <input class="btn btn-dark btn-sm" style="font-size:medium" type="submit" onclick="document.getElementById('modal1').style.display='none'" name="submit_edit" id="submit_edit" value="Submit" >
@@ -236,7 +242,7 @@
                   <h2>{{ record.name }}</h2>
                   <table>
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="email"><b>Email</b></label>
                       </td>
                       <td>
@@ -245,7 +251,7 @@
                     </tr>
                   
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="dob"><b>Date of Birth</b></label>
                       </td>
                       <td>
@@ -254,7 +260,7 @@
                     </tr>
                   
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="availability"> <b> Availability Preference</b></label>
                       </td>
                       <td>
@@ -263,7 +269,7 @@
                     </tr>
                   
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="zip"><b>Zip Code</b></label>
                       </td>
                       <td>
@@ -278,7 +284,7 @@
                     </tr>
                   
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="city"><b>City</b></label>
                       </td>
                       <td>
@@ -287,7 +293,7 @@
                     </tr>
                   
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="state"><b>State</b></label>
                       </td>
                       <td>
@@ -295,7 +301,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="start_date"><b>Start Date</b></label>
                       </td>
                       <td>
@@ -308,7 +314,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td class="profile">
                         <label for="end_date"><b>End Date</b></label>
                       </td>
                       <td>{% if record.end_date == None %}
@@ -319,7 +325,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td class="profile">
                         <b>Bio</b>
                       </td>
                       <td>
@@ -327,15 +333,17 @@
                       </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="profile">
                             <b>Home Photo</b>
                           </td>
+                      </tr>
+                  </table>
+                  <table>
+                    <tr>
                         <td>
-                          
-                            <img src="{{ record.home_image.url }}" alt="" class="img-fluid my-auto" style="width: 20%; ">
-                            
-                        </td>
-                        </tr>
+                          <img src="{{ record.home_image.url }}" alt="" class="img-fluid my-auto" style="max-width: 120px; ">
+                       </td>
+                  </tr>
                   </table>
                   <!-- <label for="name"> <b>Name</b></label>
                   <input type="text" value="{{ record.name }}" name="name" id="name" disabled> <br>

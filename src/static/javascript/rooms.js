@@ -67,11 +67,13 @@ $(function() {
     // Set up channel after it has been found / created
     function setupChannel(name) {
       // console.log("In setup channel after an already existing channel is found");
+      //`Joined channel ${name} as <span class="me"> ${username} </span>.`,
+            
       if(roomChannel.state.status!=="joined")
       {
         roomChannel.join().then(function(channel) {
           print(
-            `Joined channel ${name} as <span class="me"> ${username} </span>.`,
+            `Joined channel<span class="me"></span>`,
             true
           );
           channel.getMessages(30).then(processPage);
@@ -80,8 +82,10 @@ $(function() {
       else
       {
         //alert("Else part");
+        //`Joined channel ${name} as <span class="me"> ${username} </span>.`,
+          
         print(
-          `Joined channel ${name} as <span class="me"> ${username} </span>.`,
+          `Joined channel<span class="me"></span>.`,
           true
         );
         roomChannel.getMessages(30).then(processPage);
@@ -109,7 +113,8 @@ $(function() {
       // Extract the room's channel name from the page URL
       let channelName = window.location.pathname.split("/").slice(-2, -1)[0];
   
-      print(`Attempting to join "${channelName}" chat channel...`);
+      //print(`Attempting to join "${channelName}" chat channel...`);
+      print(`Attempting to join chat channel...`);
   
       chatClient
         .getChannelByUniqueName(channelName)

@@ -181,18 +181,22 @@
                             <input type="text" name="bio" value="{{ record.bio }}" id="bio">
                         </td>
                       </tr>
-                     
                       <tr id="home_image" style="display: block;">
                         <!-- <div id="home_photos" style="display: none"> -->
                         <td>
                             <label for="home_image"><b>Home Photo</b></label>
                         </td>
+                      </tr>
+                    </table>
+                    <table>
+                      
+                        <tr>
                         <td>
-                            <img src="{{ record.home_image.url }}" class="img-fluid">
+                            <img src="{{ record.home_image.url }}" class="img-fluid" style="max-width:120px">
                       <br><br>
                       <input type="file" name="home_image" id="home_image" class="home_image">
                         </td>
-                        
+                      </tr>
                       </tr>
                     </table>
                       
@@ -214,7 +218,7 @@
             <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
             <div class="row">
-                <div class="col-md-3 pt-5" style="border-right: 1px solid #E8E8E8; height: 35%; width: 35%;">
+                <div class="col-md-3 pt-5" style="height: 35%; width: 35%;">
                     <!-- {% if profile_image_url == 'default' %}
                       <img src="{% static 'images/person_avatar.png' %}" alt="" style="width: 100%; height: 40%;">
                     {% else %}
@@ -225,7 +229,7 @@
             
                 </div>
 
-                <div class="col-md-9 py-4" style="border-left: 1px solid #E8E8E8;">
+                <div class="col-md-8 py-4" style="border-left: 1px solid #E8E8E8; margin-left: 26px;">
                     <!-- <form action="{% url 'senior_dashboard_view' %}" method="POST" enctype="multipart/form-data"> -->
                         {% csrf_token %}
                     <button onclick="document.getElementById('modal1').style.display='block'" type="button" class="btn btn-dark btn-sm" class="edit_profile" id="edit_profile" style="right: 0; position: absolute;width: 100px;">
@@ -237,7 +241,7 @@
                     <h2>{{ record.name }}</h2>
                     <table>
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="email"><b>Email</b></label>
                         </td>
                         <td>
@@ -246,7 +250,7 @@
                       </tr>
                     
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="dob"><b>Date of Birth</b></label>
                         </td>
                         <td>
@@ -255,7 +259,7 @@
                       </tr>
                     
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="availability"> <b> Type of Care</b></label>
                         </td>
                         <td>
@@ -264,7 +268,7 @@
                       </tr>
                     
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="zip"><b>Zip Code</b></label>
                         </td>
                         <td>
@@ -279,7 +283,7 @@
                       </tr>
                     
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="city"><b>City</b></label>
                         </td>
                         <td>
@@ -288,7 +292,7 @@
                       </tr>
                     
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="state"><b>State</b></label>
                         </td>
                         <td>
@@ -296,7 +300,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="start_date"><b>Start Date</b></label>
                         </td>
                         <td>
@@ -311,7 +315,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td class="profile">
                           <label for="end_date"><b>End Date</b></label>
                         </td>
                         <td>
@@ -323,7 +327,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td class="profile">
                           <b>Bio</b>
                         </td>
                         <td>
@@ -331,18 +335,21 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td class="profile">
                           <b>Home Photo</b>
-                        </td>
-                    
-                    
-                        <td>
-                          
-                            <img src="{{ record.home_image.url }}" alt="" class="img-fluid my-auto" style="width: 20%; ">
-                            
                         </td>
                         </tr>
                     </table>
+                      <table>
+
+                      <tr>
+                        <td>
+                          
+                            <img src="{{ record.home_image.url }}" alt="" class="img-fluid my-auto" style="max-width:120px">
+                            
+                        </td>
+                        </tr>
+                      </table>
                     
             </div>
           </div>

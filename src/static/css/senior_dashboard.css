@@ -50,10 +50,9 @@ html{
 
 
  /* Full-width input fields */
- input[type=text], input[type=password] {
+ input[type=text], input[type=password], input[type=date], select {
    width: 100%;
    padding: 6px;
-   margin: 8px 0;
    display: inline-block;
    border: 1px solid #ccc;
    box-sizing: border-box;
@@ -169,8 +168,7 @@ html{
  }
 
  td, label {
-   font-size:15px;    
-   margin-right: 110px;
+   font-size:15px;
    padding-top: 2px;
   }
 
@@ -178,3 +176,8 @@ html{
   .btn:hover {
     color: white;
   }
+
+  .profile {
+    min-width:130px;
+  }
+  
