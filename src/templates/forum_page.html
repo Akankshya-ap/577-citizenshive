@@ -36,7 +36,7 @@
         </a> -->
         
 
-        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;" >
+        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto; background-color: #343A40;" >
             Add New Post
         </button>
         <!-- <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Sign Up</button> -->
@@ -52,7 +52,7 @@
                     
                 </div>
                 
-                <button class="show_comments" style="width: 200px; left: 0; position: relative;">
+                <button class="show_comments"  style="width: 100%; background-color: #343A40;" >
                     Show Comments 
                 </button>
                 <div class="comments_hidden" style="display: none;">
@@ -68,13 +68,13 @@
                         <textarea name="comment" id="comment" style="width: 100%;"></textarea>
                         <input type="text" name="comment_for_postId" id="comment_for_postId" style="display: none;" value="{{ post.post_id }}">
                         <br>
-                        <button class="add_comment" style="position: absolute; right: 0; width: 200px;">
+                        <button class="add_comment" style="position: absolute; right: 0; width: 200px;background-color: #343A40;">
                             Add comment
                         </button>
                     </form>
                     
                 </div>
-                <button class="hide_comments" style="width: 200px; left: 0; position: relative; display: none;">
+                <button class="hide_comments" style="width: 200px; left: 0; position: relative; display: none; background-color: #343A40;">
                     Hide Comments 
                 </button>
             </div>
