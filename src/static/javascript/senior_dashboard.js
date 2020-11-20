@@ -11,6 +11,8 @@ $(document).ready(function(){
         
     });
 
+    
+
     $("form").submit(function(e){
         var dob = $("#dob").val();
         var start_date = $("#start_date").val();

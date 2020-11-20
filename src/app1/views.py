@@ -206,7 +206,8 @@ def search_caregivers(request, *args, **kwargs) :
         radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
         # radius_arr = 10 #added 28/10
         # caregivers = Caregiver.objects.filter(zip_code__in = radius_arr)
-        caregivers = Caregiver.objects.filter(zip_code__in = radius_arr, availability=availability, start_date__lte=start_date, end_date__gte=end_date)
+        #caregivers = Caregiver.objects.filter(zip_code__in = radius_arr, availability=availability, start_date__lte=start_date, end_date__gte=end_date)
+        caregivers = Caregiver.objects.filter(zip_code__in = radius_arr) | Caregiver.objects.filter(availability=availability) | Caregiver.objects.filter(start_date__lte=start_date) | Caregiver.objects.filter(end_date__gte=end_date)
         context['caregivers'] = caregivers
         context['isPostRequest'] = True
     else :
@@ -233,7 +234,8 @@ def search_seniors(request, *args, **kwargs) :
         # radius_utf = [x.encode('UTF-8') for x in in_radius] # unicode list to utf list
         radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
         # radius_arr = 10 #added 28/10
-        seniors = Senior.objects.filter(zip_code__in = radius_arr,availability=availability, start_date__lte=start_date, end_date__gte=end_date)
+        #seniors = Senior.objects.filter(zip_code__in = radius_arr,availability=availability, start_date__lte=start_date, end_date__gte=end_date)
+        seniors = Senior.objects.filter(zip_code__in = radius_arr) | Senior.objects.filter(availability=availability) | Senior.objects.filter(start_date__lte=start_date) | Senior.objects.filter(end_date__gte=end_date)
         context['seniors'] = seniors
         context['isPostRequest'] = True
     else :
@@ -318,16 +320,23 @@ def senior_dashboard_view(request, *args, **kwargs) :
         if (request.POST['start_date'] == None and record.start_date == None ) or (request.POST['end_date'] == None and record.end_date == None) or (request.POST['zip'] == '' and record.zip_code == '') or (request.POST['availability'] == None and record.availability == None) :
             context = {'email':email, 'name' :record.name, 'user_type': request.session['user_type']}
             messages.add_message(request, messages.INFO, 'Please fill ZipCode, Start Date and End Date!!')
+            context['start_date'] = str(record.start_date)
+            context['end_date'] = str(record.end_date)
             return render(request, 'senior_dashboard.html', context)
         else:
             if request.POST['zip']!=None:
                 record.zip_code = request.POST['zip']
             if request.POST['availability'] != None:
                 record.availability =  request.POST['availability'] 
-            if request.POST['start_date'] != None:
-                record.start_date = request.POST['start_date']
-            if request.POST['end_date'] != None:
-                record.end_date = request.POST['end_date']
+            # if request.POST['start_date'] != None:
+            #     record.start_date = request.POST['start_date']
+            #     #record.start_date = '2020-11-11'
+            # if request.POST['end_date'] != None:
+            #     record.end_date = request.POST['end_date']
+            
+            record.start_date = request.POST['start_date'] if request.POST['start_date']!='' else None
+            record.end_date = request.POST['end_date'] if request.POST['end_date']!='' else None
+                
             # datetime.datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
             if ('dob' in request.POST) and (request.POST['dob'] != None):
                 record.dob = request.POST['dob']
@@ -349,11 +358,19 @@ def senior_dashboard_view(request, *args, **kwargs) :
             record.save()
             record = Senior.objects.get(email=email)
             context['record'] = record
+            context['start_date'] = str(record.start_date)
+            context['end_date'] = str(record.end_date)
+            
+            print("============================"+str(record.start_date)+"==============================")
+            
             return render(request, 'senior_dashboard.html', context)
     else :
-        context['record'] = Senior.objects.get(email = request.session['email'])
+        record = Senior.objects.get(email = request.session['email'])
+        context['record'] = record
         # context['profile_image_url'] = 'default'
         # context['image_object'] = record.profile_image
+        context['start_date'] = str(record.start_date)
+        context['end_date'] = str(record.end_date)
         return render(request, 'senior_dashboard.html', context)
 
 

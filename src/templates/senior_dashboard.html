@@ -22,9 +22,11 @@
     function dispHomePhotos(that) {
         if (that.value == "at_seniors") {
             document.getElementById("home_image").style.display = "block";
+            document.getElementById("home_image_label").style.display="block";
         } 
         else {
             document.getElementById("home_image").style.display = "none";
+            document.getElementById("home_image_label").style.display="none";
         }
     }
 </script>
@@ -90,14 +92,13 @@
                         </td>
                         <td>
                           <select name="availability" value="{{ record.availability }}" id="availability" onchange="dispHomePhotos(this);">
-                                        <option value="at_seniors">At my own home</option>
-                                        <option value="at_caregivers">At Caregiver's place</option>
-                                        <option value="hourly">Hourly</option>
+                                        
+                                        <option value="at_caregivers" {% if record.availability in "at_caregivers" %} selected="selected" {% endif %}>At Caregiver's place</option>
+                                        <option value="hourly" {% if record.availability in "hourly" %} selected="selected" {% endif %}>Hourly</option>
+                                        <option value="at_seniors" {% if record.availability in "at_seniors" %} selected="selected" {% endif %}>At my own home</option>
                                         </select>
                         </td>
-                      </tr>
-
-
+                    </tr>
                       <tr>
                         <td>
                           <label for="free"><b>Days available (if hourly)</b></label>
@@ -154,10 +155,12 @@
                           <label for="start_date"><b>Start Date</b></label>
                         </td>
                         <td>
+                          
                           {% if record.start_date == None %}
+
                           <input type="date" placeholder="Enter Start Date" name="start_date" id="sd" >
                           {% else %}
-                          <input type="date" value="{{ record.start_date}}" name="start_date" id="sd">
+                          <input type="date" value="{{record.start_date|date:'Y-m-d'}}" name="start_date" id="sd">
                           {% endif %}
                         </td>
                       </tr>
@@ -166,10 +169,11 @@
                           <label for="end_date"><b>End Date</b></label>
                         </td>
                         <td>
+                            
                           {% if record.end_date == None %}
-                          <input type="date" placeholder="Enter End Date" name="end_date" id="ed" >
+                          <input type="date" placeholder="Enter End Date" name="end_date" id="ed" de>
                           {% else %}
-                          <input type="date" value="{{ record.end_date}}" name="end_date" id="ed">
+                          <input type="date" value="{{record.end_date|date:'Y-m-d'}}" name="end_date" id="ed" >
                           {% endif %}
                         </td>
                       </tr>
@@ -181,7 +185,7 @@
                             <input type="text" name="bio" value="{{ record.bio }}" id="bio">
                         </td>
                       </tr>
-                      <tr id="home_image" style="display: block;">
+                      <tr id="home_image_label" style="display: block;">
                         <!-- <div id="home_photos" style="display: none"> -->
                         <td>
                             <label for="home_image"><b>Home Photo</b></label>
@@ -190,14 +194,14 @@
                     </table>
                     <table>
                       
-                        <tr>
+                        <tr id="home_image" style="display: block;">
                         <td>
                             <img src="{{ record.home_image.url }}" class="img-fluid" style="max-width:120px">
                       <br><br>
                       <input type="file" name="home_image" id="home_image" class="home_image">
                         </td>
                       </tr>
-                      </tr>
+                      <!-- </tr> -->
                     </table>
                       
                     <input type="submit" style="font-size:medium" onclick="document.getElementById('modal1').style.display='none'" class="btn btn-dark btn-sm" name="submit_edit" id="submit_edit" value="Submit" >
@@ -263,7 +267,13 @@
                           <label for="availability"> <b> Type of Care</b></label>
                         </td>
                         <td>
-                          <body>{{ record.availability }}</body>
+                            {% if record.availability == 'at_seniors' %}
+                          <body>At my own home</body>
+                          {% elif record.availability == 'at_caregivers' %}
+                          <body>At caregiver's place</body>
+                          {% else %}
+                          <body>Hourly: {{record.day}} for {{record.hour}} hours</body>
+                          {% endif %}
                         </td>
                       </tr>
                     
@@ -334,6 +344,7 @@
                           <body>{{ record.bio }}</body>
                         </td>
                       </tr>
+                      {% if record.availability == 'at_seniors' %}
                       <tr>
                         <td class="profile">
                           <b>Home Photo</b>
@@ -350,6 +361,9 @@
                         </td>
                         </tr>
                       </table>
+                      {% else %}
+                    </table>
+                {% endif %}
                     
             </div>
           </div>
