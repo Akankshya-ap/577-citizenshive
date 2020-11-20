@@ -216,7 +216,10 @@ def search_caregivers(request, *args, **kwargs) :
             radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
         else :
             radius_arr = []
-        caregivers = Caregiver.objects.filter(zip_code__in = radius_arr) | Caregiver.objects.filter(availability=availability) | Caregiver.objects.filter(start_date__lte=start_date) | Caregiver.objects.filter(end_date__gte=end_date)
+        print (start_date, end_date ,"datessssss")
+        # caregivers = Caregiver.objects.filter(zip_code__in = radius_arr) | Caregiver.objects.filter(availability=availability) | Caregiver.objects.filter(start_date__lte=start_date,end_date__gte=end_date )
+
+        caregivers = Caregiver.objects.filter(zip_code__in = radius_arr, availability=availability, start_date__lte=start_date, end_date__gte=end_date)
 
         context['caregivers'] = caregivers
         context['isPostRequest'] = True
@@ -254,7 +257,8 @@ def search_seniors(request, *args, **kwargs) :
             radius_arr = [x.encode('utf-8').decode('unicode-escape') for x in in_radius]
         else :
             radius_arr = []
-        seniors = Senior.objects.filter(zip_code__in = radius_arr) | Senior.objects.filter(availability=availability) | Senior.objects.filter(start_date__lte=start_date) | Senior.objects.filter(end_date__gte=end_date)
+        seniors = Senior.objects.filter(zip_code__in = radius_arr,availability=availability, start_date__lte=start_date, end_date__gte=end_date)
+        # seniors = Senior.objects.filter(zip_code__in = radius_arr) | Senior.objects.filter(availability=availability) | Senior.objects.filter(start_date__lte=start_date,end_date__gte=end_date)
 
         context['seniors'] = seniors
         context['isPostRequest'] = True

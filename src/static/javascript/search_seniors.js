@@ -1,4 +1,15 @@
 $(document).ready(function(){
+    var d = new Date();
+
+    var month = d.getMonth()+1;
+    var day = d.getDate();
+
+    var output = d.getFullYear() + '-' +
+        (month<10 ? '0' : '') + month + '-' +
+        (day<10 ? '0' : '') + day;
+
+    $('#start_date').val(output);
+    $('#end_date').val(output);
     $("form").submit(function(e){
 
         var start_date = $("#start_date").val();
@@ -16,17 +27,7 @@ $(document).ready(function(){
         
         var current_date = year + "-" + month + "-" + day;
         
-        var d = new Date();
-
-        var month = d.getMonth()+1;
-        var day = d.getDate();
-
-        var output = d.getFullYear() + '-' +
-            (month<10 ? '0' : '') + month + '-' +
-            (day<10 ? '0' : '') + day;
-
-        $('#start_date').val(output);
-        $('#end_date').val(output);
+        
         // alert("Start Date = " + start_date);
         // alert("End Date" + end_date);
         // alert("Current Date = " + current_date);
