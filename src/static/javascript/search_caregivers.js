@@ -15,8 +15,8 @@ $(document).ready(function(){
         var start_date = $("#start_date").val();
         var end_date = $("#end_date").val();
 
-        alert("Submitted start date = " +  start_date);
-        alert("Submitted end date = " + end_date);
+        // alert("Submitted start date = " +  start_date);
+        // alert("Submitted end date = " + end_date);
         var d = new Date(),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),

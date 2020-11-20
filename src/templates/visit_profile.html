@@ -53,7 +53,13 @@
                           <label for="availability"> <b> Type of Care</b></label>
                         </td>
                         <td>
-                          <body>{{ user.availability }}</body>
+                          {% if user.availability == 'at_seniors' %}
+                          <body>At Senior's home</body>
+                          {% elif user.availability == 'at_caregivers' %}
+                          <body>At my own home</body>
+                          {% else %}
+                          <body>Hourly: {{user.day}} for {{user.hour}} hours</body>
+                          {% endif %}
                         </td>
                       </tr>
                     

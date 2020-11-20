@@ -58,9 +58,11 @@
                 <div class="comments_hidden" style="display: none;">
                     <hr>
                     {% for comment in post.post_comments %}
+                    
                         <p style="text-align: center; width: 90%;">
                             {{ comment.content }}
                         </p>
+                        <i>Commented by: {{comment.created_by}}</i>
                         <hr>
                     {% endfor %}
                     

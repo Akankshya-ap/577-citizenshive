@@ -401,8 +401,13 @@ def senior_dashboard_view(request, *args, **kwargs) :
 def add_post_comment(request, *args, **kwargs) :
     post_id = request.GET['comment_for_postId']
     comment_content = request.GET['comment']
+    # user_email = request.session['email']
+    if request.session['user_type'] == 'senior' :
+        record = Senior.objects.get(email = request.session['email'])
+    else :
+        record = Caregiver.objects.get(email = request.session['email'])
     print(request)
-    Comments.objects.create(post_id= Posts.objects.get(id=post_id), content = comment_content)
+    Comments.objects.create(created_by = record.name, post_id= Posts.objects.get(id=post_id), content = comment_content)
     #return HttpResponse("<h1> Hey, you are about to add a comment for post id = " + post_id + ", with comment = " + comment_content   +  " </h1>")
     return redirect('forum')
 
@@ -845,7 +850,7 @@ def match_caregiver_to_senior(request, caregiver_id) :
             subset_start_date = max(senior_obj.start_date, caregiver_obj.start_date)
             subset_end_date = min(senior_obj.end_date, caregiver_obj.end_date)
             number_of_days = (subset_end_date - subset_start_date).days
-            amount = number_of_days*1500/14
+            amount = round(number_of_days*1500/14,2)
             Transaction.objects.create(senior_email = senior_obj.email, caregiver_email = caregiver_obj.email, start_date = subset_start_date, end_date = subset_end_date, number_of_days = number_of_days, availability = caregiver_obj.availability, paid = 'False', amount = amount)
 
             context['caregiver'] = caregiver_obj
